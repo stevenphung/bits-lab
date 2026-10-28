@@ -1,4 +1,4 @@
-// Emits a shadcn-compatible registry to public/r, like reactbits.dev/r/<Name>-<Variant>.json.
+// Emits a shadcn-compatible registry to public/r: /r/<Name>.json, plus -TS, -TW and -TS-TW variants.
 // Install a component from the running app with: npx shadcn@latest add <origin>/r/<Name>.json
 import fs from 'node:fs';
 import path from 'node:path';

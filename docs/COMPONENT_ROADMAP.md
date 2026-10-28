@@ -6,7 +6,7 @@ Goal: turn Bits Lab into the largest library of highly polished React components
 
 **Wave 1 complete: all 56 items shipped (2026-10-27). Wave 2 complete: all 52 items shipped (2026-10-27). Wave 3 complete: all 12 items shipped (2026-10-28), so every proposal on this roadmap is built. Shipped items are marked ✅ below.**
 
-**Wave 4 started (2026-10-28):** about 37 original components that cover the needs of the React Bits catalog without porting it, in six phases plus a launch phase. See section 6. All phases are done: 159 originals, published at bits-lab.vercel.app with a React Bits directory and three templates.
+**Wave 4 complete (2026-10-28):** 37 more originals for effects, backgrounds, cards and micro-interactions, in six phases plus a launch phase. See section 6. All phases are done: 159 originals, published at bits-lab.vercel.app and on npm as `bits-lab`.
 
 - **Pixel & game set (12 items):** shipped 2026-10-26. They live in the Pixel & Game UI category, at `/pixel-game/<slug>`.
 - **Product showcase set (9 items, #21–25, 27–29, 34):** shipped 2026-10-26. They live in the Product Showcase category, at `/showcase/<slug>`.
@@ -63,7 +63,6 @@ Goal: turn Bits Lab into the largest library of highly polished React components
 
 | Library | Size (approx.) | Known for | License | Takeaway for Bits Lab |
 |---|---|---|---|---|
-| **React Bits** (already imported, local only) | 218 | WebGL backgrounds, text effects, micro-interactions | MIT + Commons Clause | Our base; can't be redistributed, so public growth must come from originals |
 | **Magic UI** | ~250 (incl. community) | Landing-page polish: Animated Beam, Globe, Marquee, Bento, device mocks, text animations | MIT | Strong at "product launch" pieces we lack |
 | **Aceternity UI** | 200+ | Bold hero effects, 3D cards, scroll storytelling, Lamp/Spotlight, Pro blocks | Pro licence bars redistributing source; free-tier terms not stated on the licence page | Huge reach; we must design originals, not ports |
 | **Cult UI** | ~150 | App-grade interactive pieces: Dynamic Island, Family Drawer, Floating Panel, device mocks, "Halo" form kit, illustrations | shadcn convention (copy-paste) | Proves demand for polished *app* UI, not just effects |
@@ -81,29 +80,29 @@ Where they're weak:
 - **Variants:** few ship JS, TS, CSS and Tailwind versions.
 - **Pixel and game UI:** none owns it.
 
-## 2. Bits Lab today: coverage vs gaps
+## 2. Gaps at the start (2026-10-27)
 
-| Area | Bits Lab now | Competitors offer | Gap |
-|---|---|---|---|
-| Backgrounds / shaders | 64 + 6 in Background Studio | Grids, beams, meteors, retro grid | Small |
-| Text animation | 36 | Number tickers, morphing text, text-on-path, hand-drawn highlights | Medium |
-| Cursor & hover effects | Strong | Lens, pointer highlight, direction-aware hover | Small |
-| Cards & galleries | Strong (carousels, 3D galleries) | Expandable/morphing cards, 3D pin, evervault | Medium |
-| **Product showcase** (device mocks, browser frames, globe, beams, maps) | None | Magic UI, Aceternity, Cult UI | **Large** |
-| **Scroll storytelling** (sticky reveal, container scroll, tracing beam) | ScrollStack, ScrollReveal only | Aceternity, Fancy | **Large** |
-| **Overlays** (morphing dialog/popover, link preview, toasts, drawers) | SwipeToast only | Motion Primitives, Cult UI | **Large** |
-| **Navigation** (dynamic island, sliding tabs, ⌘K palette, mega menu) | Dock, PillNav, GooeyNav, CardNav | Cult UI, Aceternity | **Large** |
-| **Forms & inputs** (OTP, file drop, tag input, vanish input, date picker) | CurvedInput, a few micro | Aceternity, Cult UI "Halo" kit | **Large** |
-| **Data & feedback** (animated charts, rolling numbers, confetti, multi-step loader) | CountUp, Counter | Magic UI, Aceternity | **Large** |
-| **Physics** (gravity drop, elastic line, draggable stickers) | FallingText, Ballpit | Fancy Components | Medium |
-| **AI-era surfaces** (voice orb, streaming text, thinking states) | PromptBar, ThoughtLine, VoicePill | Kokonut UI, Cult UI | Medium |
-| **Pixel & game UI** | Pixel theme, sprites, biomes | Nobody | **Open niche** |
+| Area | Competitors offer | Gap |
+|---|---|---|
+| Backgrounds / shaders | Grids, beams, meteors, retro grid | Small |
+| Text animation | Number tickers, morphing text, text-on-path, hand-drawn highlights | Medium |
+| Cursor & hover effects | Lens, pointer highlight, direction-aware hover | Small |
+| Cards & galleries | Expandable/morphing cards, 3D pin, evervault | Medium |
+| **Product showcase** (device mocks, browser frames, globe, beams, maps) | Magic UI, Aceternity, Cult UI | **Large** |
+| **Scroll storytelling** (sticky reveal, container scroll, tracing beam) | Aceternity, Fancy | **Large** |
+| **Overlays** (morphing dialog/popover, link preview, toasts, drawers) | Motion Primitives, Cult UI | **Large** |
+| **Navigation** (dynamic island, sliding tabs, ⌘K palette, mega menu) | Cult UI, Aceternity | **Large** |
+| **Forms & inputs** (OTP, file drop, tag input, vanish input, date picker) | Aceternity, Cult UI "Halo" kit | **Large** |
+| **Data & feedback** (animated charts, rolling numbers, confetti, multi-step loader) | Magic UI, Aceternity | **Large** |
+| **Physics** (gravity drop, elastic line, draggable stickers) | Fancy Components | Medium |
+| **AI-era surfaces** (voice orb, streaming text, thinking states) | Kokonut UI, Cult UI | Medium |
+| **Pixel & game UI** | Nobody | **Open niche** |
 
 ## 3. The Bits Lab quality bar
 
 Every new component ships only when it passes all of these. This is what "highly polished" means in practice, and it's the moat against bigger but uneven catalogs.
 
-1. **Four variants:** JS, TS, CSS and Tailwind, from one source of truth (the React Bits pattern), installable via the Bits Lab registry.
+1. **Four variants:** JS, TS, CSS and Tailwind, from one source of truth, installable via the Bits Lab registry.
 2. **Accessible:**
    - keyboard operable with visible focus;
    - correct ARIA roles;
@@ -158,7 +157,7 @@ Legend:
 | 17 | **Minimap** ✅ | Scaled live overview of a long page with a draggable viewport box | M | P2 |
 | 18 | **QuestLog** ✅ | Checklist with quest states, XP rewards and "quest complete" fanfare (onboarding) | M | P2 |
 | 19 | **PixelAvatar** ✅ | Deterministic pixel avatar from a seed/username (identicon-style, original art) | S | P2 |
-| 20 | **ChiptuneKit** ✅ | Hook + components to attach Sound Lab sounds to any UI event, with a global mute | S | P1 |
+| 20 | **ChiptuneKit** ✅ | Hook + components to attach synthesized chiptune sounds to any UI event, with a global mute | S | P1 |
 
 ### 4.2 Product showcase
 
@@ -329,41 +328,35 @@ Accessible base components (on Radix UI or Base UI) with signature motion, so pe
 | **Wave 1** (P1) | Pixel & game core (1–10, 13, 20); showcase core (21–25, 27–29, 34); scroll (35–38); overlays (43–46, 50); nav (54–57); inputs (62–64, 72); data (73, 74, 76); cards/text/AI (81, 88, 91–93, 96, 99, 105, 106, 108); backgrounds (111, 112); primitives (118–120) | 58 | Closes the biggest gaps and launches the signature pixel collection |
 | **Wave 2** (P2) | Remaining P2 items | 52 | Depth across every category |
 | **Wave 3** (P3) | Remaining P3 items | 12 | Long tail and delight |
-| **Wave 4** | Original equivalents for the needs the React Bits catalog covers (section 6) | ~37 | A public catalog that stands on its own, with React Bits kept local |
+| **Wave 4** | Effects, backgrounds, cards and micro-interactions (section 6) | ~37 | Breadth across the most-wanted kinds of animated UI |
 
-Shipping all 120 originals takes Bits Lab's own deployable catalog from 3 to 123, plus the six tools. With the 218 React Bits components kept local, that's about 340 in the app.
+Shipping all 120 originals takes Bits Lab's catalog from 3 to 123.
 
 To become the largest library, three multipliers matter more than headcount:
 
-- **Variants count as reach.** Four language/styling variants per component is how React Bits multiplies 218 into 872 installable items. Do the same.
+- **Variants count as reach.** Four language/styling variants turn every component into four installable items.
 - **Blocks on top of components.** Hero, pricing, feature, testimonial, footer, 404 and onboarding sections assembled from the components. Every leader monetizes or grows through blocks.
 - **Community pipeline.** A contribution template that enforces the quality bar: generated prop docs, the smoke and visual check from this session as CI, and a review checklist. Scale comes from contributors, but only the quality bar keeps it polished.
 
-## 6. Wave 4: original equivalents for the React Bits catalog
+## 6. Wave 4: effects, backgrounds and micro-interactions
 
 **Status:** planned 2026-10-28. Phases 0–6 done 2026-10-28.
 
-**Why:** the React Bits catalog (218 components) stays local. Its license (MIT + Commons Clause, `src/reactbits/LICENSE.md`) forbids redistributing the components "alone, in a bundle, or as a ported version", and covers the React Bits tools by name. Rewriting all 218 one-for-one would be a ported version, and would break quality bar item 10. Wave 4 covers the same *needs* instead: about 37 originals, most of them merging several common, unowned ideas into one Bits Lab component with its own name, API and pixel-game twist.
-
-**Where things stand:** React Bits has 33 text animations, 38 animations, 64 backgrounds, 48 components and 35 micro-interactions. At planning time only BlurText, CountUp and DotGrid shared a name with Bits Lab; Phase 0 replaced them. Several more are already covered by existing originals (Counter by RollingNumber, Stepper by StepperForm, MagicBento by BentoGrid, ScrollVelocity by ScrollTypography, StickerPeel by StickerBoard, ClickSpark by Confetti, LogoLoop and OrbitImages by LogoOrbit, CircularText and CurvedLoop by TextOnPath).
+**Why:** after Wave 3 the catalog was strong on app UI but thin on the effects people reach for most: text animations, animated backgrounds, cursor and border effects, card stacks and small delightful interactions. Wave 4 adds about 37 originals, most of them merging several common ideas into one Bits Lab component with its own name, API and pixel-game twist.
 
 ### 6.1 Rules for every phase
 
-- **Clean room:** the React Bits source for an idea is never opened while building its Bits Lab counterpart; only the idea ("a cursor trail") carries over.
-- **Different on purpose:** a new name, its own API, usually several ideas merged into one component, and the Bits Lab pixel style.
+- **Original on purpose:** a new name, its own API, usually several ideas merged into one component, and the Bits Lab pixel style.
 - **Same quality bar (section 3):** JS, TS, CSS and Tailwind variants from day one, a parity fixture in `/tw-check.html`, a catalog demo and a roadmap entry.
 
 ### 6.2 Phases
 
-**Phase 0: ground rules and a public build** ✅ done 2026-10-28
+**Phase 0: redesigns and a public build** ✅ done 2026-10-28
 
-- `npm run check:originals` (`scripts/check-originals.mjs`) fails when a Bits Lab component shares a name with a React Bits one, or shares too many specific props with one (at least 4, and at least half of the smaller set, ignoring generic props like `className` or `duration`). The prop check runs where the local catalog exists; elsewhere it falls back to a names-only list, `scripts/reactbits-names.json`. Two overlaps were reviewed and recorded as shared vocabulary rather than shared design: RollingNumber/Counter (number-format options) and TextOnPath/TextLoop (generic text-motion props).
-- The check showed that the first three originals were not just same-named: BlurText, CountUp and DotGrid shared 6–7 specific props with their React Bits namesakes. They were replaced by new designs, written from scratch with new props, and their old pages redirect:
-  - **FocusPull** (text animations, replaces BlurText): a camera focus pull. Soft, colour-fringed letters rack into focus by sweeping across the line, opening from the centre, or snapping in with a lens "breathe"; it can rack again on hover.
-  - **TallyUp** (data, replaces CountUp): a figure climbs to its value while a pixel block bar fills toward a goal; milestone notches flash as they pass, with an optional stepped "arcade" count.
-  - **PegBoard** (backgrounds, replaces DotGrid): a pin-art board. Pixel pegs rise under the pointer and sink back slowly, and a word can be imprinted into the pegs at rest.
-- The app builds without React Bits: `src/reactbits/` is git-ignored and loaded only if present, so a public build has just the All, Bits Lab (and later Tools) tabs.
-- The five tools stay local for now: their folders are git-ignored and the Tools tab appears only when they are present. They return publicly once redesigned under their own names.
+- The first three originals were replaced by new designs, written from scratch with new props; their old pages redirect:
+  - **FocusPull** (text animations): a camera focus pull. Soft, colour-fringed letters rack into focus by sweeping across the line, opening from the centre, or snapping in with a lens "breathe"; it can rack again on hover.
+  - **TallyUp** (data): a figure climbs to its value while a pixel block bar fills toward a goal; milestone notches flash as they pass, with an optional stepped "arcade" count.
+  - **PegBoard** (backgrounds): a pin-art board. Pixel pegs rise under the pointer and sink back slowly, and a word can be imprinted into the pegs at rest.
 - `vercel.json` added (Vite build, single-page rewrites). Publishing itself is Phase 6.
 
 **Phase 1: text effects** (6) ✅ done 2026-10-28, in Text Animations, each with JS, TS, CSS and Tailwind variants and parity fixtures:
@@ -377,14 +370,14 @@ To become the largest library, three multipliers matter more than headcount:
 
 Planned:
 
-| Component | Idea | Covers ideas like |
-|---|---|---|
-| SignalText | Scramble, glitch and split-flap modes with an arcade feel | DecryptedText, ScrambledText, Shuffle, GlitchText, SplitFlapText |
-| InkText | Shimmer, gradient, outline and image-mask fills | ShinyText, GradientText, StrokeText, MaskedHeading |
-| PixelType | Letters built from pixels that scatter, fall and re-form | ParticleText, FallingText, FuzzyText, AsciiText |
-| ProximityType | Weight and width follow the pointer | TextPressure, VariableProximity |
-| ShadowStack | Chunky retro extruded and echo titles | DepthText, EchoText, FoldText |
-| MarqueeLine | An endless banner that speeds up with scroll | ScrollVelocity, CurvedLoop, TextLoop |
+| Component | Idea |
+|---|---|
+| SignalText | Scramble, glitch and split-flap modes with an arcade feel |
+| InkText | Shimmer, gradient, outline and image-mask fills |
+| PixelType | Letters built from pixels that scatter, fall and re-form |
+| ProximityType | Weight and width follow the pointer |
+| ShadowStack | Chunky retro extruded and echo titles |
+| MarqueeLine | An endless banner that speeds up with scroll |
 
 **Phase 2: pointer and animation effects** (6) ✅ done 2026-10-28, each with JS, TS, CSS and Tailwind variants and parity fixtures:
 
@@ -397,14 +390,14 @@ Planned:
 
 Planned:
 
-| Component | Idea | Covers ideas like |
-|---|---|---|
-| PointerKit | One cursor component with trail, crosshair, target-lock, spark and blob modes | BlobCursor, Crosshair, TargetCursor, GhostCursor, GlowCursor, SplashCursor, SwarmCursor |
-| Footprints | Pixel and image trails behind the pointer | PixelTrail, ImageTrail, CursorGrid |
-| EdgeFX | Border effects: marching ants, pixel glow, energy | StarBorder, ElectricBorder, BorderGlow, GlareHover |
-| Reveal | Scroll and mount reveal primitive | AnimatedContent, FadeContent |
-| Marquee | Logo and content loop with drag | LogoLoop |
-| GrainFX | Dither, halftone, noise and blur overlays | DitherVeil, HalftoneReveal, Noise, GradualBlur |
+| Component | Idea |
+|---|---|
+| PointerKit | One cursor component with trail, crosshair, target-lock, spark and blob modes |
+| Footprints | Pixel and image trails behind the pointer |
+| EdgeFX | Border effects: marching ants, pixel glow, energy |
+| Reveal | Scroll and mount reveal primitive |
+| Marquee | Logo and content loop with drag |
+| GrainFX | Dither, halftone, noise and blur overlays |
 
 **Phase 3: backgrounds** (8) ✅ done 2026-10-28, in Backgrounds, each with JS, TS, CSS and Tailwind variants and parity fixtures. All are canvas-drawn, fill their parent, pause off-screen and in hidden tabs, and hold one still frame under reduced motion; most render at low resolution and scale up crisply (`pixelSize`):
 
@@ -415,20 +408,20 @@ Planned:
 - CodeRain: glyph columns (hex, binary, blocks, arrows or custom) with bright heads, frame-rate-independent tails, flips and glitch rows; hot near the pointer.
 - DitherField: noise, waves or a radial pulse drawn through an 8×8 Bayer dither into a small palette, with a pointer glow.
 - ContourLines: a drifting topographic map traced in single pixels, with index lines, optional atlas tints and a pointer hill.
-- ScanScope: a radar sweep with range rings, or a scanning bar, over a pixel grid; blips light, ping and fade as the beam passes. Planned as "GridScan", renamed when `check:originals` found that name in React Bits.
+- ScanScope: a radar sweep with range rings, or a scanning bar, over a pixel grid; blips light, ping and fade as the beam passes.
 
 Planned:
 
-| Component | Idea | Covers ideas like |
-|---|---|---|
-| AuroraBands | Pixel-banded aurora light | Aurora, SoftAurora, Silk, Waves, ColorBends |
-| WarpField | Stars streaking into hyperspace | Hyperspeed, Galaxy, Particles, PixelSnow |
-| LightShafts | Beams, rays and lightning | Beams, LightRays, LightPillar, Lightning, LaserFlow |
-| LavaLamp | Pixelated lava-lamp blobs | LiquidChrome, Plasma, MetaBalls, Ferrofluid, MoltenMetal |
-| CodeRain | Falling glyph columns | LetterGlitch, FaultyTerminal, GradientASCII |
-| DitherField | Ordered-dither colour field | Dither, DarkVeil, Grainient |
-| ContourLines | Drifting topographic lines | Topography, Threads, LineWaves, FloatingLines |
-| ScanScope | Radar-style sweep over a grid (planned as GridScan; renamed, as React Bits uses that name) | GridScan, Radar, RippleGrid, Scanner |
+| Component | Idea |
+|---|---|
+| AuroraBands | Pixel-banded aurora light |
+| WarpField | Stars streaking into hyperspace |
+| LightShafts | Beams, rays and lightning |
+| LavaLamp | Pixelated lava-lamp blobs |
+| CodeRain | Falling glyph columns |
+| DitherField | Ordered-dither colour field |
+| ContourLines | Drifting topographic lines |
+| ScanScope | Radar-style sweep over a grid |
 
 **Phase 4: UI components** (9) ✅ done 2026-10-28, each with JS, TS, CSS and Tailwind variants and parity fixtures:
 
@@ -444,17 +437,17 @@ Planned:
 
 Planned:
 
-| Component | Idea | Covers ideas like |
-|---|---|---|
-| CardDeck | A swipeable deck, like a hand in a card game | Stack, CardSwap, BounceCards, ScrollStack |
-| Coverflow | 3D carousel | Carousel, CircularCarousel, DepthCarousel, FlexCarousel, CircularGallery |
-| MasonryWall | Masonry layout with animated reflow | Masonry |
-| FeedList | Animated list with keyboard selection | AnimatedList |
-| HotbarDock | A dock styled like a game item hotbar, magnifying on hover | Dock, GlassIcons |
-| OverlayMenu | Full-screen menu that staggers in | StaggeredMenu, FlowingMenu, BubbleMenu, CardNav |
-| TradingCard | Holographic foil card with tilt and glare | TiltedCard, HoloCard, ReflectiveCard, ProfileCard, SpotlightCard |
-| GlassPanel | Frosted-glass surface | GlassSurface |
-| WheelPicker | Spinning option wheel and spring slider | OptionWheel, ElasticSlider |
+| Component | Idea |
+|---|---|
+| CardDeck | A swipeable deck, like a hand in a card game |
+| Coverflow | 3D carousel |
+| MasonryWall | Masonry layout with animated reflow |
+| FeedList | Animated list with keyboard selection |
+| HotbarDock | A dock styled like a game item hotbar, magnifying on hover |
+| OverlayMenu | Full-screen menu that staggers in |
+| TradingCard | Holographic foil card with tilt and glare |
+| GlassPanel | Frosted-glass surface |
+| WheelPicker | Spinning option wheel and spring slider |
 
 **Phase 5: micro-interactions** (8) ✅ done 2026-10-28, each with JS, TS, CSS and Tailwind variants and parity fixtures:
 
@@ -469,30 +462,25 @@ Planned:
 
 Planned:
 
-| Component | Idea | Covers ideas like |
-|---|---|---|
-| HoldToConfirm | A fuse that burns down while held | HoldButton, FuseButton, SlideCommit |
-| SwipeActions | Swipe a row or toast to act on it | SwipeRow, SwipeToast |
-| Discard | Shred, crumple or tear-ticket delete effects | Shredder, PaperCrumple, TearTicket |
-| RatingPips | Heart containers, Zelda-style | PeekRating, PulseHeart |
-| ScrubNumber | Drag a number to change it | ScrubField |
-| PixelSpinners | A set of loading spinners | LatticeLoader, StatusMark, ThoughtLine |
-| ArcadeButtons | Buttons that dodge, fly or sling | DodgeField, FlyingButton, SlingButton |
-| ToggleKit additions | Bell, squish and spring variants for the existing kit | BellToggle, SquishSwitch, SpringCheck, JellyRadio |
+| Component | Idea |
+|---|---|
+| HoldToConfirm | A fuse that burns down while held |
+| SwipeActions | Swipe a row or toast to act on it |
+| Discard | Shred, crumple or tear-ticket delete effects |
+| RatingPips | Heart containers, Zelda-style |
+| ScrubNumber | Drag a number to change it |
+| PixelSpinners | A set of loading spinners |
+| ArcadeButtons | Buttons that dodge, fly or sling |
+| ToggleKit additions | Bell, squish and spring variants for the existing kit |
 
 **Phase 6: launch** ✅ done 2026-10-28
 
-- **Published:** private GitHub repo `stevenphung/bits-lab`, deployed by Vercel (team personal-8a16af13) to https://bits-lab.vercel.app on every push to `main`. Vercel builds from GitHub, so git-ignored files (the React Bits catalog, the five tools, the internal research notes and the importer) never leave this machine.
-- **Name check widened:** ToggleKit's bell was first named BellToggle, which is a React Bits name. It is now NotifyBell, and `check:originals` also checks named component exports.
-- **React Bits directory** (`/react-bits`): all 218 names by category, each linking to its reactbits.dev page, plus the Bits Lab originals that cover the same idea (131 of them, from the tables above). No code, previews or descriptions: writing our own blurb for each would mean paraphrasing theirs, so the names and links do the job.
-- **Taken off the site for now (2026-10-28):** the directory and the templates are no longer routed from `App.jsx`; their code stays in the repo to bring back later.
+- **Published:** GitHub repo `stevenphung/bits-lab` (public since 2026-10-28), deployed by Vercel to https://bits-lab.vercel.app on every push to `main`, and the `bits-lab` npm package (MIT) built from `packages/bits-lab`.
+- **ToggleKit's bell** is named NotifyBell.
+- **Taken off the site for now (2026-10-28):** the templates are no longer routed from `App.jsx`; their code stays in the repo to bring back later.
 - **Templates** (`/templates`): Questboard (SaaS landing page, 56 components), Emberfall (game page, 49) and Pocket Tavern (app launch page, 54). Between them they use all 159 components, which `npm run check:templates` enforces. Each is a full page without the library's header, loaded as its own chunk.
 
-### 6.3 Left out on purpose
-
-Signature React Bits pieces with no common pattern behind them stay out: Lanyard, Balatro, Ballpit, DomeGallery, EvilEye, FluidGlass, ModelViewer, Antigravity and CrystalizedBall.
-
-### 6.4 Outcome
+### 6.3 Outcome
 
 About 37 new originals take Bits Lab from 123 to about 160. Phases 1–5 are each about the size of a Wave 2 batch; Phase 0 is short.
 

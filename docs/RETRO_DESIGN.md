@@ -49,8 +49,6 @@ The layout is unchanged from before: header with tabs and search; level-select s
 - **Below 1080px:** single column, with the control panel right after the preview.
 - **Below 760px:** the sidebar becomes a sideways-scrolling row of menu chips.
 
-React Bits components keep their own styling inside the stage. Only the Bits Lab originals' demo text uses the pixel font.
-
 ## Demo world: pixel adventure
 
 All demo content follows one theme: a nostalgic, blocky voxel-adventure world. Every asset is original, generated in code. No game textures, logos or characters are copied, and no game is named.
@@ -59,9 +57,6 @@ All demo content follows one theme: a nostalgic, blocky voxel-adventure world. E
 |---|---|---|
 | Pixel-art kit | `src/pixel/art.js` | 15 hand-placed 16×16 sprites (heart, gem, pickaxe, sword, chest, potion, book, star, XP orb, coin, note, painting, lever, grass block, workbench) with automatic ink outlines, plus 12 procedurally generated biome scenes (plains, forest, desert, snowy peaks, ocean, jungle, mesa, night plains, underworld, void isles, deep cave, blossom hills). Pure JS, so it runs in both Node and the browser. |
 | Generated files | `scripts/generate-pixel-assets.mjs` → `public/pixel/` | 768×512 PNG postcard per biome, 128px PNG per sprite, and the gem `favicon.svg`. Regenerated on dev start and build; git-ignored. |
-| `<Sprite>` | `src/pixel/Sprite.jsx` | Crisp SVG sprites for the header tabs, logo, hearts HUD, avatars and tool cartridges. |
-| Stock-photo swap | `public/pixel-sw.js` | A service worker that answers requests to picsum, unsplash, pexels and twimg with a biome postcard, the same one per URL. This re-skins the 15+ React Bits components that ship stock photos, without editing their source. |
-| Preview copy | `src/lib/theme.js` | Game-flavored text for about 60 React Bits previews ("Achievement unlocked!", "Press start", "Wood / Stone / Iron / Diamond"…), and biome postcards with captions for four galleries. Props with a Customize control become the new defaults and are written into the usage snippet, so the code still matches the preview. |
-| Tools | `src/tools/*` | Background Studio's new default **Pixel Sky** shader and biome presets; Texture Lab's biome samples and one-click looks (CRT, Handheld, Night vision, Comic, Dream); Center Stage's pixel game screenshot with HUD and biome-scene backdrops; Shape Magic's **Pixel sprite** shape (default: a glossy gem app icon); Sound Lab's 15 chiptune sounds, each labeled with the UI moment it suits. |
+| `<Sprite>` | `src/pixel/Sprite.jsx` | Crisp SVG sprites for the header tabs, logo, hearts HUD, avatars and template cards. |
 
 UI copy gets a light game flavor while labels stay clear: "Crafting table" (Customize), "Craft & copy usage", "Respawn" (replay), "Loot: install & code", "Recipe: props", "Search the inventory", and "Workbench" for the tools.

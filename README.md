@@ -91,11 +91,11 @@ npm install
 npm run dev   # http://localhost:5173
 ```
 
-The UI is an 8-bit game theme: Sweetie 16 palette, pixel fonts, notched pixel borders and a blinking ► menu cursor (see [docs/RETRO_DESIGN.md](docs/RETRO_DESIGN.md)). Demo content is a pixel-adventure world: original sprites and biome scenes from `src/pixel/art.js`, and a service worker (`public/pixel-sw.js`) that swaps stock photos in previews for local pixel art.
+The UI is an 8-bit game theme: Sweetie 16 palette, pixel fonts, notched pixel borders and a blinking ► menu cursor (see [docs/RETRO_DESIGN.md](docs/RETRO_DESIGN.md)). Demo content is a pixel-adventure world: original sprites and biome scenes from `src/pixel/art.js`.
 
 The shadcn registry is written to `public/r/` by `scripts/build-registry.mjs` on dev start, on build and when a component changes. The site deploys to Vercel on every push to `main`.
 
-Two pages are built but switched off for now: three templates (`src/templates/`, checked by `npm run check:templates`) and a React Bits link directory (`src/ui/DirectoryPage.jsx`). Neither is routed from `src/App.jsx`, so neither is in the build.
+Three page templates are built but switched off for now (`src/templates/`, checked by `npm run check:templates`). They aren't routed from `src/App.jsx`, so they aren't in the build.
 
 ### Layout
 
@@ -110,23 +110,15 @@ Two pages are built but switched off for now: three templates (`src/templates/`,
 | `src/lib/cli.js` | Install commands for each package manager |
 | `src/ui/` | Page, controls, code blocks |
 
-### Local-only parts
-
-Two parts of the dev setup are not in this repository, and the app builds without them:
-
-- **A private React Bits catalog** (`src/reactbits/`). React Bits is MIT + Commons Clause, which forbids redistributing its components, so it stays on the author's machine. Bits Lab components are written from scratch, and `npm run check:originals` checks that none shares a name or a prop set with a React Bits component. The site links to [reactbits.dev](https://reactbits.dev) instead.
-- **Five tool studios** (`src/tools/*`), kept local until they are redesigned under their own names. Without them there is no Tools tab.
-
 ### Publishing
 
-What git contains is what gets published: the local-only parts above are git-ignored. `vercel.json` builds with `npm run build` and serves the single-page app for every path; pixel art and the `/r` registry are generated during the build. Vercel deploys every push to `main` of the GitHub repo.
+What git contains is what gets published. `vercel.json` builds with `npm run build` and serves the single-page app for every path; pixel art and the `/r` registry are generated during the build. Vercel deploys every push to `main` of the GitHub repo.
 
 Before publishing, run the checks:
 
 ```bash
 npm run check:ts         # TypeScript variants: strict types, no drift from the .jsx
 npm run check:tw         # Tailwind variants: types, logic and drift
-npm run check:originals  # no Bits Lab component shares a name or its props with a React Bits one
 npm run check:templates  # the three templates use every component
 ```
 

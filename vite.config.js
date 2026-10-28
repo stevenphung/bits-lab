@@ -42,18 +42,5 @@ const twCheck = () => ({
 
 export default defineConfig({
   // Tailwind only processes CSS that imports it: the Tailwind-variant check page (tw-check.html).
-  plugins: [react(), tailwindcss(), twCheck(), registry(), pixelAssets()],
-  // Scan the lazily imported React Bits components up front; otherwise Vite discovers their
-  // deps (three, ogl, gsap, motion…) one page at a time and force-reloads the page each time.
-  optimizeDeps: {
-    entries: ['index.html', 'src/reactbits/*/*.jsx'],
-    include: [
-      'matter-js',
-      'gsap/ScrambleTextPlugin',
-      'gsap/ScrollTrigger',
-      'gsap/SplitText',
-      'three/examples/jsm/environments/RoomEnvironment.js',
-      'three/examples/jsm/loaders/OBJLoader.js'
-    ]
-  }
+  plugins: [react(), tailwindcss(), twCheck(), registry(), pixelAssets()]
 });

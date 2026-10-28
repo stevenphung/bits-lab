@@ -4,24 +4,12 @@ public/r
 public/pixel
 public/favicon.svg
 
-# React Bits catalog: local only (MIT + Commons Clause forbids redistribution)
-src/reactbits/
-
 .vercel
 .DS_Store
-
-# Tools: local-only until redesigned (names match the React Bits tools; see roadmap section 6)
-src/tools/background-studio/
-src/tools/shape-magic/
-src/tools/texture-lab/
-src/tools/center-stage/
-src/tools/sound-lab/
+.env*
 
 # Internal research notes: local only
-docs/REACTBITS_ANALYSIS.md
 docs/AIRBNB_DESIGN_LANGUAGE.md
-scripts/import-reactbits.mjs
-.env*
 
 # npm package build output
 packages/bits-lab/dist

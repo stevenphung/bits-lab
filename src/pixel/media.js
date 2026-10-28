@@ -1,13 +1,8 @@
-// Demo media that can't be a static PNG: a short pixel-world video and a chiptune click,
-// both generated in the browser the first time a preview needs them, then cached.
+// Demo media that can't be a static PNG: a short pixel-world video, generated in the browser
+// the first time a preview needs it, then cached.
 import { gridToRgba, sceneGrid } from './art';
 
-// The click sound borrows Sound Lab's synth, which is local-only (git-ignored); without it,
-// pixelSoundUrl resolves to null and previews simply stay silent.
-const soundLab = import.meta.glob(['../tools/sound-lab/engine.js', '../tools/sound-lab/sounds.js', '../tools/sound-lab/wav.js']);
-
 let videoPromise = null;
-let soundPromise = null;
 
 function sceneCanvas(id, width, height) {
   const { width: w, height: h, data } = gridToRgba(sceneGrid(id, width, height), 1);
@@ -56,17 +51,4 @@ export function pixelVideoUrl() {
     });
   }
   return videoPromise;
-}
-
-// The Sound Lab "Select" blip as a WAV.
-export function pixelSoundUrl() {
-  if (!soundPromise) {
-    const load = name => soundLab[`../tools/sound-lab/${name}.js`]?.();
-    soundPromise = Promise.all([load('engine'), load('sounds'), load('wav')]).then(async ([engine, sounds, wav]) => {
-      if (!engine || !sounds || !wav) return null;
-      const recipe = sounds.SOUNDS.find(sound => sound.id === 'select').recipe;
-      return URL.createObjectURL(wav.encodeWav(await engine.renderToBuffer(recipe)));
-    });
-  }
-  return soundPromise;
 }

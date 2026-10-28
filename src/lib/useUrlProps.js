@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
-// Same idea as React Bits' useComponentProps: every prop lives in the query string,
+// Every prop lives in the query string,
 // parsed by the type of its default, and only non-default values are written.
 
 const isHex = value => typeof value === 'string' && /^#[0-9a-fA-F]{3,8}$/.test(value);

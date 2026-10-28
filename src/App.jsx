@@ -1,19 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CATEGORIES } from './meta';
 import { CATALOG } from './catalog';
-import { REACTBITS_CATEGORIES, REACTBITS_ITEMS } from './lib/reactbits';
 import ComponentPage from './ui/ComponentPage';
 import HomePage from './ui/HomePage';
 import { Icon } from './ui/icons';
 import Sprite from './pixel/Sprite';
-import { TOOLS, ToolRoute, ToolsIndex } from './tools';
-
-const LIBRARIES = [
-  { key: 'lab', title: 'Bits Lab', categories: CATEGORIES, items: CATALOG },
-  { key: 'reactbits', title: 'React Bits', categories: REACTBITS_CATEGORIES, items: REACTBITS_ITEMS }
-];
-
-const ALL_ITEMS = LIBRARIES.flatMap(library => library.items);
 
 // Pages that moved: the first three originals were replaced by new designs (roadmap, Wave 4).
 const MOVED = {
@@ -22,32 +13,8 @@ const MOVED = {
   '/backgrounds/dot-grid': '/backgrounds/peg-board'
 };
 
-// Header tabs, like Airbnb's All / Homes / Experiences: one for the original components,
-// one per React Bits category.
-// Each tab gets a pixel sprite, like an inventory slot.
-const CATEGORY_SPRITES = {
-  'text-animations': 'book',
-  animations: 'star',
-  components: 'bench',
-  backgrounds: 'grass',
-  micro: 'lever'
-};
-
-const TABS = [
-  { key: 'all', label: 'All', sprite: 'chest', match: () => true },
-  { key: 'lab', label: 'Bits Lab', sprite: 'gem', match: item => item.origin === 'lab' },
-  ...REACTBITS_CATEGORIES.map(category => ({
-    key: category.slug,
-    label: category.name,
-    sprite: CATEGORY_SPRITES[category.slug] ?? 'orb',
-    match: item => item.origin === 'reactbits' && item.category === category.slug
-  }))
-];
-
-const categoryNameFor = item => {
-  const library = LIBRARIES.find(entry => entry.key === item.origin);
-  return library.categories.find(category => category.slug === item.category)?.name;
-};
+const REPO_URL = 'https://github.com/stevenphung/bits-lab';
+const categoryNameFor = item => CATEGORIES.find(category => category.slug === item.category)?.name;
 
 function usePathname() {
   const [pathname, setPathname] = useState(window.location.pathname);
@@ -70,32 +37,27 @@ function usePathname() {
 export default function App() {
   const [pathname, navigate] = usePathname();
   const [query, setQuery] = useState('');
-  const [tab, setTab] = useState('all');
   const searchRef = useRef(null);
-  const item = ALL_ITEMS.find(entry => entry.path === pathname);
-  const [, section, toolSlug] = pathname.split('/');
-  const isTools = section === 'tools' && TOOLS.length > 0 && (!toolSlug || TOOLS.some(tool => tool.slug === toolSlug));
+  const item = CATALOG.find(entry => entry.path === pathname);
   const isHome = pathname === '/';
-  const isPage = isTools || isHome;
   const lastItem = useRef(CATALOG[0]);
   if (item) lastItem.current = item;
 
   useEffect(() => {
-    if (item || isPage) return;
+    if (item || isHome) return;
     const moved = MOVED[pathname];
     // Unknown addresses go home; pages that moved go to their new address.
     window.history.replaceState(null, '', moved ?? '/');
     // Let the router pick up the new address (replaceState doesn't fire popstate by itself).
     window.dispatchEvent(new PopStateEvent('popstate'));
-  }, [item, isPage, pathname]);
+  }, [item, isHome, pathname]);
 
   const current = item ?? lastItem.current;
-  const activeTab = TABS.find(entry => entry.key === tab);
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
-    return ALL_ITEMS.filter(entry => activeTab.match(entry) && (!needle || entry.name.toLowerCase().includes(needle)));
-  }, [query, activeTab]);
+    return CATALOG.filter(entry => !needle || entry.name.toLowerCase().includes(needle));
+  }, [query]);
 
   const onLink = (event, to) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
@@ -117,43 +79,23 @@ export default function App() {
               <Sprite name="star" size={26} />
               <span>Home</span>
             </button>
-            {TABS.map(entry => (
-              <button
-                key={entry.key}
-                type="button"
-                className={`tab ${!isPage && tab === entry.key ? 'active' : ''}`}
-                aria-pressed={!isPage && tab === entry.key}
-                onClick={() => {
-                  setTab(entry.key);
-                  if (isPage) navigate(current.path);
-                }}
-              >
-                <Sprite name={entry.sprite} size={26} />
-                <span>{entry.label}</span>
-              </button>
-            ))}
-            {TOOLS.length > 0 && (
-              <>
-                <span className="tab-divider" aria-hidden="true" />
-                <button type="button" className={`tab ${isTools ? 'active' : ''}`} aria-pressed={isTools} onClick={() => navigate('/tools')}>
-                  <Sprite name="pickaxe" size={26} />
-                  <span>Tools</span>
-                </button>
-              </>
-            )}
+            <button type="button" className={`tab ${isHome ? '' : 'active'}`} aria-pressed={!isHome} onClick={() => isHome && navigate(current.path)}>
+              <Sprite name="gem" size={26} />
+              <span>Components</span>
+            </button>
           </nav>
 
           <div className="topbar-actions">
-            <span className="hud" title={`${ALL_ITEMS.length} components collected`}>
+            <span className="hud" title={`${CATALOG.length} components collected`}>
               {[0, 1, 2].map(index => (
                 <Sprite key={index} name="heart" size={20} />
               ))}
-              <span className="hud-count">×{ALL_ITEMS.length}</span>
+              <span className="hud-count">×{CATALOG.length}</span>
             </span>
             <a className="text-button" href="/r/registry.json" target="_blank" rel="noreferrer">
               Registry
             </a>
-            <a className="round-button" href={current.originalUrl ?? '/r/registry.json'} target="_blank" rel="noreferrer" aria-label="Open original">
+            <a className="round-button" href={REPO_URL} target="_blank" rel="noreferrer" aria-label="Bits Lab on GitHub">
               <Icon name="external" size={16} />
             </a>
           </div>
@@ -164,54 +106,36 @@ export default function App() {
         <main className="home-main">
           <HomePage onOpen={onLink} go={navigate} />
         </main>
-      ) : isTools ? (
-        <main className="tools-main">
-          {toolSlug ? <ToolRoute key={toolSlug} slug={toolSlug} /> : <ToolsIndex onOpen={onLink} />}
-        </main>
       ) : (
         <div className="shell">
           <aside className="sidebar">
             <form className="search-pill" role="search" onSubmit={event => event.preventDefault()}>
               <label className="search-field">
                 <span className="search-label">Search the inventory</span>
-                <input ref={searchRef} type="search" placeholder={`Search ${filtered.length} in ${activeTab.label}`} value={query} onChange={event => setQuery(event.target.value)} />
+                <input ref={searchRef} type="search" placeholder={`Search ${CATALOG.length} components`} value={query} onChange={event => setQuery(event.target.value)} />
               </label>
               <button type="submit" className="search-go" aria-label="Search" onClick={() => searchRef.current?.focus()}>
                 <Icon name="search" size={16} />
               </button>
             </form>
             <nav>
-              {LIBRARIES.map(library => {
-                const groups = library.categories
-                  .map(category => ({
-                    ...category,
-                    items: filtered.filter(entry => entry.origin === library.key && entry.category === category.slug)
-                  }))
-                  .filter(group => group.items.length);
-                if (!groups.length) return null;
-                return (
-                  <div key={library.key} className="library">
-                    <p className="library-title">{library.title}</p>
-                    {groups.map(group => (
-                      <div key={group.slug} className="nav-group">
-                        <p>
-                          {group.name} <span className="count">{group.items.length}</span>
-                        </p>
-                        {group.items.map(entry => (
-                          <a
-                            key={entry.path}
-                            href={entry.path}
-                            className={entry === current ? 'active' : ''}
-                            onClick={event => onLink(event, entry.path)}
-                          >
-                            {entry.name}
-                          </a>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                );
-              })}
+              <div className="library">
+                <p className="library-title">Bits Lab</p>
+                {CATEGORIES.map(category => ({ ...category, items: filtered.filter(entry => entry.category === category.slug) }))
+                  .filter(group => group.items.length)
+                  .map(group => (
+                    <div key={group.slug} className="nav-group">
+                      <p>
+                        {group.name} <span className="count">{group.items.length}</span>
+                      </p>
+                      {group.items.map(entry => (
+                        <a key={entry.path} href={entry.path} className={entry === current ? 'active' : ''} onClick={event => onLink(event, entry.path)}>
+                          {entry.name}
+                        </a>
+                      ))}
+                    </div>
+                  ))}
+              </div>
               {!filtered.length && <p className="muted-text">Nothing in your inventory matches “{query}”.</p>}
             </nav>
           </aside>

@@ -4,7 +4,7 @@ const optionLabel = option => (option === '' ? 'none' : option === ' ' ? 'space'
 
 const formatNumber = value => (Number.isInteger(value) ? value : Number(value.toFixed(3)));
 
-// Generated React Bits labels are prop names: "mouseInteraction" reads better as "mouse interaction".
+// Labels can be prop names: "mouseInteraction" reads better as "mouse interaction".
 const humanize = label => label.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
 
 function Field({ label, value, children, inline }) {

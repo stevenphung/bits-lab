@@ -142,28 +142,7 @@ function Sources({ item, lang, styling }) {
 }
 
 // The "Hosted by" row of a listing: who made it and under what terms.
-function MakerRow({ item }) {
-  if (item.origin === 'reactbits') {
-    return (
-      <div className="maker-row">
-        <span className="avatar" aria-hidden="true">
-          <Sprite name="chest" size={36} />
-        </span>
-        <div>
-          <p className="row-title">
-            From{' '}
-            <a href={item.originalUrl} target="_blank" rel="noreferrer">
-              React Bits
-            </a>
-          </p>
-          <p className="row-sub">
-            MIT + Commons Clause (<code>src/reactbits/LICENSE.md</code>). Keep this catalog local; don't redistribute
-            the components.
-          </p>
-        </div>
-      </div>
-    );
-  }
+function MakerRow() {
   return (
     <div className="maker-row">
       <span className="avatar avatar-brand" aria-hidden="true">
@@ -192,7 +171,7 @@ export default function ComponentPage({ item, categoryName }) {
   const usage = useMemo(() => injectProps(item.usage, props, item.defaults, item.demoOnly), [item, props]);
   const replay = () => setReplayKey(key => key + 1);
 
-  // Changing a prop replays the animation, like the re-key in React Bits' demos.
+  // Changing a prop replays the animation by re-keying the preview.
   const change = (name, value) => {
     update(name, value);
     replay();
@@ -224,7 +203,7 @@ export default function ComponentPage({ item, categoryName }) {
       </div>
 
       <div className={`lab-stage ${item.fullBleed ? 'lab-stage-bleed' : ''}`}>
-        <span className="stage-badge">{item.origin === 'reactbits' ? 'React Bits' : 'Bits Lab original'}</span>
+        <span className="stage-badge">Bits Lab original</span>
         <button type="button" className="replay" onClick={replay} title="Replay the animation">
           <Icon name="replay" size={14} />
           Respawn
@@ -238,7 +217,7 @@ export default function ComponentPage({ item, categoryName }) {
         <div className="listing-main">
           <section className="section overview">
             <h2 className="section-title">
-              {categoryName} · {item.origin === 'reactbits' ? 'React Bits' : 'Bits Lab'}
+              {categoryName} · Bits Lab
             </h2>
             <p className="row-sub">
               {plural(item.controls.length, 'setting')} · {plural(item.docs.length, 'prop')} · {deps}
@@ -246,7 +225,7 @@ export default function ComponentPage({ item, categoryName }) {
           </section>
 
           <section className="section">
-            <MakerRow item={item} />
+            <MakerRow />
           </section>
 
           <section className="section">
