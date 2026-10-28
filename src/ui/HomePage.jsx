@@ -25,6 +25,7 @@ import ShadowStack from '../bits/ShadowStack';
 import SignalText from '../bits/SignalText';
 import TallyUp from '../bits/TallyUp';
 import WarpField from '../bits/WarpField';
+import WorldExplorer from '../worlds/WorldExplorer';
 
 // The landing page. Bits Lab's story: game feel for real products. Game design solved
 // feedback, progress and reward long ago; these components bring those patterns to everyday
@@ -181,7 +182,12 @@ export default function HomePage({ onOpen, go }) {
             </PixelButton>
             <InstallChip />
           </div>
-          <p className="home-hint">Hold anywhere, or the space bar, to hit hyperspeed.</p>
+          <p className="home-hint">
+            Hold anywhere, or the space bar, to hit hyperspeed. Or{' '}
+            <a href="#worlds" onClick={event => (event.preventDefault(), document.getElementById('worlds')?.scrollIntoView({ behavior: 'smooth' }))}>
+              warp to a new world ▼
+            </a>
+          </p>
         </div>
       </section>
 
@@ -208,6 +214,17 @@ export default function HomePage({ onOpen, go }) {
         ))}
         separator="✦"
       />
+
+      <section className="home-section home-worlds" id="worlds" aria-labelledby="home-worlds">
+        <div className="home-wrap">
+          <p className="home-kicker">Endless worlds</p>
+          <h2 id="home-worlds" className="home-h2">
+            {COMPONENTS.length} components. Endless worlds.
+          </h2>
+          <p className="home-body">Every warp grows a new planet from a seed. Its sky, palette, title, survey and locals are all Bits Lab components, with props rolled inside ranges that look good. Find one you love? Copy its code or share its link.</p>
+          <WorldExplorer />
+        </div>
+      </section>
 
       <section className="home-section" aria-labelledby="home-demo">
         <div className="home-wrap">

@@ -38,6 +38,12 @@ The homepage turns a made-up app’s onboarding into a playable quest, built fro
 
 ![An onboarding quest: a quest log with two tasks done, 150 XP on a progress bar, a setup meter and a level map](docs/screenshots/onboarding-quest.jpg)
 
+## Endless worlds
+
+Every component has props you can tune, so Bits Lab can also *generate*. On the homepage, **Warp** grows a new planet from a seed: a biome, a palette, a sky, a title effect, a planet card, a survey and a local guide, all Bits Lab components with props rolled inside ranges that look good. The seed lives in the URL (`?world=lumo-909`), so every world can be shared and rebuilt exactly, and **Copy world code** gives you the JSX for what you see. With 12 biomes, 10 skies, 6 title effects and continuous props, the worlds don’t run out.
+
+![A generated world, “Dropoudror-20, the Sunbaked Mesas”: a retro horizon at sunset with a planet card, survey rings, a hazard bar and a guide’s greeting](docs/screenshots/endless-worlds.jpg)
+
 ## Install
 
 ```bash
