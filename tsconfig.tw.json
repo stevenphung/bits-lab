@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.variants.json",
+  "include": ["src/bits/tw-ts/*.tsx"]
+}

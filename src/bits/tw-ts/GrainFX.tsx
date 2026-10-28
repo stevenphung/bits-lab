@@ -1,0 +1,154 @@
+import { useEffect, useMemo, useRef, type CSSProperties, type ReactNode } from 'react';
+
+type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
+
+// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
+// styles as utility classes.
+//
+// Texture on top of anything. Stack any of: "grain", live film noise in chunky pixels; "dither",
+// an 8-bit ordered-dither screen; "halftone", printer dots that fade toward one edge; "scanlines";
+// and "blur", which softens the content toward the top or bottom edge. Wrap content, or use it
+// on its own to cover its parent. Never catches the pointer; grain pauses off-screen and holds
+// still for reduced motion.
+
+// The classic 8×8 Bayer matrix: thresholds spread so no two neighbours are close in value.
+const BAYER = [0, 32, 8, 40, 2, 34, 10, 42, 48, 16, 56, 24, 50, 18, 58, 26, 12, 44, 4, 36, 14, 46, 6, 38, 60, 28, 52, 20, 62, 30, 54, 22, 3, 35, 11, 43, 1, 33, 9, 41, 51, 19, 59, 27, 49, 17, 57, 25, 15, 47, 7, 39, 13, 45, 5, 37, 63, 31, 55, 23, 61, 29, 53, 21];
+
+// An 8×8 SVG tile: each cell is ink when its threshold is under the level, so `level` sets density.
+function ditherTile(color: string, level: number) {
+  const cells = BAYER.map((t, i) => (t < level * 64 ? `<rect x="${i % 8}" y="${Math.floor(i / 8)}" width="1" height="1"/>` : '')).join('');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" shape-rendering="crispEdges" fill="${color}">${cells}</svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+
+const DIR: Record<string, string> = { top: 'to bottom', bottom: 'to top', left: 'to right', right: 'to left' };
+
+export type GrainEffect = 'grain' | 'dither' | 'halftone' | 'scanlines' | 'blur';
+type Edge = 'top' | 'bottom' | 'left' | 'right';
+
+export interface GrainFXProps {
+  /** What to texture; without children it covers its parent. */
+  children?: ReactNode;
+  /** Stack any number. */
+  effects?: GrainEffect | GrainEffect[];
+  /** Strength, 0–1. */
+  amount?: number;
+  /** Pixel size of grain and dither, in px. */
+  cell?: number;
+  /** Grain refresh rate. */
+  fps?: number;
+  /** CSS mix-blend-mode for grain and dither. */
+  blend?: string;
+  /** Ink for dither, halftone and scanlines. */
+  color?: string;
+  /** Dither density, 0–1. */
+  density?: number;
+  dotSize?: number;
+  dotPitch?: number;
+  /** The edge halftone dots fade from. */
+  fadeFrom?: Edge;
+  /** Edge blur strength in px. */
+  blur?: number;
+  blurEdge?: Edge;
+  /** How far in the edge blur reaches, in %. */
+  blurSize?: number;
+  className?: string;
+  style?: CSSProperties;
+}
+
+export default function GrainFX({
+  children,
+  effects = ['grain'],
+  amount = 0.35,
+  cell = 2,
+  fps = 12,
+  blend = 'overlay',
+  color = '#0b0b14',
+  density = 0.5,
+  dotSize = 2.5,
+  dotPitch = 8,
+  fadeFrom = 'top',
+  blur = 10,
+  blurEdge = 'bottom',
+  blurSize = 45,
+  className = '',
+  style
+}: GrainFXProps) {
+  
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const list = Array.isArray(effects) ? effects : [effects];
+  const has = (name: GrainEffect) => list.includes(name);
+  const grain = has('grain');
+  const dither = useMemo(() => ditherTile(color, density), [color, density]);
+
+  useEffect(() => {
+    if (!grain) return undefined;
+    const canvas = canvasRef.current!;
+    const ctx = canvas.getContext('2d')!;
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    let image: ImageData | null = null;
+    let visible = true;
+    let timer = 0;
+
+    // One canvas pixel per `cell` CSS pixels, stretched up crisply, so the grain is chunky.
+    const fit = () => {
+      canvas.width = Math.max(1, Math.ceil(canvas.clientWidth / cell));
+      canvas.height = Math.max(1, Math.ceil(canvas.clientHeight / cell));
+      image = ctx.createImageData(canvas.width, canvas.height);
+    };
+    const paint = () => {
+      const d = image!.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const v = Math.random() * 255;
+        d[i] = v;
+        d[i + 1] = v;
+        d[i + 2] = v;
+        d[i + 3] = 255;
+      }
+      ctx.putImageData(image!, 0, 0);
+    };
+    const loop = () => {
+      paint();
+      timer = visible && !document.hidden && !reduced ? setTimeout(loop, 1000 / fps) : 0;
+    };
+    const resize = new ResizeObserver(() => {
+      fit();
+      paint();
+    });
+    resize.observe(canvas);
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible && !timer) loop();
+    });
+    observer.observe(canvas);
+    const onVisibility = () => !timer && loop();
+    document.addEventListener('visibilitychange', onVisibility);
+    fit();
+    loop();
+    return () => {
+      clearTimeout(timer);
+      resize.disconnect();
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, [grain, cell, fps]);
+
+  return (
+    <div
+      className={`relative isolate data-[cover]:absolute data-[cover]:inset-0 ${className}`}
+      data-cover={children == null || undefined}
+      style={{ '--bl-amount': amount, '--bl-cell': `${cell}px`, '--bl-blend': blend, '--bl-ink': color, '--bl-dither': dither, '--bl-dot': `${dotSize}px`, '--bl-pitch': `${dotPitch}px`, '--bl-fade-dir': DIR[fadeFrom] ?? 'to bottom', '--bl-blur': `${blur}px`, '--bl-blur-dir': DIR[blurEdge] ?? 'to top', '--bl-blur-size': `${blurSize}%`, ...style } as CSSVars}
+    >
+      {children}
+      {has('blur') && <span className="pointer-events-none absolute inset-0 z-1 [-webkit-backdrop-filter:blur(var(--bl-blur))] [backdrop-filter:blur(var(--bl-blur))] [-webkit-mask-image:linear-gradient(var(--bl-blur-dir),#000,transparent_var(--bl-blur-size))] [mask-image:linear-gradient(var(--bl-blur-dir),#000,transparent_var(--bl-blur-size))]" aria-hidden="true" />}
+      {has('halftone') && <span className="pointer-events-none absolute inset-0 z-1 bg-[radial-gradient(circle_at_center,var(--bl-ink)_var(--bl-dot),transparent_calc(var(--bl-dot)_+_0.6px))] bg-size-[var(--bl-pitch)_var(--bl-pitch)] opacity-(--bl-amount) [-webkit-mask-image:linear-gradient(var(--bl-fade-dir),#000,transparent)] [mask-image:linear-gradient(var(--bl-fade-dir),#000,transparent)]" aria-hidden="true" />}
+      {has('dither') && <span className="pointer-events-none absolute inset-0 z-1 bg-(image:--bl-dither) bg-size-[calc(var(--bl-cell)_*_8)_calc(var(--bl-cell)_*_8)] opacity-(--bl-amount) [image-rendering:pixelated] [mix-blend-mode:var(--bl-blend)]" aria-hidden="true" />}
+      {has('scanlines') && <span className="pointer-events-none absolute inset-0 z-1 opacity-(--bl-amount) [background:repeating-linear-gradient(to_bottom,transparent_0_calc(var(--bl-cell)_*_1),var(--bl-ink)_calc(var(--bl-cell)_*_1)_calc(var(--bl-cell)_*_2))]" aria-hidden="true" />}
+      {grain && (
+        <span className="pointer-events-none absolute inset-0 z-1" aria-hidden="true">
+          <canvas ref={canvasRef} className="block h-full w-full opacity-(--bl-amount) [image-rendering:pixelated] [mix-blend-mode:var(--bl-blend)]" />
+        </span>
+      )}
+    </div>
+  );
+}

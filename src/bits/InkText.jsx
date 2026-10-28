@@ -1,0 +1,72 @@
+import { useInsertionEffect } from 'react';
+
+// Text filled with something other than flat ink. "shimmer" runs a band of light across it;
+// "gradient" flows colours through it, either smooth or stepped into hard pixel bands; "outline"
+// shows a hollow stroke that floods with colour from the bottom on hover or focus; "image"
+// fills the letters with a picture that slowly pans. Plain, selectable text throughout; reduced
+// motion keeps every fill still.
+
+const STYLE_ID = 'bl-ink-text';
+const CSS = `
+@property --bl-ink-level { syntax: "<percentage>"; inherits: true; initial-value: 0%; }
+.bl-ink { margin: 0; color: transparent; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-repeat: no-repeat; }
+.bl-ink[data-fill="shimmer"] { background-image: linear-gradient(100deg, var(--bl-base) 0 40%, var(--bl-glint) 50%, var(--bl-base) 60% 100%); background-size: 250% 100%; animation: bl-ink-sweep var(--bl-speed) linear infinite; }
+.bl-ink[data-fill="gradient"] { background-image: linear-gradient(90deg, var(--bl-stops)); background-size: 300% 100%; background-repeat: repeat; animation: bl-ink-flow var(--bl-speed) linear infinite; }
+.bl-ink[data-fill="outline"] { --bl-ink-level: 0%; background-image: linear-gradient(to top, var(--bl-base) var(--bl-ink-level), transparent var(--bl-ink-level)); -webkit-text-stroke: var(--bl-stroke) var(--bl-base); transition: --bl-ink-level 600ms cubic-bezier(.3,.8,.3,1); }
+.bl-ink[data-fill="outline"]:hover, .bl-ink[data-fill="outline"]:focus-visible, .bl-ink[data-fill="outline"][data-filled] { --bl-ink-level: 100%; }
+.bl-ink[data-fill="image"] { background-image: var(--bl-image); background-size: cover; background-position: 0% 50%; animation: bl-ink-pan var(--bl-speed) ease-in-out infinite alternate; }
+.bl-ink[data-fill="image"][data-pixelated] { image-rendering: pixelated; }
+@keyframes bl-ink-sweep { from { background-position: 100% 0; } to { background-position: -50% 0; } }
+@keyframes bl-ink-flow { from { background-position: 0% 0; } to { background-position: 150% 0; } }
+@keyframes bl-ink-pan { to { background-position: 100% 50%; } }
+@media (prefers-reduced-motion: reduce) { .bl-ink { animation: none !important; transition: none !important; } .bl-ink[data-fill="shimmer"] { background-position: 50% 0; } }
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
+
+// "a, b, c" as hard bands (each colour holds, then jumps) or as smooth stops. The list repeats
+// once so the flowing background tiles without a seam.
+function gradientStops(colors, stepped) {
+  const list = [...colors, colors[0]];
+  if (!stepped) return list.join(', ');
+  const share = 100 / list.length;
+  return list.map((c, i) => `${c} ${(i * share).toFixed(2)}% ${((i + 1) * share).toFixed(2)}%`).join(', ');
+}
+
+export default function InkText({
+  text,
+  children,
+  as: Tag = 'span',
+  fill = 'shimmer',
+  colors = ['#ef7d57', '#ffcd75', '#a7f070', '#73eff7', '#41a6f6', '#b13e53'],
+  stepped = true,
+  baseColor = '#94b0c2',
+  glintColor = '#f4f4f4',
+  image,
+  pixelated = true,
+  strokeWidth = 1.5,
+  filled = false,
+  speed = 3,
+  className = '',
+  style
+}) {
+  useStyles();
+  return (
+    <Tag
+      className={`bl-ink ${className}`}
+      data-fill={fill}
+      data-filled={filled || undefined}
+      data-pixelated={pixelated || undefined}
+      style={{ '--bl-base': baseColor, '--bl-glint': glintColor, '--bl-stops': gradientStops(colors, stepped), '--bl-image': image ? `url("${image}")` : 'none', '--bl-stroke': `${strokeWidth}px`, '--bl-speed': `${speed}s`, ...style }}
+    >
+      {text ?? children}
+    </Tag>
+  );
+}

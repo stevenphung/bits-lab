@@ -1,0 +1,307 @@
+import { useEffect, useId, useInsertionEffect, useRef, useState } from 'react';
+
+// A color picker built around a hue ring with a saturation/brightness square inside it.
+// Drag either one (or use the keyboard: each is a slider, the square moves on both axes),
+// type a hex code, pick a swatch, or sample from the screen with the eyedropper where the
+// browser supports it. Hue is kept while you drag through greys, so it never jumps to red.
+
+const STYLE_ID = 'bl-color-dial';
+const CSS = `
+.bl-dial { display: grid; justify-items: center; gap: 14px; width: min(var(--bl-size), 100%); font-family: var(--bl-font); color: var(--bl-ink); }
+.bl-dial__wheel { position: relative; width: 100%; aspect-ratio: 1; touch-action: none; user-select: none; -webkit-user-select: none; }
+.bl-dial__ring { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(#f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--bl-ring) - 1px), #000 calc(100% - var(--bl-ring))); mask: radial-gradient(farthest-side, transparent calc(100% - var(--bl-ring) - 1px), #000 calc(100% - var(--bl-ring))); cursor: crosshair; }
+.bl-dial__square { position: absolute; left: 50%; top: 50%; width: var(--bl-sq); height: var(--bl-sq); border-radius: 8px; background: linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent), hsl(var(--bl-h) 100% 50%); transform: translate(-50%, -50%); cursor: crosshair; }
+.bl-dial__thumb { position: absolute; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: var(--bl-thumb); box-shadow: 0 0 0 3px #fff, 0 0 0 4px rgba(0,0,0,0.35), 0 4px 10px rgba(0,0,0,0.4); outline: none; transition: transform 140ms cubic-bezier(.3,1.6,.5,1); }
+.bl-dial__thumb:focus-visible { transform: scale(1.25); box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--bl-accent); }
+.bl-dial[data-dragging] .bl-dial__thumb[data-active] { transform: scale(1.25); }
+.bl-dial__row { display: flex; align-items: center; gap: 8px; width: 100%; }
+.bl-dial__preview { flex: 0 0 auto; width: 36px; height: 36px; border-radius: 10px; background: var(--bl-thumb); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15); }
+.bl-dial__hex { flex: 1; min-width: 0; height: 36px; padding: 0 10px; box-sizing: border-box; border: 0; border-radius: 10px; background: var(--bl-field); color: inherit; font: inherit; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; text-transform: uppercase; box-shadow: inset 0 0 0 1px var(--bl-line); outline: none; }
+.bl-dial__hex:focus { box-shadow: inset 0 0 0 2px var(--bl-accent); }
+.bl-dial__hex[aria-invalid="true"] { box-shadow: inset 0 0 0 2px var(--bl-error); }
+.bl-dial__btn { flex: 0 0 auto; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 10px; background: var(--bl-field); color: var(--bl-muted); cursor: pointer; box-shadow: inset 0 0 0 1px var(--bl-line); }
+.bl-dial__btn:hover { color: var(--bl-ink); }
+.bl-dial__btn:focus-visible, .bl-dial__swatch:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 2px; }
+.bl-dial__swatches { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.bl-dial__swatch { width: 24px; height: 24px; padding: 0; border: 0; border-radius: 7px; cursor: pointer; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15); transition: transform 160ms cubic-bezier(.3,1.6,.5,1); }
+.bl-dial__swatch:hover { transform: scale(1.15); }
+.bl-dial__swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--bl-bg), 0 0 0 4px var(--bl-ink); }
+@media (prefers-reduced-motion: reduce) { .bl-dial__thumb, .bl-dial__swatch { transition: none; } }
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
+
+export function parseHex(text) {
+  const m = String(text).trim().replace(/^#/, '').match(/^([0-9a-f]{3}|[0-9a-f]{6})$/i);
+  if (!m) return null;
+  const full = m[1].length === 3 ? m[1].replace(/./g, c => c + c) : m[1];
+  const n = parseInt(full, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+const toHex = ([r, g, b]) => `#${[r, g, b].map(c => Math.round(c).toString(16).padStart(2, '0')).join('')}`;
+
+export function hsvToRgb(h, s, v) {
+  const f = n => {
+    const k = (n + h / 60) % 6;
+    return v * (1 - s * Math.max(0, Math.min(k, 4 - k, 1)));
+  };
+  return [f(5) * 255, f(3) * 255, f(1) * 255];
+}
+
+export function rgbToHsv([r, g, b]) {
+  const [rn, gn, bn] = [r / 255, g / 255, b / 255];
+  const max = Math.max(rn, gn, bn);
+  const d = max - Math.min(rn, gn, bn);
+  let h = 0;
+  if (d) h = max === rn ? ((gn - bn) / d) % 6 : max === gn ? (bn - rn) / d + 2 : (rn - gn) / d + 4;
+  return { h: (h * 60 + 360) % 360, s: max ? d / max : 0, v: max };
+}
+
+const DEFAULT_SWATCHES = ['#1a1c2c', '#5d275d', '#b13e53', '#ef7d57', '#ffcd75', '#a7f070', '#38b764', '#257179', '#29366f', '#3b5dc9', '#41a6f6', '#73eff7', '#f4f4f4', '#94b0c2', '#566c86', '#333c57'];
+
+export default function ColorDial({
+  value,
+  defaultValue = '#73eff7',
+  onValueChange,
+  swatches = DEFAULT_SWATCHES,
+  size = 240,
+  ringWidth = 22,
+  eyedropper = true,
+  label = 'Color',
+  backgroundColor = '#1a1c2c',
+  fieldColor = '#0b0b14',
+  textColor = '#f4f4f4',
+  mutedColor = '#94b0c2',
+  lineColor = '#333c57',
+  accentColor = '#73eff7',
+  errorColor = '#ef7d57',
+  fontFamily = 'ui-sans-serif, system-ui, sans-serif',
+  className = '',
+  style
+}) {
+  useStyles();
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
+  const [inner, setInner] = useState(defaultValue);
+  const hex = (value ?? inner).toLowerCase();
+  const [hsv, setHsv] = useState(() => rgbToHsv(parseHex(hex) ?? [0, 0, 0]));
+  const [draft, setDraft] = useState(hex);
+  const [dragging, setDragging] = useState(null);
+  const [canSample, setCanSample] = useState(false);
+  const wheelRef = useRef(null);
+  const lastEmitted = useRef(hex);
+
+  useEffect(() => setCanSample(eyedropper && typeof window !== 'undefined' && 'EyeDropper' in window), [eyedropper]);
+
+  // Follow outside changes to the value, keeping our hue when the new color is grey.
+  useEffect(() => {
+    setDraft(hex);
+    if (hex === lastEmitted.current) return;
+    const rgb = parseHex(hex);
+    if (!rgb) return;
+    const next = rgbToHsv(rgb);
+    setHsv(current => ({ h: next.s === 0 || next.v === 0 ? current.h : next.h, s: next.s, v: next.v }));
+    lastEmitted.current = hex;
+  }, [hex]);
+
+  const emit = next => {
+    setHsv(next);
+    const out = toHex(hsvToRgb(next.h, next.s, next.v));
+    lastEmitted.current = out;
+    if (value === undefined) setInner(out);
+    onValueChange?.(out);
+  };
+
+  // Set from an RGB color, keeping the current hue when the new color is grey.
+  const emitRgb = rgb => {
+    const next = rgbToHsv(rgb);
+    emit({ h: next.s === 0 || next.v === 0 ? hsv.h : next.h, s: next.s, v: next.v });
+  };
+
+  // Geometry, in fractions of the wheel's width.
+  const ringFrac = ringWidth / size;
+  const innerR = 0.5 - ringFrac;
+  const sq = Math.SQRT2 * innerR - 0.06;
+
+  const fromPointer = (event, mode) => {
+    const rect = wheelRef.current.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    if (mode === 'ring') {
+      const h = ((Math.atan2(y, x) * 180) / Math.PI + 90 + 360) % 360;
+      emit({ ...hsv, h });
+    } else {
+      const s = Math.max(0, Math.min(1, (x + sq / 2) / sq));
+      const v = Math.max(0, Math.min(1, 1 - (y + sq / 2) / sq));
+      emit({ ...hsv, s, v });
+    }
+  };
+
+  const onPointerDown = event => {
+    const rect = wheelRef.current.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    const r = Math.hypot(x, y);
+    const mode = r >= innerR - 0.01 && r <= 0.5 ? 'ring' : Math.abs(x) <= sq / 2 && Math.abs(y) <= sq / 2 ? 'square' : null;
+    if (!mode) return;
+    event.preventDefault();
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    } catch {
+      // Synthetic pointers can't be captured; the drag still tracks via the wheel.
+    }
+    setDragging(mode);
+    fromPointer(event, mode);
+    wheelRef.current.querySelector(`[data-part="${mode}"]`)?.focus({ preventScroll: true });
+  };
+
+  const onRingKey = event => {
+    const step = event.shiftKey ? 10 : 1;
+    const delta = { ArrowRight: step, ArrowUp: step, ArrowLeft: -step, ArrowDown: -step }[event.key];
+    if (delta === undefined && event.key !== 'Home' && event.key !== 'End') return;
+    event.preventDefault();
+    const h = event.key === 'Home' ? 0 : event.key === 'End' ? 359 : (hsv.h + delta + 360) % 360;
+    emit({ ...hsv, h });
+  };
+
+  const onSquareKey = event => {
+    const step = event.shiftKey ? 0.1 : 0.01;
+    const moves = { ArrowRight: ['s', step], ArrowLeft: ['s', -step], ArrowUp: ['v', step], ArrowDown: ['v', -step] };
+    const move = moves[event.key];
+    if (!move) return;
+    event.preventDefault();
+    const [axis, delta] = move;
+    emit({ ...hsv, [axis]: Math.max(0, Math.min(1, hsv[axis] + delta)) });
+  };
+
+  const commitDraft = () => {
+    const rgb = parseHex(draft);
+    if (rgb) emitRgb(rgb);
+  };
+
+  const sample = async () => {
+    try {
+      const result = await new window.EyeDropper().open();
+      const rgb = parseHex(result.sRGBHex);
+      if (rgb) emitRgb(rgb);
+    } catch {
+      // Cancelled.
+    }
+  };
+
+  const angle = ((hsv.h - 90) * Math.PI) / 180;
+  const ringR = 0.5 - ringFrac / 2;
+  const valid = !!parseHex(draft);
+  const pct = n => Math.round(n * 100);
+
+  return (
+    <div
+      className={`bl-dial ${className}`}
+      role="group"
+      aria-label={label}
+      data-dragging={dragging || undefined}
+      style={{
+        '--bl-size': `${size}px`,
+        '--bl-ring': `${ringWidth}px`,
+        '--bl-sq': `${sq * 100}%`,
+        '--bl-h': hsv.h,
+        '--bl-thumb': hex,
+        '--bl-bg': backgroundColor,
+        '--bl-field': fieldColor,
+        '--bl-ink': textColor,
+        '--bl-muted': mutedColor,
+        '--bl-line': lineColor,
+        '--bl-accent': accentColor,
+        '--bl-error': errorColor,
+        '--bl-font': fontFamily,
+        ...style
+      }}
+    >
+      <div
+        ref={wheelRef}
+        className="bl-dial__wheel"
+        onPointerDown={onPointerDown}
+        onPointerMove={event => dragging && fromPointer(event, dragging)}
+        onPointerUp={() => setDragging(null)}
+        onPointerCancel={() => setDragging(null)}
+      >
+        <div className="bl-dial__ring" aria-hidden="true" />
+        <div className="bl-dial__square" aria-hidden="true" />
+        <span
+          className="bl-dial__thumb"
+          data-part="ring"
+          data-active={dragging === 'ring' || undefined}
+          role="slider"
+          tabIndex={0}
+          aria-label="Hue"
+          aria-valuemin={0}
+          aria-valuemax={359}
+          aria-valuenow={Math.round(hsv.h)}
+          aria-valuetext={`Hue ${Math.round(hsv.h)} degrees`}
+          onKeyDown={onRingKey}
+          style={{ left: `${(0.5 + Math.cos(angle) * ringR) * 100}%`, top: `${(0.5 + Math.sin(angle) * ringR) * 100}%`, background: `hsl(${hsv.h} 100% 50%)` }}
+        />
+        <span
+          className="bl-dial__thumb"
+          data-part="square"
+          data-active={dragging === 'square' || undefined}
+          role="slider"
+          tabIndex={0}
+          aria-label="Saturation and brightness"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={pct(hsv.s)}
+          aria-valuetext={`Saturation ${pct(hsv.s)}%, brightness ${pct(hsv.v)}%`}
+          onKeyDown={onSquareKey}
+          style={{ left: `${(0.5 - sq / 2 + hsv.s * sq) * 100}%`, top: `${(0.5 - sq / 2 + (1 - hsv.v) * sq) * 100}%` }}
+        />
+      </div>
+      <div className="bl-dial__row">
+        <span className="bl-dial__preview" aria-hidden="true" />
+        <input
+          className="bl-dial__hex"
+          aria-label={`${label} hex code`}
+          aria-invalid={!valid}
+          spellCheck={false}
+          value={draft}
+          onChange={event => setDraft(event.target.value)}
+          onBlur={commitDraft}
+          onKeyDown={event => event.key === 'Enter' && commitDraft()}
+        />
+        {canSample && (
+          <button type="button" className="bl-dial__btn" aria-label="Pick a color from the screen" onClick={sample}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="m9.5 3.5 3 3M11 2a1.4 1.4 0 0 1 2 0l1 1a1.4 1.4 0 0 1 0 2l-1.5 1.5-3-3zM8.5 4.5 2.8 10.2 2 14l3.8-.8 5.7-5.7" />
+            </svg>
+          </button>
+        )}
+      </div>
+      {swatches.length > 0 && (
+        <ul className="bl-dial__swatches" aria-label="Swatches" id={`${uid}-swatches`}>
+          {swatches.map(swatch => (
+            <li key={swatch}>
+              <button
+                type="button"
+                className="bl-dial__swatch"
+                aria-label={swatch}
+                aria-pressed={swatch.toLowerCase() === hex}
+                style={{ background: swatch }}
+                onClick={() => {
+                  const rgb = parseHex(swatch);
+                  if (rgb) emitRgb(rgb);
+                }}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}

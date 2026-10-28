@@ -1,0 +1,196 @@
+import { useEffect, useInsertionEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+
+type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
+
+// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
+// styles as utility classes; the keyframes ship as a small injected style.
+//
+// A button for actions you shouldn't take by accident. Press and hold (or hold Space or Enter)
+// and a fuse burns across it, spark and all; let go early and it rewinds. Hold to the end and
+// it confirms, flashes, and shows a done label for a moment. Screen readers hear how to use it
+// and when it's done. Reduced motion drops the spark and flash but keeps the hold.
+
+const STYLE_ID = 'bl-hold-confirm-tw';
+const CSS = `
+@keyframes bl-hold-crackle { 50% { transform: translate(1px, -2px) scale(0.8); } }
+@keyframes bl-hold-flash { 33% { filter: brightness(1.8); } }
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
+
+export interface HoldToConfirmProps {
+  /** Label while waiting. */
+  children?: ReactNode;
+  /** Label after confirming. */
+  doneLabel?: ReactNode;
+  /** Called once the fuse burns all the way. */
+  onConfirm?: () => void;
+  /** Hold time in ms. */
+  duration?: number;
+  /** How many times faster it rewinds when let go. */
+  rewind?: number;
+  /** How long the done state shows, in ms. */
+  resetAfter?: number;
+  disabled?: boolean;
+  width?: number;
+  height?: number;
+  radius?: number;
+  backgroundColor?: string;
+  fillColor?: string;
+  fuseColor?: string;
+  sparkColor?: string;
+  textColor?: string;
+  accentColor?: string;
+  fontFamily?: string;
+  className?: string;
+  style?: CSSProperties;
+}
+
+export default function HoldToConfirm({
+  children = 'Hold to delete',
+  doneLabel = 'Done',
+  onConfirm,
+  duration = 1200,
+  rewind = 2.5,
+  resetAfter = 1600,
+  disabled = false,
+  width = 200,
+  height = 52,
+  radius = 10,
+  backgroundColor = '#333c57',
+  fillColor = '#b13e53',
+  fuseColor = '#ef7d57',
+  sparkColor = '#ffcd75',
+  textColor = '#f4f4f4',
+  accentColor = '#73eff7',
+  fontFamily = 'inherit',
+  className = '',
+  style
+}: HoldToConfirmProps) {
+  useStyles();
+  const ref = useRef<HTMLButtonElement>(null);
+  const confirmRef = useRef(onConfirm);
+  confirmRef.current = onConfirm;
+  const [state, setState] = useState('idle'); // idle | holding | done
+  const [announce, setAnnounce] = useState('');
+  const held = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current!;
+    let p = 0;
+    let raf = 0;
+    let last = 0;
+    let done = false;
+    let resetTimer = 0;
+    const paint = () => el.style.setProperty('--p', p.toFixed(4));
+
+    // Fill while held, rewind (faster) when let go; confirm at the end.
+    const tick = (now: number) => {
+      // Real time, not frame count: a slow or janky device shouldn't make the hold longer.
+      const dt = Math.max(0, Math.min(0.25, (now - last) / 1000));
+      last = now;
+      p = held.current ? Math.min(1, p + (dt * 1000) / duration) : Math.max(0, p - ((dt * 1000) / duration) * rewind);
+      paint();
+      if (held.current && p >= 1 && !done) {
+        done = true;
+        held.current = false;
+        setState('done');
+        setAnnounce(`${typeof doneLabel === 'string' ? doneLabel : 'Done'}.`);
+        confirmRef.current?.();
+        resetTimer = setTimeout(() => {
+          done = false;
+          p = 0;
+          paint();
+          setState('idle');
+          setAnnounce('');
+        }, resetAfter);
+        raf = 0;
+        return;
+      }
+      raf = held.current || p > 0 ? requestAnimationFrame(tick) : 0;
+      if (!raf) setState('idle');
+    };
+    const start = () => {
+      if (done || el.disabled) return;
+      held.current = true;
+      setState('holding');
+      if (!raf) {
+        last = performance.now();
+        raf = requestAnimationFrame(tick);
+      }
+    };
+    const stop = () => {
+      if (!held.current) return;
+      held.current = false;
+      if (!raf && p > 0) {
+        last = performance.now();
+        raf = requestAnimationFrame(tick);
+      }
+    };
+    const onDown = (event: PointerEvent) => {
+      if (event.button > 0) return;
+      el.setPointerCapture?.(event.pointerId);
+      start();
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.key === ' ' || event.key === 'Enter') && !event.repeat) {
+        event.preventDefault();
+        start();
+      }
+    };
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.key === ' ' || event.key === 'Enter') stop();
+    };
+    // Block the native click so a quick tap never counts as a confirm.
+    const onClick = (event: MouseEvent) => event.preventDefault();
+
+    el.addEventListener('pointerdown', onDown);
+    el.addEventListener('pointerup', stop);
+    el.addEventListener('pointercancel', stop);
+    el.addEventListener('lostpointercapture', stop);
+    el.addEventListener('keydown', onKeyDown);
+    el.addEventListener('keyup', onKeyUp);
+    el.addEventListener('blur', stop);
+    el.addEventListener('click', onClick);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(resetTimer);
+      el.removeEventListener('pointerdown', onDown);
+      el.removeEventListener('pointerup', stop);
+      el.removeEventListener('pointercancel', stop);
+      el.removeEventListener('lostpointercapture', stop);
+      el.removeEventListener('keydown', onKeyDown);
+      el.removeEventListener('keyup', onKeyUp);
+      el.removeEventListener('blur', stop);
+      el.removeEventListener('click', onClick);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [duration, rewind, resetAfter]);
+
+  return (
+    <button
+      ref={ref}
+      type="button"
+      className={`group/hold relative inline-grid h-(--bl-h) min-w-(--bl-w) cursor-pointer touch-none place-items-center overflow-hidden rounded-(--bl-radius) border-0 bg-(--bl-bg) px-[22px] py-0 font-(family-name:--bl-font) text-[15px] font-bold text-(--bl-ink) shadow-[inset_0_-4px_0_rgba(0,0,0,0.3)] select-none [--p:0] [-webkit-tap-highlight-color:transparent] focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-(--bl-accent) focus-visible:outline-solid disabled:cursor-not-allowed disabled:opacity-50 data-[state=done]:animate-[bl-hold-flash_420ms_steps(3)] motion-reduce:data-[state=done]:animate-none ${className}`}
+      data-state={state}
+      disabled={disabled}
+      style={{ '--bl-w': `${width}px`, '--bl-h': `${height}px`, '--bl-radius': `${radius}px`, '--bl-bg': backgroundColor, '--bl-fill': fillColor, '--bl-fuse': fuseColor, '--bl-spark': sparkColor, '--bl-ink': textColor, '--bl-accent': accentColor, '--bl-font': fontFamily, ...style } as CSSVars}
+    >
+      <span className="absolute inset-0 origin-left bg-(--bl-fill) [transform:scaleX(var(--p))]" aria-hidden="true" />
+      <span className="absolute right-0 bottom-0 left-0 h-1 bg-[repeating-linear-gradient(90deg,var(--bl-fuse)_0_6px,transparent_6px_9px)]" aria-hidden="true" />
+      <span className="absolute -bottom-0.5 left-[calc(var(--p)_*_100%)] -ml-1 size-2 animate-[bl-hold-crackle_120ms_steps(2)_infinite] bg-(--bl-spark) opacity-0 shadow-[4px_-4px_0_var(--bl-spark),-4px_-6px_0_var(--bl-fuse),2px_-10px_0_rgba(255,255,255,0.7)] group-data-[state=holding]/hold:opacity-100 motion-reduce:hidden" aria-hidden="true" />
+      <span className="relative inline-flex items-center gap-2">{state === 'done' ? doneLabel : children}</span>
+      <span className="sr-only">{state === 'done' ? '' : ' (press and hold to confirm)'}</span>
+      <span className="sr-only" aria-live="polite">
+        {announce}
+      </span>
+    </button>
+  );
+}

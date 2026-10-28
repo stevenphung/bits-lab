@@ -1,0 +1,13 @@
+/* Tailwind for the parity check page only, as a Tailwind app would have it (Preflight
+   included), generating just the classes used in the Tailwind variants. Both the original and
+   the Tailwind version render with it, so they're compared in the same environment. */
+@import 'tailwindcss' source(none);
+@source '../../bits/tw';
+
+html,
+body {
+  margin: 0;
+  background: #14151f;
+  color: #f4f4f4;
+  font: 16px/1.5 ui-sans-serif, system-ui, sans-serif;
+}
