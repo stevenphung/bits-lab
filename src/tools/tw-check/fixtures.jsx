@@ -120,6 +120,26 @@ const W3_PHOTOS = ['plains', 'forest', 'desert'].map(b => ({ src: `/pixel/biome-
 const W3_CRUMBS = ['Overworld', 'Plains', 'Village', 'Blacksmith', 'Storage', 'Chest', 'Enchanted pickaxe'].map(label => ({ label }));
 const W3_STAGES = [{ label: 'Visited', value: 1000 }, { label: 'Signed up', value: 400 }, { label: 'Paid', value: 90 }];
 
+
+// Wave 5, Phase B.
+const W5B_DECISIONS = [
+  { id: 'a', title: 'Refund order #4821?', detail: 'Two days late.', reward: '+10 trust' },
+  { id: 'b', title: 'Ship on Friday?', acceptLabel: 'Ship', declineLabel: 'Wait' }
+];
+const W5B_QUESTS = [
+  { id: 'a', title: 'Learn the shortcut', body: 'Press / to search.', action: 'Try it', xp: 10, icon: <span>★</span> },
+  { id: 'b', title: 'Pick a theme', body: 'Make it yours.', action: 'Open', xp: 15 },
+  { id: 'c', title: 'Invite a teammate', xp: 30 }
+];
+const W5B_GROUPS = [
+  { id: 'type', label: 'Type', options: [{ value: 'w', label: 'Weapons', count: 4 }, { value: 'a', label: 'Armour' }] },
+  { id: 'rarity', label: 'Rarity', options: [{ value: 'epic', label: 'Epic', rarity: 'epic', count: 2 }, { value: 'gold', label: 'Gold', color: '#ffcd75' }] }
+];
+const W5B_COMMENT = { id: 'c', author: 'Scout', agent: true, time: '2 min ago', text: 'Fixed it for @Mira.', details: ['Read files', 'Wrote patch'] };
+const clickFirstButton = el => el.querySelector('button:not(:disabled)')?.click();
+const clickLabelled = label => el => el.querySelector(`button[aria-label="${label}"]`)?.click();
+const clickToggle = el => el.querySelector('button[aria-expanded]')?.click();
+
 export const FIXTURES = {
   HoldToConfirm: [
     { label: 'idle', props: { children: 'Hold' } },
@@ -493,5 +513,43 @@ export const FIXTURES = {
   SuggestionChips: [
     { label: 'centered', props: { suggestions: IDEAS } },
     { label: 'start, icons', props: { align: 'start', count: 3, suggestions: IDEAS.map(text => ({ text, icon: <span>★</span> })) } }
+  ],
+  CharacterSheet: [
+    { label: 'full', settle: 900, props: { name: 'Mira', title: 'Designer', avatar: <span>★</span>, level: 7, xp: 120, xpMax: 300, setup: { done: 3, total: 5, next: 'Add a photo', onContinue: () => {} }, stats: [{ label: 'Quests', value: 42 }], actions: [{ label: 'Settings' }, { label: 'Sign out', danger: true }] } },
+    { label: 'minimal', props: { name: 'A very long player name that should cut off', blocks: 8 } }
+  ],
+  ReactionCombo: [
+    { label: 'like on', props: { defaultActive: ['like'] } },
+    { label: 'combo', settle: 150, render: C => <After run={el => { el.querySelectorAll('button')[0].click(); el.querySelectorAll('button')[2].click(); }}><C /></After> }
+  ],
+  BountyBoard: [
+    { label: 'open', props: { items: W5B_DECISIONS } },
+    { label: 'stamped', settle: 400, render: C => <After run={clickFirstButton}><C items={W5B_DECISIONS} foldDelay={60000} /></After> },
+    { label: 'cleared', props: { items: [] } }
+  ],
+  SideQuests: [
+    { label: 'one done', props: { quests: W5B_QUESTS, defaultDone: ['a'] } },
+    { label: 'just done', settle: 300, render: C => <After run={clickFirstButton}><C quests={W5B_QUESTS} /></After> }
+  ],
+  LevelUpStats: [{ label: 'counted', settle: 1600, props: { trigger: 'mount', duration: 100, stats: [{ label: 'Revenue', from: 100, to: 150, format: 'currency' }, { label: 'Churn', from: 0.05, to: 0.04, format: 'percent', goodDirection: 'down' }, { label: 'Flat', from: 3, to: 3 }] } }],
+  LootFilter: [
+    { label: 'picked', props: { groups: W5B_GROUPS, defaultValue: { rarity: ['epic', 'gold'] } } },
+    { label: 'collapsed', props: { groups: W5B_GROUPS, defaultOpen: [] } }
+  ],
+  ReplyActions: [
+    { label: 'versions', props: { defaultVersions: 3, defaultVersion: 2, defaultFeedback: 'up' } },
+    { label: 'copied', settle: 200, render: C => <After run={clickLabelled('Copy')}><C /></After> }
+  ],
+  DraftScroll: [
+    { label: 'draft', props: { recipients: [{ id: 'a', name: 'Ana', email: 'ana@x.io' }], subject: 'Hello', drafts: { Friendly: 'Hi!', Formal: 'Dear Ana,' }, attachments: [{ name: 'a.pdf', size: '8 KB' }] } },
+    { label: 'sent', settle: 400, render: C => <After run={el => el.querySelector('button[type=submit]')?.click()}><C drafts={{ Brief: 'Hi' }} /></After> }
+  ],
+  ThreadTrail: [
+    { label: 'thread', props: { comment: W5B_COMMENT, replies: [{ id: 'r', author: 'Mira Okafor', text: 'Thanks @Scout' }] } },
+    { label: 'details open', settle: 300, render: C => <After run={clickToggle}><C comment={W5B_COMMENT} /></After> }
+  ],
+  AdvisorCard: [
+    { label: 'options', props: { suggestion: { id: 'a', title: 'Thursday', body: 'Busier day.', confidence: 0.8 }, alternatives: [{ id: 'b', title: 'Friday', confidence: 0.4 }] } },
+    { label: 'accepted', settle: 300, render: C => <After run={el => [...el.querySelectorAll('button')].pop()?.click()}><C suggestion={{ id: 'a', title: 'Thursday', confidence: 0.3 }} undoWindow={60000} /></After> }
   ]
 };

@@ -6,7 +6,7 @@
 
 **Game feel for real products.**
 
-Games solved feedback, progress and reward decades ago. Bits Lab brings those tricks to everyday software: **159 original React components** where onboarding becomes a quest, milestones become achievements, progress has a health bar, waiting comes with tips and risky actions burn a fuse. Everything around them is here too (inputs, overlays, navigation, data, text effects and backgrounds), all in a playful 8-bit style.
+Games solved feedback, progress and reward decades ago. Bits Lab brings those tricks to everyday software: **169 original React components** where onboarding becomes a quest, milestones become achievements, progress has a health bar, waiting comes with tips and risky actions burn a fuse. Everything around them is here too (inputs, overlays, navigation, data, text effects and backgrounds), all in a playful 8-bit style.
 
 Every component brings its own styles, works with the keyboard, respects reduced motion and comes in four flavours: JavaScript or TypeScript, styled with plain CSS or Tailwind. Play with them and copy the code at **[bits-lab.vercel.app](https://bits-lab.vercel.app)**.
 
@@ -90,18 +90,18 @@ The site shows the right command for each component and variant, for pnpm, npm, 
 
 | Category | Count | For example |
 |---|---|---|
-| Pixel & Game UI | 22 | QuestDialog, HealthBar, InventoryGrid, VoxelTiles, ArcadeButtons |
+| Pixel & Game UI | 25 | QuestDialog, CharacterSheet, BountyBoard, SideQuests, HealthBar, VoxelTiles |
 | Text Animations | 15 | FocusPull, SignalText, PixelType, ShadowStack, KineticHeadline |
 | Backgrounds | 17 | RetroHorizon, AuroraBands, WarpField, CodeRain, LavaLamp |
 | Product Showcase | 16 | DeviceFrame, BentoGrid, PricingFlip, TerminalDemo, Coverflow |
 | Scroll Storytelling | 9 | StickyReveal, ScrollZoom, HorizontalTrack, Reveal |
 | Overlays & Feedback | 11 | ToastStack, SpringDrawer, SpotlightTour, Confetti |
 | Navigation | 10 | CommandPalette, DynamicIsland, SmartNavbar, HotbarDock |
-| Forms & Inputs | 15 | OTPInput, DateRange, HoldToConfirm, RatingPips, ScrubNumber |
-| Data & Numbers | 10 | TallyUp, SparkChart, RingProgress, BarRace, Heatmap |
+| Forms & Inputs | 16 | OTPInput, DateRange, HoldToConfirm, LootFilter, RatingPips, ScrubNumber |
+| Data & Numbers | 11 | TallyUp, LevelUpStats, SparkChart, RingProgress, BarRace, Heatmap |
 | Cards & Media | 15 | TradingCard, CardDeck, StoryViewer, SwipeActions, Discard |
-| Physics & Playful | 9 | GravityBox, StickerBoard, PointerKit, JellyBlob |
-| AI Surfaces | 6 | ChatBubbles, ThinkingShimmer, AgentCard, VoiceOrb |
+| Physics & Playful | 10 | GravityBox, ReactionCombo, StickerBoard, PointerKit, JellyBlob |
+| AI Surfaces | 10 | ChatBubbles, ThinkingShimmer, AgentCard, ReplyActions, DraftScroll, ThreadTrail, AdvisorCard |
 | Primitives | 4 | Accordion, OverlayKit, ToggleKit, GlassPanel |
 
 ## Screenshots
@@ -139,7 +139,7 @@ The UI is an 8-bit game theme: Sweetie 16 palette, pixel fonts, notched pixel bo
 
 The shadcn registry is written to `public/r/` by `scripts/build-registry.mjs` on dev start, on build and when a component changes. The site deploys to Vercel on every push to `main`.
 
-Three page templates are built but switched off for now (`src/templates/`, checked by `npm run check:templates`). They aren't routed from `src/App.jsx`, so they aren't in the build.
+Three page templates are built but switched off for now (`src/templates/`). `npm run check:templates` lists components they don't use yet; add `-- --strict` to make that fail once the templates come back. They aren't routed from `src/App.jsx`, so they aren't in the build.
 
 ### Layout
 
@@ -163,7 +163,7 @@ Before publishing, run the checks:
 ```bash
 npm run check:ts         # TypeScript variants: strict types, no drift from the .jsx
 npm run check:tw         # Tailwind variants: types, logic and drift
-npm run check:templates  # the three templates use every component
+npm run check:templates  # which components the (switched-off) templates don't use yet
 ```
 
 ### npm package

@@ -10,7 +10,7 @@ Original goal: turn Bits Lab into the largest library of highly polished React c
 
 **Wave 4 complete (2026-10-28):** 37 more originals for effects, backgrounds, cards and micro-interactions, in six phases plus a launch phase. See section 6. All phases are done: 159 originals, published at bits-lab.vercel.app and on npm as `bits-lab`.
 
-**Wave 5 planned (2026-10-29):** fill the gaps found by comparing Bits Lab with affectUI: light mode and AI-tool docs across the library, 10 game-feel product components, a new Scenes & Mascots category of 8 pixel scenes, and 6 upgrades to existing components. See section 7. Not started.
+**Wave 5 planned (2026-10-29):** fill the gaps found by comparing Bits Lab with affectUI: light mode and AI-tool docs across the library, 10 game-feel product components, a new Scenes & Mascots category of 8 pixel scenes, and 6 upgrades to existing components. See section 7. Phase B done (169 originals); Phases A, C and D next.
 
 - **Pixel & game set (12 items):** shipped 2026-10-26. They live in the Pixel & Game UI category, at `/pixel-game/<slug>`.
 - **Product showcase set (9 items, #21–25, 27–29, 34):** shipped 2026-10-26. They live in the Product Showcase category, at `/showcase/<slug>`.
@@ -491,7 +491,7 @@ About 37 new originals take Bits Lab from 123 to about 160. Phases 1–5 are eac
 
 ## 7. Wave 5: filling the gaps
 
-**Status:** planned 2026-10-29. Not started.
+**Status:** planned 2026-10-29. Phase B done 2026-10-29.
 
 **Why:** a comparison with [affectUI](https://github.com/flohoeller/affectui) (MIT, 57 free items: calm components, blocks, illustrations and motion for AI and SaaS products, one file each, light and dark mode built in). About half of its items are already covered by Bits Lab. The rest point to real gaps: light mode, a handful of everyday product components, and animated illustrations for empty states and explainers, a category Bits Lab doesn't have yet.
 
@@ -526,7 +526,7 @@ About 37 new originals take Bits Lab from 123 to about 160. Phases 1–5 are eac
 2. **Docs for AI coding tools.** An `llms.txt` plus a markdown doc per component (props, usage, accessibility), generated from the catalog, so assistants can use the library well.
 3. **A calmer skin (parked).** A quieter pixel style could widen the audience but dilutes the identity. Revisit after light mode.
 
-**Phase B: product moments with game feel** (10)
+**Phase B: product moments with game feel** (10) ✅ done 2026-10-29, each with JS, TS, CSS and Tailwind variants, a catalog demo and parity fixtures (20/20 match). CharacterSheet, BountyBoard and SideQuests went to Pixel & Game UI, ReactionCombo to Physics & Playful, LevelUpStats to Data & Numbers, LootFilter to Forms & Inputs, and ReplyActions, DraftScroll, ThreadTrail and AdvisorCard to AI Surfaces.
 
 | Gap | Component | Idea |
 |---|---|---|

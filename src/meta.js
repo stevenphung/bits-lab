@@ -1288,5 +1288,85 @@ export const COMPONENTS = [
     file: 'src/bits/ArcadeButtons.jsx',
     dependencies: [],
     description: 'Buttons with tricks: one launches with smoke, one dodges the pointer, one stretches like a slingshot.'
+  },
+  {
+    slug: 'character-sheet',
+    name: 'CharacterSheet',
+    category: 'pixel-game',
+    file: 'src/bits/CharacterSheet.jsx',
+    dependencies: [],
+    description: 'An account card drawn as an RPG character sheet: level, XP bar, setup progress, stats and menu actions.'
+  },
+  {
+    slug: 'reaction-combo',
+    name: 'ReactionCombo',
+    category: 'playful',
+    file: 'src/bits/ReactionCombo.jsx',
+    dependencies: [],
+    description: 'A reaction pill whose icons pop and counts roll, with a combo burst when you react in quick succession.'
+  },
+  {
+    slug: 'bounty-board',
+    name: 'BountyBoard',
+    category: 'pixel-game',
+    file: 'src/bits/BountyBoard.jsx',
+    dependencies: [],
+    description: 'Open decisions pinned up like bounties: answer one and a stamp slams on before it folds away.'
+  },
+  {
+    slug: 'side-quests',
+    name: 'SideQuests',
+    category: 'pixel-game',
+    file: 'src/bits/SideQuests.jsx',
+    dependencies: [],
+    description: 'Tips as side quests: one action each, a Done stamp, XP and a running score.'
+  },
+  {
+    slug: 'level-up-stats',
+    name: 'LevelUpStats',
+    category: 'data',
+    file: 'src/bits/LevelUpStats.jsx',
+    dependencies: [],
+    description: 'What changed since last time, as an RPG level-up screen with counting values and good/bad deltas.'
+  },
+  {
+    slug: 'loot-filter',
+    name: 'LootFilter',
+    category: 'inputs',
+    file: 'src/bits/LootFilter.jsx',
+    dependencies: [],
+    description: 'Grouped filters like a loot screen: rarity-tinted checkboxes, removable chips and Clear all.'
+  },
+  {
+    slug: 'reply-actions',
+    name: 'ReplyActions',
+    category: 'ai',
+    file: 'src/bits/ReplyActions.jsx',
+    dependencies: [],
+    description: 'The bar under an assistant reply: copy to check, regenerate with a version switcher, thumbs up and down.'
+  },
+  {
+    slug: 'draft-scroll',
+    name: 'DraftScroll',
+    category: 'ai',
+    file: 'src/bits/DraftScroll.jsx',
+    dependencies: [],
+    description: 'An agent-written draft on a parchment scroll: switch tone and recipient, edit, send with a wax seal or discard.'
+  },
+  {
+    slug: 'thread-trail',
+    name: 'ThreadTrail',
+    category: 'ai',
+    file: 'src/bits/ThreadTrail.jsx',
+    dependencies: [],
+    description: 'A comment thread joined by a pixel trail, with @mentions, folded agent steps and a reply box.'
+  },
+  {
+    slug: 'advisor-card',
+    name: 'AdvisorCard',
+    category: 'ai',
+    file: 'src/bits/AdvisorCard.jsx',
+    dependencies: [],
+    description: 'A suggestion with pixel confidence bars, alternatives to switch to, and accept with a timed undo.'
   }
 ];
