@@ -70,6 +70,26 @@ npm run check:originals  # no Bits Lab component shares a name or its props with
 npm run check:templates  # the three templates use every component
 ```
 
+## npm package
+
+`packages/bits-lab` is the `bits-lab` npm package (MIT). `npm run build:package` compiles every JavaScript + CSS component into `packages/bits-lab/dist`:
+
+- one ES module per component, with `"use client"` on top for Next.js;
+- TypeScript declarations from `src/bits/ts`;
+- an index that exports everything except components with dependencies (GravityBox, which needs matter-js, is only at `bits-lab/GravityBox`).
+
+To publish a release:
+
+```bash
+npm run build:package
+cd packages/bits-lab
+npm pack --dry-run   # lists exactly what will be uploaded
+npm login            # once
+npm publish
+```
+
+For later releases, bump the version first with `npm version patch` (or `minor`) inside `packages/bits-lab`.
+
 ## Adding a component
 
 1. Put the component in `src/bits/Name.jsx`.

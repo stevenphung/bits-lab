@@ -1,0 +1,36 @@
+{
+  "name": "bits-lab",
+  "version": "0.1.0",
+  "description": "159 original 8-bit React components: text effects, backgrounds, game UI, inputs, data, overlays and more. Zero dependencies, styles included.",
+  "license": "MIT",
+  "author": "Steven Phung",
+  "homepage": "https://bits-lab.vercel.app",
+  "keywords": ["react", "components", "pixel", "8-bit", "retro", "animation", "ui"],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "peerDependencies": {
+    "matter-js": ">=0.19",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "matter-js": {
+      "optional": true
+    }
+  }
+}

@@ -11,7 +11,8 @@
     "check:ts": "node scripts/check-ts-variants.mjs",
     "check:tw": "node scripts/check-tw-variants.mjs",
     "check:originals": "node scripts/check-originals.mjs",
-    "check:templates": "node scripts/check-templates.mjs"
+    "check:templates": "node scripts/check-templates.mjs",
+    "build:package": "node scripts/build-package.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
