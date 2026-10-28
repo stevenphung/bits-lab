@@ -21,3 +21,4 @@ src/tools/sound-lab/
 docs/REACTBITS_ANALYSIS.md
 docs/AIRBNB_DESIGN_LANGUAGE.md
 scripts/import-reactbits.mjs
+.env*
