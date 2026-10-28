@@ -281,7 +281,7 @@ export const FIXTURES = {
   ToggleKit: [
     { label: 'switches', render: (C, mod) => <div><mod.Switch label="On" description="Desc" defaultChecked /><mod.Switch label="Off" size="sm" /><mod.Switch label="Disabled" disabled size="lg" /></div> },
     { label: 'checkboxes', render: (C, mod) => <div><mod.Checkbox label="Checked" defaultChecked /><mod.Checkbox label="Mixed" indeterminate /><mod.Checkbox label="Off" description="Desc" disabled /></div> },
-    { label: 'bells', settle: 1200, render: (C, mod) => <div><mod.BellToggle label="On" defaultPressed /><mod.BellToggle label="Off" size="lg" /><mod.BellToggle label="Hidden label" showLabel={false} disabled /></div> },
+    { label: 'bells', settle: 1200, render: (C, mod) => <div><mod.NotifyBell label="On" defaultPressed /><mod.NotifyBell label="Off" size="lg" /><mod.NotifyBell label="Hidden label" showLabel={false} disabled /></div> },
     { label: 'radio group', render: (C, mod) => <mod.RadioGroup label="Pick" defaultValue="b" orientation="horizontal" options={[{ value: 'a', label: 'A' }, { value: 'b', label: 'B', description: 'Bee' }, { value: 'c', label: 'C', disabled: true }]} /> }
   ],
   TagInput: [

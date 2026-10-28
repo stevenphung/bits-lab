@@ -1,5 +1,6 @@
 // Guards the "original, not ported" rule (quality bar item 10) against the React Bits catalog:
-//   1. no Bits Lab component shares a name with a React Bits component,
+//   1. no Bits Lab component (or named component export, like ToggleKit's Switch) shares a name
+//      with a React Bits component,
 //   2. no Bits Lab component's props overlap a React Bits component's props too closely
 //      (matching APIs are the clearest sign that a component was modelled on another one).
 // The React Bits sources are local-only, so check 2 runs only where src/reactbits exists. Check 1
@@ -62,9 +63,18 @@ const norm = name => name.toLowerCase().replace(/[^a-z0-9]/g, '');
 const rbNames = new Map(rbItems.map(item => [norm(item.name), item.name]));
 let failed = false;
 
+let exportsChecked = 0;
 for (const c of COMPONENTS) {
   const clash = rbNames.get(norm(c.name));
   if (clash) (failed = true), console.error(`name: ${c.name} has the same name as React Bits ${clash}`);
+  // Named component exports (capitalised functions or consts) count as components too.
+  const source = fs.readFileSync(path.join(root, c.file), 'utf8');
+  for (const [, name] of source.matchAll(/export (?:function|const) ([A-Z][A-Za-z0-9]*)\b/g)) {
+    if (name === name.toUpperCase()) continue; // constants like DEFAULT_ZONES
+    exportsChecked += 1;
+    const named = rbNames.get(norm(name));
+    if (named) (failed = true), console.error(`name: ${c.name} exports ${name}, the same name as React Bits ${named}`);
+  }
 }
 
 if (local) {
@@ -83,5 +93,5 @@ if (local) {
   }
 }
 
-console.log(`originals: ${COMPONENTS.length} Bits Lab components checked against ${rbItems.length} React Bits names${local ? ' and props' : ' (props skipped: no local catalog)'}`);
+console.log(`originals: ${COMPONENTS.length} Bits Lab components and ${exportsChecked} named exports checked against ${rbItems.length} React Bits names${local ? ' and props' : ' (props skipped: no local catalog)'}`);
 process.exit(failed ? 1 : 0);

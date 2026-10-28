@@ -465,7 +465,7 @@ Planned:
 - ScrubNumber (Forms & Inputs): drag the label to scrub (Shift ×10, Alt ×0.1) with a sliding pixel ruler; a labelled text input with Up/Down.
 - PixelSpinners (Pixel & Game UI): blocks, bar, dots, hourglass and orbit, all CSS, as a status with a label.
 - ArcadeButtons (Pixel & Game UI): launch (rumble, smoke, lift-off, landing), dodge (mouse only, a few times) and sling (stretch and snap, fires on a far pull); keyboard presses always work.
-- ToggleKit additions: the Switch already squishes and the Checkbox already draws its check, so the gap was a bell: BellToggle, a toggle button whose pixel bell rings when switched on and wears a slash when off, added to all four ToggleKit variants.
+- ToggleKit additions: the Switch already squishes and the Checkbox already draws its check, so the gap was a bell: NotifyBell, a toggle button whose pixel bell rings when switched on and wears a slash when off, added to all four ToggleKit variants.
 
 Planned:
 

@@ -3,6 +3,7 @@ import { CATEGORIES } from './meta';
 import { CATALOG } from './catalog';
 import { REACTBITS_CATEGORIES, REACTBITS_ITEMS } from './lib/reactbits';
 import ComponentPage from './ui/ComponentPage';
+import DirectoryPage from './ui/DirectoryPage';
 import { Icon } from './ui/icons';
 import Sprite from './pixel/Sprite';
 import { TOOLS, ToolRoute, ToolsIndex } from './tools';
@@ -74,16 +75,18 @@ export default function App() {
   const item = ALL_ITEMS.find(entry => entry.path === pathname);
   const [, section, toolSlug] = pathname.split('/');
   const isTools = section === 'tools' && TOOLS.length > 0 && (!toolSlug || TOOLS.some(tool => tool.slug === toolSlug));
+  const isDirectory = pathname === '/react-bits';
+  const isPage = isTools || isDirectory;
   const lastItem = useRef(CATALOG[0]);
   if (item) lastItem.current = item;
 
   useEffect(() => {
-    if (item || isTools) return;
+    if (item || isPage) return;
     const moved = MOVED[pathname];
     window.history.replaceState(null, '', moved ?? CATALOG[0].path);
     // Let the router pick up the new address (replaceState doesn't fire popstate by itself).
     if (moved) window.dispatchEvent(new PopStateEvent('popstate'));
-  }, [item, isTools, pathname]);
+  }, [item, isPage, pathname]);
 
   const current = item ?? lastItem.current;
   const activeTab = TABS.find(entry => entry.key === tab);
@@ -113,20 +116,24 @@ export default function App() {
               <button
                 key={entry.key}
                 type="button"
-                className={`tab ${!isTools && tab === entry.key ? 'active' : ''}`}
-                aria-pressed={!isTools && tab === entry.key}
+                className={`tab ${!isPage && tab === entry.key ? 'active' : ''}`}
+                aria-pressed={!isPage && tab === entry.key}
                 onClick={() => {
                   setTab(entry.key);
-                  if (isTools) navigate(current.path);
+                  if (isPage) navigate(current.path);
                 }}
               >
                 <Sprite name={entry.sprite} size={26} />
                 <span>{entry.label}</span>
               </button>
             ))}
+            <span className="tab-divider" aria-hidden="true" />
+            <button type="button" className={`tab ${isDirectory ? 'active' : ''}`} aria-pressed={isDirectory} onClick={() => navigate('/react-bits')}>
+              <Sprite name="note" size={26} />
+              <span>React Bits</span>
+            </button>
             {TOOLS.length > 0 && (
               <>
-                <span className="tab-divider" aria-hidden="true" />
                 <button type="button" className={`tab ${isTools ? 'active' : ''}`} aria-pressed={isTools} onClick={() => navigate('/tools')}>
                   <Sprite name="pickaxe" size={26} />
                   <span>Tools</span>
@@ -145,14 +152,18 @@ export default function App() {
             <a className="text-button" href="/r/registry.json" target="_blank" rel="noreferrer">
               Registry
             </a>
-            <a className="round-button" href={current.originalUrl ?? '/r/registry.json'} target="_blank" rel="noreferrer" aria-label="Open original">
+            <a className="round-button" href={isDirectory ? 'https://reactbits.dev' : (current.originalUrl ?? '/r/registry.json')} target="_blank" rel="noreferrer" aria-label="Open original">
               <Icon name="external" size={16} />
             </a>
           </div>
         </div>
       </header>
 
-      {isTools ? (
+      {isDirectory ? (
+        <main className="tools-main">
+          <DirectoryPage onOpen={onLink} />
+        </main>
+      ) : isTools ? (
         <main className="tools-main">
           {toolSlug ? <ToolRoute key={toolSlug} slug={toolSlug} /> : <ToolsIndex onOpen={onLink} />}
         </main>

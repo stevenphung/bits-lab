@@ -5,7 +5,7 @@ import RetroHorizon from './bits/RetroHorizon';
 import FlickerGrid from './bits/FlickerGrid';
 import Accordion from './bits/Accordion';
 import { Dialog, Sheet, Tooltip, Popover, Dropdown } from './bits/OverlayKit';
-import { Switch, Checkbox, RadioGroup, BellToggle } from './bits/ToggleKit';
+import { Switch, Checkbox, RadioGroup, NotifyBell } from './bits/ToggleKit';
 import retroHorizonSource from './bits/RetroHorizon.jsx?raw';
 import flickerGridSource from './bits/FlickerGrid.jsx?raw';
 import accordionSource from './bits/Accordion.jsx?raw';
@@ -153,8 +153,8 @@ function ToggleDemo({ size, accentColor }) {
         ]}
       />
       <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-        <BellToggle size={size} color={accentColor} label="Quest alerts" defaultPressed />
-        <BellToggle size={size} color={accentColor} label="Trade offers" />
+        <NotifyBell size={size} color={accentColor} label="Quest alerts" defaultPressed />
+        <NotifyBell size={size} color={accentColor} label="Trade offers" />
       </div>
     </div>
   );
@@ -273,14 +273,14 @@ const DEMO_ENTRIES = {
       ['Checkbox', 'Switch props + indeterminate?', 'md', 'A native checkbox; the check draws itself; indeterminate shows a dash.'],
       ['Radio', '{ checked, onChange, name, value, label?, description? }', '-', 'A single native radio, for custom layouts.'],
       ['RadioGroup', '{ options, value?, defaultValue?, onValueChange?, label?, orientation?, name? }', 'vertical', 'A fieldset with a legend; arrow keys move between options natively.'],
-      ['BellToggle', '{ pressed?, defaultPressed?, onPressedChange?, label?, showLabel?, disabled?, size?, color? }', 'md', 'A toggle button (aria-pressed) with a pixel bell that rings when switched on and shows a slash when off; label is its name.'],
+      ['NotifyBell', '{ pressed?, defaultPressed?, onPressedChange?, label?, showLabel?, disabled?, size?, color? }', 'md', 'A toggle button (aria-pressed) with a pixel bell that rings when switched on and shows a slash when off; label is its name.'],
       ['Theme', 'CSS variables', '-', '--bl-tk-accent, --bl-tk-track, --bl-tk-ink, --bl-tk-muted, --bl-tk-on-ink, --bl-tk-font; or the color prop per control.'],
       ['Forms', '-', '-', 'name / value submit with the form like plain inputs, because they are plain inputs.']
     ],
-    usage: `import { Switch, Checkbox, RadioGroup, BellToggle } from "./ToggleKit";
+    usage: `import { Switch, Checkbox, RadioGroup, NotifyBell } from "./ToggleKit";
 
 <Switch label="Peaceful mode" defaultChecked />
-<BellToggle label="Quest alerts" />
+<NotifyBell label="Quest alerts" />
 <Checkbox label="Pack torches" />
 <RadioGroup label="Difficulty" options={[{ value: "easy", label: "Easy" }]} />`,
     demoOnly: ['accentColor'],

@@ -225,7 +225,7 @@ export function RadioGroup({ options = [], value, defaultValue, onValueChange, l
   );
 }
 
-export interface BellToggleProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'type' | 'style' | 'color'> {
+export interface NotifyBellProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'type' | 'style' | 'color'> {
   pressed?: boolean;
   defaultPressed?: boolean;
   onPressedChange?: (pressed: boolean) => void;
@@ -240,7 +240,7 @@ export interface BellToggleProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   style?: CSSProperties;
 }
 
-// ---------- BellToggle ----------
+// ---------- NotifyBell ----------
 
 // A notifications-style toggle: a pixel bell that rings when switched on and wears a slash
 // when off. It's a toggle button (aria-pressed); the label is its name, shown or not.
@@ -248,7 +248,7 @@ export interface BellToggleProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
 // The slash across the bell when it's off: a staircase of pixels.
 const SLASH = Array.from({ length: 10 }, (_, i) => i + 1);
 
-export function BellToggle({ pressed, defaultPressed, onPressedChange, label = 'Notifications', showLabel = true, disabled = false, size = 'md', color, className = '', style, ...rest }: BellToggleProps) {
+export function NotifyBell({ pressed, defaultPressed, onPressedChange, label = 'Notifications', showLabel = true, disabled = false, size = 'md', color, className = '', style, ...rest }: NotifyBellProps) {
   useStyles();
   const [on, setOn] = useChecked(pressed, defaultPressed, onPressedChange);
   return (
@@ -287,5 +287,5 @@ export function BellToggle({ pressed, defaultPressed, onPressedChange, label = '
   );
 }
 
-// The default export is the Switch; Checkbox, Radio, RadioGroup and BellToggle are named exports.
+// The default export is the Switch; Checkbox, Radio, RadioGroup and NotifyBell are named exports.
 export default Switch;
