@@ -1,6 +1,6 @@
 # Bits Lab component roadmap
 
-**Mission (from 2026-10-28):** Bits Lab is the foundation for agent–human interfaces: the components people use to see what an agent is doing, steer it, approve it and undo it. New work is judged first by how well it serves that loop (ask, think, act, review, approve, undo) and the four promises: show the work, ask before acting, let people interrupt, make it delightful.
+**Mission (from 2026-10-29):** game feel for real products. Games solved feedback, progress and reward long ago; Bits Lab brings those patterns to everyday software. New work is judged first by how well it turns a flat product moment (onboarding, saving, waiting, deleting, coming back) into one that answers back, shows progress or rewards a real milestone, while staying accessible and calm under reduced motion.
 
 Original goal: turn Bits Lab into the largest library of highly polished React components. Researched 2026-10-27.
 

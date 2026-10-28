@@ -1,7 +1,7 @@
 {
   "name": "bits-lab",
   "version": "0.1.0",
-  "description": "The foundation for agent\u2013human interfaces: 159 original React components for chat, streaming, agent progress, approvals and undo, in a playful 8-bit style. Zero dependencies, styles included.",
+  "description": "Game feel for real products: 159 original React components for quests, achievements, progress, combos, streaks and hold-to-confirm, in a playful 8-bit style. Zero dependencies, styles included.",
   "license": "MIT",
   "author": "Steven Phung",
   "homepage": "https://bits-lab.vercel.app",
@@ -16,12 +16,12 @@
   "keywords": [
     "react",
     "components",
-    "ai",
-    "agent",
-    "agent-ui",
-    "chat",
-    "llm",
-    "human-in-the-loop",
+    "gamification",
+    "game-ui",
+    "onboarding",
+    "achievements",
+    "micro-interactions",
+    "animation",
     "pixel",
     "8-bit",
     "ui"

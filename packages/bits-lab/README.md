@@ -1,8 +1,8 @@
 # Bits Lab
 
-**The foundation for agent–human interfaces.** 159 original React components for the moments that matter when software can think: chat, streaming answers, live progress, tool calls, diffs, approvals and undo, plus everything around them (inputs, overlays, navigation, data and motion), in a playful 8-bit style. Every component brings its own styles, so there is nothing else to import or configure.
+**Game feel for real products.** 159 original React components that bring game design to everyday software: onboarding as a quest, milestones as achievements, progress bars, combos, streaks, loading screens with tips and hold-to-confirm for risky actions, plus everything around them (inputs, overlays, navigation, data and motion), in a playful 8-bit style. Every component brings its own styles, so there is nothing else to import or configure.
 
-Try them all, tweak their props and copy the code at **https://bits-lab.vercel.app**.
+Play with them all, tweak their props and copy the code at **https://bits-lab.vercel.app**.
 
 ## Install
 
@@ -23,16 +23,20 @@ import GravityBox from "bits-lab/GravityBox";
 ## Use
 
 ```jsx
-import { AgentCard, DiffReveal, HoldToConfirm, ThinkingShimmer } from "bits-lab";
+import { AchievementToast, HoldToConfirm, QuestLog, achievement } from "bits-lab";
 
-// One turn of an agent: think, act, show the change, wait for a yes.
-export function AgentTurn({ run, onApprove }) {
+const quests = [
+  { id: "profile", title: "Create your profile", xp: 50 },
+  { id: "invite", title: "Invite a teammate", xp: 100, requires: ["profile"] }
+];
+
+// Onboarding as a quest: finishing a task pops an achievement.
+export function Onboarding({ onDeleteDraft }) {
   return (
     <>
-      <ThinkingShimmer thinking={run.thinking} steps={run.steps} />
-      <AgentCard tool={run.tool} args={run.args} status={run.status} logs={run.logs} />
-      <DiffReveal before={run.before} after={run.after} />
-      <HoldToConfirm onConfirm={onApprove}>Hold to approve</HoldToConfirm>
+      <QuestLog quests={quests} onQuestComplete={quest => achievement({ title: quest.title, xp: quest.xp, tier: "gold" })} />
+      <HoldToConfirm onConfirm={onDeleteDraft}>Hold to delete draft</HoldToConfirm>
+      <AchievementToast />
     </>
   );
 }

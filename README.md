@@ -4,39 +4,39 @@
 [![license](https://img.shields.io/badge/license-MIT-38b764)](packages/bits-lab/LICENSE)
 [![live site](https://img.shields.io/badge/live-bits--lab.vercel.app-3b5dc9)](https://bits-lab.vercel.app)
 
-**The foundation for agent–human interfaces.**
+**Game feel for real products.**
 
-Agents are starting to do real work. The hard part is rarely the model; it's the interface. People need to see what an agent is doing, steer it, approve it and undo it. Bits Lab gives you those pieces: **159 original React components** for chat, streaming answers, live progress, tool calls, diffs, approvals and undo, plus everything around them (inputs, overlays, navigation, data and motion), in a playful 8-bit style that makes even waiting feel good.
+Games solved feedback, progress and reward decades ago. Bits Lab brings those tricks to everyday software: **159 original React components** where onboarding becomes a quest, milestones become achievements, progress has a health bar, waiting comes with tips and risky actions burn a fuse. Everything around them is here too (inputs, overlays, navigation, data, text effects and backgrounds), all in a playful 8-bit style.
 
-Every component brings its own styles, works with the keyboard, respects reduced motion and comes in four flavours: JavaScript or TypeScript, styled with plain CSS or Tailwind. Try them and copy the code at **[bits-lab.vercel.app](https://bits-lab.vercel.app)**.
+Every component brings its own styles, works with the keyboard, respects reduced motion and comes in four flavours: JavaScript or TypeScript, styled with plain CSS or Tailwind. Play with them and copy the code at **[bits-lab.vercel.app](https://bits-lab.vercel.app)**.
 
-![The Bits Lab homepage: “Build the interface between people and agents.” over a warp-speed starfield](docs/screenshots/home.jpg)
+![The Bits Lab homepage: “Make your app feel like a game people want to play.” over a warp-speed starfield](docs/screenshots/home.jpg)
 
-## Mission
+## Why game feel
 
-Agents do the work. People stay in charge. An agent is only as trustworthy as the interface around it, so every Bits Lab component is built around four promises:
+People don’t remember features. They remember how a product made them feel. Games are the best teachers of that, and Bits Lab is built around four of their rules:
 
-- **Show the work.** Every step visible, nothing hidden.
-- **Ask before acting.** Big moves need a clear yes.
-- **Let people interrupt.** Pause, undo or take over at any time.
-- **Make it delightful.** Accessible, keyboard-friendly and fun.
+- **Every action answers back.** Clicks, saves and sends all get a response.
+- **Progress you can see.** Bars, maps and streaks show how far people have come.
+- **Rewards that mean something.** Celebrate real milestones, never empty clicks.
+- **Fun for everyone.** Keyboard-friendly, screen-reader friendly, and calm with reduced motion.
 
-## The agent–human loop
+## Game patterns, product moments
 
-Each moment in a conversation with an agent maps to components you can drop in:
-
-| Moment | What the person needs | Components |
+| Game pattern | Product moment | Components |
 |---|---|---|
-| **Ask** | Say what they want, by text or voice | ChatBubbles, SuggestionChips, VanishInput, VoiceOrb, CommandPalette |
-| **Think** | Know the agent is working, and on what | ThinkingShimmer, StreamingText, PixelSpinners, SkeletonShimmer |
-| **Act** | Follow tool calls and progress as they happen | AgentCard, StepLoader, FeedList |
-| **Review** | See exactly what will change | DiffReveal, CompareSlider |
-| **Approve** | Give a deliberate yes, or a clear no | HoldToConfirm, QuestDialog, OverlayKit (Dialog) |
-| **Undo** | Take it back, any time | ToastStack (undo actions), SpringDrawer |
+| **Quests** | Onboarding checklists, setup steps | QuestLog, LevelMap, StepperForm |
+| **Progress** | Profile completeness, usage limits, goals | HealthBar, TallyUp, RingProgress, PixelLoader |
+| **Rewards** | Milestones, badges, first-time wins | AchievementToast, Confetti, InventoryGrid, TradingCard |
+| **Feedback** | Every click, save and send | ScoreTicker, JellyBlob, PixelButton, ToastStack |
+| **Streaks** | Habits and returning users | Heatmap, RatingPips |
+| **Caution** | Deleting, publishing, paying | HoldToConfirm, OverlayKit (Dialog) |
+| **Guidance** | Tours, tips and empty states | QuestDialog, SpotlightTour, PressStart |
+| **Waiting** | Imports, uploads and AI responses | PixelLoader, PixelSpinners, ThinkingShimmer, SkeletonShimmer |
 
-The homepage runs the whole loop live, built from seven of these components:
+The homepage turns a made-up app’s onboarding into a playable quest, built from five of these components:
 
-![A live agent console: a chat thread, a “Thought for 2s” summary, an edit_file tool call, a word-level diff and a “Hold to approve” button](docs/screenshots/agent-console.jpg)
+![An onboarding quest: a quest log with two tasks done, 150 XP on a progress bar, a setup meter and a level map](docs/screenshots/onboarding-quest.jpg)
 
 ## Install
 
@@ -45,16 +45,20 @@ npm install bits-lab
 ```
 
 ```jsx
-import { AgentCard, DiffReveal, HoldToConfirm, ThinkingShimmer } from "bits-lab";
+import { AchievementToast, HoldToConfirm, QuestLog, achievement } from "bits-lab";
 
-// One turn of an agent: think, act, show the change, wait for a yes.
-export function AgentTurn({ run, onApprove }) {
+const quests = [
+  { id: "profile", title: "Create your profile", xp: 50 },
+  { id: "invite", title: "Invite a teammate", xp: 100, requires: ["profile"] }
+];
+
+// Onboarding as a quest: finishing a task pops an achievement.
+export function Onboarding({ onDeleteDraft }) {
   return (
     <>
-      <ThinkingShimmer thinking={run.thinking} steps={run.steps} />
-      <AgentCard tool={run.tool} args={run.args} status={run.status} logs={run.logs} />
-      <DiffReveal before={run.before} after={run.after} />
-      <HoldToConfirm onConfirm={onApprove}>Hold to approve</HoldToConfirm>
+      <QuestLog quests={quests} onQuestComplete={quest => achievement({ title: quest.title, xp: quest.xp, tier: "gold" })} />
+      <HoldToConfirm onConfirm={onDeleteDraft}>Hold to delete draft</HoldToConfirm>
+      <AchievementToast />
     </>
   );
 }
@@ -80,10 +84,9 @@ The site shows the right command for each component and variant, for pnpm, npm, 
 
 | Category | Count | For example |
 |---|---|---|
-| Agent Interfaces | 6 | ChatBubbles, ThinkingShimmer, AgentCard, VoiceOrb, SuggestionChips, DiffReveal |
+| Pixel & Game UI | 22 | QuestDialog, HealthBar, InventoryGrid, VoxelTiles, ArcadeButtons |
 | Text Animations | 15 | FocusPull, SignalText, PixelType, ShadowStack, KineticHeadline |
 | Backgrounds | 17 | RetroHorizon, AuroraBands, WarpField, CodeRain, LavaLamp |
-| Pixel & Game UI | 22 | QuestDialog, HealthBar, InventoryGrid, VoxelTiles, ArcadeButtons |
 | Product Showcase | 16 | DeviceFrame, BentoGrid, PricingFlip, TerminalDemo, Coverflow |
 | Scroll Storytelling | 9 | StickyReveal, ScrollZoom, HorizontalTrack, Reveal |
 | Overlays & Feedback | 11 | ToastStack, SpringDrawer, SpotlightTour, Confetti |
@@ -92,11 +95,12 @@ The site shows the right command for each component and variant, for pnpm, npm, 
 | Data & Numbers | 10 | TallyUp, SparkChart, RingProgress, BarRace, Heatmap |
 | Cards & Media | 15 | TradingCard, CardDeck, StoryViewer, SwipeActions, Discard |
 | Physics & Playful | 9 | GravityBox, StickerBoard, PointerKit, JellyBlob |
+| AI Surfaces | 6 | ChatBubbles, ThinkingShimmer, AgentCard, VoiceOrb |
 | Primitives | 4 | Accordion, OverlayKit, ToggleKit, GlassPanel |
 
 ## Screenshots
 
-![Agent components on the homepage: StreamingText, VoiceOrb, StepLoader, FeedList, QuestDialog, ToastStack and PixelSpinners](docs/screenshots/agent-components.jpg)
+![Game patterns on the homepage: AchievementToast, ScoreTicker, HoldToConfirm, Heatmap, RatingPips, QuestDialog, PixelLoader, InventoryGrid and JellyBlob](docs/screenshots/game-patterns.jpg)
 
 | | |
 |---|---|
