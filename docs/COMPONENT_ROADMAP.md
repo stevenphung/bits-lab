@@ -10,6 +10,8 @@ Original goal: turn Bits Lab into the largest library of highly polished React c
 
 **Wave 4 complete (2026-10-28):** 37 more originals for effects, backgrounds, cards and micro-interactions, in six phases plus a launch phase. See section 6. All phases are done: 159 originals, published at bits-lab.vercel.app and on npm as `bits-lab`.
 
+**Wave 5 planned (2026-10-29):** fill the gaps found by comparing Bits Lab with affectUI: light mode and AI-tool docs across the library, 10 game-feel product components, a new Scenes & Mascots category of 8 pixel scenes, and 6 upgrades to existing components. See section 7. Not started.
+
 - **Pixel & game set (12 items):** shipped 2026-10-26. They live in the Pixel & Game UI category, at `/pixel-game/<slug>`.
 - **Product showcase set (9 items, #21–25, 27–29, 34):** shipped 2026-10-26. They live in the Product Showcase category, at `/showcase/<slug>`.
 - **Scroll storytelling set (4 items, #35–38):** shipped 2026-10-26. They live in the Scroll Storytelling category, at `/scroll/<slug>`. Each one tracks the nearest scroll box or the window.
@@ -331,6 +333,7 @@ Accessible base components (on Radix UI or Base UI) with signature motion, so pe
 | **Wave 2** (P2) | Remaining P2 items | 52 | Depth across every category |
 | **Wave 3** (P3) | Remaining P3 items | 12 | Long tail and delight |
 | **Wave 4** | Effects, backgrounds, cards and micro-interactions (section 6) | ~37 | Breadth across the most-wanted kinds of animated UI |
+| **Wave 5** | Light mode, product moments, pixel scenes and upgrades (section 7) | 18 + 6 upgrades | Fills the gaps against affectUI and takes the library to 177 |
 
 Shipping all 120 originals takes Bits Lab's catalog from 3 to 123.
 
@@ -486,6 +489,86 @@ Planned:
 
 About 37 new originals take Bits Lab from 123 to about 160. Phases 1–5 are each about the size of a Wave 2 batch; Phase 0 is short.
 
+## 7. Wave 5: filling the gaps
+
+**Status:** planned 2026-10-29. Not started.
+
+**Why:** a comparison with [affectUI](https://github.com/flohoeller/affectui) (MIT, 57 free items: calm components, blocks, illustrations and motion for AI and SaaS products, one file each, light and dark mode built in). About half of its items are already covered by Bits Lab. The rest point to real gaps: light mode, a handful of everyday product components, and animated illustrations for empty states and explainers, a category Bits Lab doesn't have yet.
+
+### 7.1 Rules
+
+- **Ideas only.** Only affectUI's README and item list were read, never its source. Every Wave 5 component has its own name, its own API and the Bits Lab pixel style, and turns the idea into game feel.
+- **Same quality bar (section 3):** JS, TS, CSS and Tailwind variants, a parity fixture in `/tw-check.html`, a catalog demo, accessibility and reduced motion.
+- **Light mode from day one** for every new component, once Phase A1 lands.
+
+### 7.2 Already covered (no work needed)
+
+| affectUI item | Bits Lab |
+|---|---|
+| OTP Input | OTPInput |
+| Progress Tracker | QuestLog |
+| Tool Call Card | AgentCard |
+| Segmented Control | SlideTabs, ToggleGroup |
+| Thinking Loader | ThinkingShimmer, PixelSpinners |
+| Logo Marquee, Testimonial Wall | Marquee, TestimonialWall |
+| Cover Flow | Coverflow |
+| Integration Beam, Enrichment Orbit | ConnectBeams, LogoOrbit |
+| Region map | DotMap |
+| Model Wheel | WheelPicker |
+| Number Ticker, Shimmer Loader | RollingNumber, TallyUp, SkeletonShimmer |
+| Text Reveal, Grid Background | CutReveal, FocusPull, InteractiveGrid, FlickerGrid |
+
+### 7.3 Phases
+
+**Phase A: across the whole library** (3)
+
+1. **Light mode.** None of the 159 components react to a theme today; all default to dark colours. Add a light Sweetie 16 palette and switch when an ancestor has `.dark`/`.light` or `data-theme`, falling back to `prefers-color-scheme`. Colour props keep working as overrides. The biggest single step for adoption, since many products are light.
+2. **Docs for AI coding tools.** An `llms.txt` plus a markdown doc per component (props, usage, accessibility), generated from the catalog, so assistants can use the library well.
+3. **A calmer skin (parked).** A quieter pixel style could widen the audience but dilutes the identity. Revisit after light mode.
+
+**Phase B: product moments with game feel** (10)
+
+| Gap | Component | Idea |
+|---|---|---|
+| Profile menu | **CharacterSheet** | The account card as an RPG sheet: avatar, level, XP bar, setup progress and menu actions |
+| Reaction bar | **ReactionCombo** | Like, comment, repost and share: icons pop and fill, counts roll, quick reactions build a combo burst |
+| Decision inbox | **BountyBoard** | Pinned decisions with two answers each, stamped Accepted or Declined before they fold away |
+| Tips panel | **SideQuests** | Tips as side quests, one action each, with a Done stamp and XP |
+| Change summary | **LevelUpStats** | "What changed" as a level-up screen: ▲ +12 Revenue, ▼ −3 Churn, coloured by direction |
+| Filter menu | **LootFilter** | Grouped filters with removable chips, rarity-style checkbox groups, Clear all and full keyboard control |
+| Message actions | **ReplyActions** | The bar under a reply: copy turns into a check, regenerate shows a 1/3 version switcher, thumbs up and down |
+| Draft review | **DraftScroll** | An agent-written draft to review: switch tone and recipient, edit inline, remove attachments, send or discard |
+| Comment thread | **ThreadTrail** | A comment with replies, @mentions and folded "what I did" details |
+| Recommendation | **AdvisorCard** | A suggestion with a confidence meter, alternatives to switch to, and accept with undo |
+
+**Phase C: Scenes & Mascots, a new category** (8)
+
+Animated pixel vignettes for empty states, onboarding and feature explainers, built on the pixel-art kit (`src/pixel/art.js`).
+
+| Gap | Component | Idea |
+|---|---|---|
+| Mascot | **PixelPet** | A creature that floats, blinks, follows the pointer and reacts: idle, happy, thinking, sad |
+| Empty states | **EmptyScenes** | Empty chest (no items), quiet campfire (no messages), closed shop (no results), unplugged cable (offline), lost map (404) |
+| Team invite | **PartyInvite** | Drag a new party member into the empty slot; the link turns solid and they come online |
+| Agent team | **PartyFormation** | A quest splits into party members, each with a role and their gear |
+| Layer stack | **LayerTower** | An isometric voxel stack beside a list; the chosen layer lifts out in colour |
+| Tab overload | **WindowPile** | Overlapping retro windows; the highlight follows the pointer |
+| Side folder | **ChestReveal** | A chest swings open and items slide out on hover |
+| Logo cluster | **LogoBurst** | Logos burst out of a centre tile and settle around it |
+
+**Phase D: upgrades to existing components** (6)
+
+- **PixelButton:** ghost and destructive variants, icon-only buttons, a shimmering loading state.
+- **SlideTabs:** drag the pill to switch.
+- **ThinkingShimmer:** a compact pill mode whose label rolls through phases.
+- **ToastStack:** an inline "stacked notices" mode, dismissing the front card to reveal the next.
+- **Marquee:** drag to scrub with momentum, easing to a stop on hover.
+- **WheelPicker:** a curved drum look.
+
+### 7.4 Order and outcome
+
+Phase B first (most of the new value), then light mode (A1), then Phase C; Phase D fits in alongside. A2 can run any time. The wave takes Bits Lab from 159 to 177 components, makes it usable in light-themed products, and adds the illustration category it lacks, all in the game-feel style that sets it apart.
+
 ## Sources
 
 - [Best React Animation Libraries in 2026 — SmoothUI](https://smoothui.dev/blog/best-react-animation-libraries)
@@ -496,3 +579,4 @@ About 37 new originals take Bits Lab from 123 to about 160. Phases 1–5 are eac
 - [21st.dev help: community (MIT licensing)](https://help.21st.dev/community)
 - Component catalogs read directly: [Magic UI](https://magicui.design/docs/components), [Aceternity UI](https://ui.aceternity.com/components), [Motion Primitives](https://motion-primitives.com/docs), [Cult UI](https://www.cult-ui.com/docs/components), [Fancy Components](https://www.fancycomponents.dev/docs/introduction)
 - [Aceternity UI licence](https://ui.aceternity.com/licence)
+- [affectUI](https://github.com/flohoeller/affectui): README and item list, read 2026-10-29 for Wave 5
