@@ -12,7 +12,7 @@ const STYLE_ID = 'bl-signal-text';
 const CSS = `
 .bl-signal { position: relative; margin: 0; color: var(--bl-ink); }
 .bl-signal__glyphs { display: inline; }
-.bl-signal__ch { white-space: pre; }
+.bl-signal__ch { white-space: pre-wrap; }
 .bl-signal__ch[data-noise] { color: var(--bl-noise); }
 .bl-signal[data-mode="flap"] .bl-signal__glyphs { display: inline-flex; flex-wrap: wrap; gap: var(--bl-cell-gap); }
 .bl-signal[data-mode="flap"] .bl-signal__word { display: inline-flex; gap: var(--bl-cell-gap); }

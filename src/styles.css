@@ -2102,3 +2102,486 @@ code.muted {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- Home ---------- */
+.home-main {
+  min-width: 0;
+}
+
+.home {
+  overflow-x: clip;
+}
+
+.home-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.home-wrap {
+  width: min(1180px, 100% - 32px);
+  margin: 0 auto;
+}
+
+.home-hero {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: calc(100vh - 96px);
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.home-hero-inner {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 22px;
+  width: min(980px, 100% - 32px);
+  padding: 72px 0;
+  text-align: center;
+  pointer-events: none;
+}
+
+.home-hero-inner > * {
+  max-width: 100%;
+}
+
+.home-hero-inner button,
+.home-hero-inner a {
+  pointer-events: auto;
+}
+
+.home-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 6px 12px;
+  background: rgba(11, 11, 20, 0.7);
+  box-shadow: 0 0 0 2px var(--deep);
+  color: var(--mist);
+  font: 700 12px/1.3 var(--label);
+  text-transform: uppercase;
+}
+
+.home-title {
+  margin: 0;
+  line-height: 1.15;
+  text-transform: none;
+  text-shadow: none;
+}
+
+.home-lede {
+  max-width: 34ch;
+  margin: 0;
+  padding: 6px 12px;
+  background: rgba(11, 11, 20, 0.6);
+  color: var(--paper);
+  font: 700 clamp(15px, 2vw, 20px)/1.45 var(--label);
+}
+
+.home-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.home-install {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 0;
+  background: var(--void);
+  color: var(--paper);
+  box-shadow: inset 0 0 0 2px var(--deep), 4px 4px 0 0 rgba(0, 0, 0, 0.5);
+  font: 15px/1 var(--code);
+}
+
+.home-install:hover {
+  box-shadow: inset 0 0 0 2px var(--cyan), 4px 4px 0 0 rgba(0, 0, 0, 0.5);
+}
+
+.home-install:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+.home-install code {
+  font: inherit;
+}
+
+.home-install-prompt {
+  color: var(--lime);
+}
+
+.home-install-copy {
+  padding: 4px 8px;
+  background: var(--deep);
+  color: var(--cyan);
+  font: 700 11px/1 var(--label);
+  text-transform: uppercase;
+}
+
+.home-hint {
+  margin: 0;
+  color: var(--mist);
+  font-size: 13px;
+  text-shadow: 2px 2px 0 var(--ink);
+}
+
+.home-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  background: var(--void);
+  box-shadow: 0 -4px 0 0 var(--ink), 0 4px 0 0 var(--ink);
+}
+
+.home-stat {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--mist);
+  font: 700 12px/1.4 var(--label);
+  text-transform: uppercase;
+}
+
+.home-stat + .home-stat {
+  box-shadow: inset 4px 0 0 0 var(--ink);
+}
+
+.home-stat-value {
+  color: var(--yellow);
+  font: 32px/1 var(--pixel);
+  text-shadow: 4px 4px 0 var(--ink);
+}
+
+.home-marquee-link {
+  color: var(--paper);
+  text-decoration: none;
+}
+
+.home-marquee-link:hover,
+.home-marquee-link:focus-visible {
+  color: var(--cyan);
+}
+
+.home-section {
+  padding: 88px 0;
+}
+
+.home-kicker {
+  margin: 0 0 10px;
+  color: var(--lime);
+  font: 700 12px/1 var(--label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-h2 {
+  max-width: 26ch;
+  margin: 0 0 36px;
+  color: var(--paper);
+  font: 700 clamp(26px, 3.6vw, 42px)/1.15 var(--body);
+  letter-spacing: -0.02em;
+  text-shadow: none;
+  text-transform: none;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 260px;
+  grid-auto-flow: dense;
+  gap: 20px;
+}
+
+.home-tile {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--ink);
+  box-shadow: var(--notch), var(--drop);
+}
+
+.home-tile.wide {
+  grid-column: span 2;
+}
+
+.home-tile.tall {
+  grid-row: span 2;
+}
+
+.home-tile-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.home-tile-stage > * {
+  max-width: 100%;
+}
+
+.home-fill {
+  position: absolute;
+  inset: 0;
+}
+
+.home-tile-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--void);
+  box-shadow: inset 0 3px 0 0 var(--deep);
+  color: var(--paper);
+  text-decoration: none;
+}
+
+.home-tile-foot strong,
+.home-tile-foot small {
+  display: block;
+}
+
+.home-tile-foot strong {
+  color: var(--yellow);
+  font: 12px/1.5 var(--pixel);
+}
+
+.home-tile-foot small {
+  color: var(--mist);
+  font-size: 14px;
+}
+
+.home-tile-go {
+  color: var(--cyan);
+  animation: blink 1s steps(1) infinite;
+}
+
+.home-tile-foot:hover strong,
+.home-tile-foot:focus-visible strong {
+  color: var(--cyan);
+}
+
+.home-tile-foot:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: -3px;
+}
+
+.home-col {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+}
+
+.home-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+
+.home-mini-btn {
+  padding: 8px 14px;
+  border: 0;
+  background: var(--deep);
+  color: var(--paper);
+  font: 700 12px/1 var(--label);
+}
+
+.home-mini-btn:hover {
+  background: var(--slate);
+}
+
+.home-card-back {
+  margin: 0;
+  padding: 16px;
+  text-align: center;
+}
+
+.home-deck-card {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 10px;
+  height: 100%;
+  padding: 18px;
+  background: linear-gradient(var(--navy), var(--night));
+  box-shadow: inset 0 0 0 4px var(--cyan), inset 0 0 0 8px var(--ink);
+  text-align: center;
+}
+
+.home-deck-card strong {
+  color: var(--yellow);
+  font: 12px/1.4 var(--pixel);
+}
+
+.home-deck-card span {
+  color: var(--mist);
+  font-size: 14px;
+}
+
+.home-more {
+  margin: 32px 0 0;
+  text-align: center;
+}
+
+.home-more a {
+  color: var(--cyan);
+  font: 13px/1 var(--pixel);
+  text-decoration: none;
+}
+
+.home-quest {
+  background: var(--void);
+}
+
+.home-quest-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 48px;
+  align-items: center;
+}
+
+.home-steps {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  font-size: 18px;
+}
+
+.home-steps li {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  counter-increment: step;
+}
+
+.home-steps li::before {
+  content: counter(step);
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  background: var(--blue);
+  color: var(--paper);
+  font: 12px/1 var(--pixel);
+  box-shadow: inset -3px -3px 0 0 var(--navy);
+}
+
+.home-steps strong {
+  color: var(--yellow);
+}
+
+.home-steps code {
+  font-size: 15px;
+}
+
+.home-manifesto {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.home-manifesto-inner {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 24px;
+  padding: 120px 0;
+  text-align: center;
+  pointer-events: none;
+}
+
+.home-kinetic {
+  margin: 0;
+  text-shadow: 4px 4px 0 var(--ink);
+  text-transform: none;
+}
+
+.home-manifesto-text {
+  max-width: 30ch;
+  margin: 0;
+  color: var(--paper);
+  font: 700 clamp(20px, 2.6vw, 30px)/1.35 var(--body);
+  text-shadow: 3px 3px 0 var(--ink);
+}
+
+.home-manifesto-note {
+  max-width: 56ch;
+  margin: 0;
+  padding: 10px 14px;
+  background: rgba(11, 11, 20, 0.7);
+  color: var(--mist);
+}
+
+.home-final {
+  display: grid;
+  place-items: center;
+  min-height: 320px;
+  padding: 64px 16px 96px;
+  background: var(--night);
+}
+
+@media (max-width: 1080px) {
+  .home-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .home-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: auto;
+  }
+
+  .home-tile.wide,
+  .home-tile.tall {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .home-tile-stage {
+    min-height: 260px;
+  }
+
+  .home-tile.tall .home-tile-stage {
+    min-height: 360px;
+  }
+
+  .home-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-stat:nth-child(3) {
+    box-shadow: inset 0 4px 0 0 var(--ink);
+  }
+
+  .home-stat:nth-child(4) {
+    box-shadow: inset 4px 0 0 0 var(--ink), inset 0 4px 0 0 var(--ink);
+  }
+
+  .home-quest-inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-install {
+    font-size: 13px;
+  }
+}

@@ -3,6 +3,7 @@ import { CATEGORIES } from './meta';
 import { CATALOG } from './catalog';
 import { REACTBITS_CATEGORIES, REACTBITS_ITEMS } from './lib/reactbits';
 import ComponentPage from './ui/ComponentPage';
+import HomePage from './ui/HomePage';
 import { Icon } from './ui/icons';
 import Sprite from './pixel/Sprite';
 import { TOOLS, ToolRoute, ToolsIndex } from './tools';
@@ -74,16 +75,19 @@ export default function App() {
   const item = ALL_ITEMS.find(entry => entry.path === pathname);
   const [, section, toolSlug] = pathname.split('/');
   const isTools = section === 'tools' && TOOLS.length > 0 && (!toolSlug || TOOLS.some(tool => tool.slug === toolSlug));
+  const isHome = pathname === '/';
+  const isPage = isTools || isHome;
   const lastItem = useRef(CATALOG[0]);
   if (item) lastItem.current = item;
 
   useEffect(() => {
-    if (item || isTools) return;
+    if (item || isPage) return;
     const moved = MOVED[pathname];
-    window.history.replaceState(null, '', moved ?? CATALOG[0].path);
+    // Unknown addresses go home; pages that moved go to their new address.
+    window.history.replaceState(null, '', moved ?? '/');
     // Let the router pick up the new address (replaceState doesn't fire popstate by itself).
-    if (moved) window.dispatchEvent(new PopStateEvent('popstate'));
-  }, [item, isTools, pathname]);
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  }, [item, isPage, pathname]);
 
   const current = item ?? lastItem.current;
   const activeTab = TABS.find(entry => entry.key === tab);
@@ -103,21 +107,25 @@ export default function App() {
     <div className="app">
       <header className="topbar">
         <div className="topbar-row">
-          <a className="brand" href="/" onClick={event => onLink(event, CATALOG[0].path)}>
+          <a className="brand" href="/" onClick={event => onLink(event, '/')}>
             <Sprite name="gem" size={32} className="brand-mark" />
             <span>bits lab</span>
           </a>
 
           <nav className="tabs" aria-label="Categories">
+            <button type="button" className={`tab ${isHome ? 'active' : ''}`} aria-pressed={isHome} onClick={() => navigate('/')}>
+              <Sprite name="star" size={26} />
+              <span>Home</span>
+            </button>
             {TABS.map(entry => (
               <button
                 key={entry.key}
                 type="button"
-                className={`tab ${!isTools && tab === entry.key ? 'active' : ''}`}
-                aria-pressed={!isTools && tab === entry.key}
+                className={`tab ${!isPage && tab === entry.key ? 'active' : ''}`}
+                aria-pressed={!isPage && tab === entry.key}
                 onClick={() => {
                   setTab(entry.key);
-                  if (isTools) navigate(current.path);
+                  if (isPage) navigate(current.path);
                 }}
               >
                 <Sprite name={entry.sprite} size={26} />
@@ -152,7 +160,11 @@ export default function App() {
         </div>
       </header>
 
-      {isTools ? (
+      {isHome ? (
+        <main className="home-main">
+          <HomePage onOpen={onLink} go={navigate} />
+        </main>
+      ) : isTools ? (
         <main className="tools-main">
           {toolSlug ? <ToolRoute key={toolSlug} slug={toolSlug} /> : <ToolsIndex onOpen={onLink} />}
         </main>
