@@ -10,7 +10,8 @@
     "registry": "node scripts/build-registry.mjs",
     "check:ts": "node scripts/check-ts-variants.mjs",
     "check:tw": "node scripts/check-tw-variants.mjs",
-    "check:originals": "node scripts/check-originals.mjs"
+    "check:originals": "node scripts/check-originals.mjs",
+    "check:templates": "node scripts/check-templates.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

@@ -33,6 +33,11 @@ The install command uses a shadcn-compatible registry that `scripts/build-regist
 npx shadcn@latest add http://localhost:5173/r/FocusPull.json
 ```
 
+Live at **https://bits-lab.vercel.app**. Two more pages sit beside the components:
+
+- **Templates** (`/templates`): three full pages (a SaaS landing page, a game page and an app launch page) made only from Bits Lab components. Between them they use every component; `npm run check:templates` keeps it that way. Sources are in `src/templates/`.
+- **React Bits** (`/react-bits`): a link directory of every React Bits component, with the Bits Lab originals that cover the same idea. Names and links only (`src/lib/reactbits-directory.js`).
+
 ## Layout
 
 | Path | Role |
@@ -55,7 +60,7 @@ Two parts of the dev setup are not in this repository, and the app builds withou
 
 ## Publishing
 
-What git contains is what gets published: the local-only parts above are git-ignored. `vercel.json` builds with `npm run build` and serves the single-page app for every path; pixel art and the `/r` registry are generated during the build.
+What git contains is what gets published: the local-only parts above are git-ignored. `vercel.json` builds with `npm run build` and serves the single-page app for every path; pixel art and the `/r` registry are generated during the build. Vercel deploys every push to `main` of the GitHub repo.
 
 Before publishing, run the checks:
 
@@ -63,6 +68,7 @@ Before publishing, run the checks:
 npm run check:ts         # TypeScript variants: strict types, no drift from the .jsx
 npm run check:tw         # Tailwind variants: types, logic and drift
 npm run check:originals  # no Bits Lab component shares a name or its props with a React Bits one
+npm run check:templates  # the three templates use every component
 ```
 
 ## Adding a component

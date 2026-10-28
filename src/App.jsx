@@ -7,6 +7,7 @@ import DirectoryPage from './ui/DirectoryPage';
 import { Icon } from './ui/icons';
 import Sprite from './pixel/Sprite';
 import { TOOLS, ToolRoute, ToolsIndex } from './tools';
+import { TEMPLATES, TemplateRoute, TemplatesIndex } from './templates';
 
 const LIBRARIES = [
   { key: 'lab', title: 'Bits Lab', categories: CATEGORIES, items: CATALOG },
@@ -76,7 +77,8 @@ export default function App() {
   const [, section, toolSlug] = pathname.split('/');
   const isTools = section === 'tools' && TOOLS.length > 0 && (!toolSlug || TOOLS.some(tool => tool.slug === toolSlug));
   const isDirectory = pathname === '/react-bits';
-  const isPage = isTools || isDirectory;
+  const isTemplates = section === 'templates' && (!toolSlug || TEMPLATES.some(template => template.slug === toolSlug));
+  const isPage = isTools || isDirectory || isTemplates;
   const lastItem = useRef(CATALOG[0]);
   if (item) lastItem.current = item;
 
@@ -101,6 +103,9 @@ export default function App() {
     event.preventDefault();
     navigate(to);
   };
+
+  // A template is a whole page of its own, without the library's header and sidebar.
+  if (isTemplates && toolSlug) return <TemplateRoute key={toolSlug} slug={toolSlug} onOpen={onLink} />;
 
   return (
     <div className="app">
@@ -128,6 +133,10 @@ export default function App() {
               </button>
             ))}
             <span className="tab-divider" aria-hidden="true" />
+            <button type="button" className={`tab ${isTemplates ? 'active' : ''}`} aria-pressed={isTemplates} onClick={() => navigate('/templates')}>
+              <Sprite name="frame" size={26} />
+              <span>Templates</span>
+            </button>
             <button type="button" className={`tab ${isDirectory ? 'active' : ''}`} aria-pressed={isDirectory} onClick={() => navigate('/react-bits')}>
               <Sprite name="note" size={26} />
               <span>React Bits</span>
@@ -159,7 +168,11 @@ export default function App() {
         </div>
       </header>
 
-      {isDirectory ? (
+      {isTemplates ? (
+        <main className="tools-main">
+          <TemplatesIndex onOpen={onLink} />
+        </main>
+      ) : isDirectory ? (
         <main className="tools-main">
           <DirectoryPage onOpen={onLink} />
         </main>

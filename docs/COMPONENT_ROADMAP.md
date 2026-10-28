@@ -6,7 +6,7 @@ Goal: turn Bits Lab into the largest library of highly polished React components
 
 **Wave 1 complete: all 56 items shipped (2026-10-27). Wave 2 complete: all 52 items shipped (2026-10-27). Wave 3 complete: all 12 items shipped (2026-10-28), so every proposal on this roadmap is built. Shipped items are marked ✅ below.**
 
-**Wave 4 started (2026-10-28):** about 37 original components that cover the needs of the React Bits catalog without porting it, in six phases plus a launch phase. See section 6. Phases 0–5 are done (159 originals); Phase 6 (launch) is next.
+**Wave 4 started (2026-10-28):** about 37 original components that cover the needs of the React Bits catalog without porting it, in six phases plus a launch phase. See section 6. All phases are done: 159 originals, published at bits-lab.vercel.app with a React Bits directory and three templates.
 
 - **Pixel & game set (12 items):** shipped 2026-10-26. They live in the Pixel & Game UI category, at `/pixel-game/<slug>`.
 - **Product showcase set (9 items, #21–25, 27–29, 34):** shipped 2026-10-26. They live in the Product Showcase category, at `/showcase/<slug>`.
@@ -341,7 +341,7 @@ To become the largest library, three multipliers matter more than headcount:
 
 ## 6. Wave 4: original equivalents for the React Bits catalog
 
-**Status:** planned 2026-10-28. Phases 0–5 done 2026-10-28; Phase 6 (launch) next.
+**Status:** planned 2026-10-28. Phases 0–6 done 2026-10-28.
 
 **Why:** the React Bits catalog (218 components) stays local. Its license (MIT + Commons Clause, `src/reactbits/LICENSE.md`) forbids redistributing the components "alone, in a bundle, or as a ported version", and covers the React Bits tools by name. Rewriting all 218 one-for-one would be a ported version, and would break quality bar item 10. Wave 4 covers the same *needs* instead: about 37 originals, most of them merging several common, unowned ideas into one Bits Lab component with its own name, API and pixel-game twist.
 
@@ -480,11 +480,12 @@ Planned:
 | ArcadeButtons | Buttons that dodge, fly or sling | DodgeField, FlyingButton, SlingButton |
 | ToggleKit additions | Bell, squish and spring variants for the existing kit | BellToggle, SquishSwitch, SpringCheck, JellyRadio |
 
-**Phase 6: launch**
+**Phase 6: launch** ✅ done 2026-10-28
 
-- Publish to GitHub and Vercel, Bits Lab only.
-- A React Bits directory page: names, our own one-line descriptions and links to reactbits.dev, with no code or previews.
-- The three templates (SaaS landing page, game page, app launch page), built from Bits Lab components.
+- **Published:** private GitHub repo `stevenphung/bits-lab`, deployed by Vercel (team personal-8a16af13) to https://bits-lab.vercel.app on every push to `main`. Vercel builds from GitHub, so git-ignored files (the React Bits catalog, the five tools, the internal research notes and the importer) never leave this machine.
+- **Name check widened:** ToggleKit's bell was first named BellToggle, which is a React Bits name. It is now NotifyBell, and `check:originals` also checks named component exports.
+- **React Bits directory** (`/react-bits`): all 218 names by category, each linking to its reactbits.dev page, plus the Bits Lab originals that cover the same idea (131 of them, from the tables above). No code, previews or descriptions: writing our own blurb for each would mean paraphrasing theirs, so the names and links do the job.
+- **Templates** (`/templates`): Questboard (SaaS landing page, 56 components), Emberfall (game page, 49) and Pocket Tavern (app launch page, 54). Between them they use all 159 components, which `npm run check:templates` enforces. Each is a full page without the library's header, loaded as its own chunk.
 
 ### 6.3 Left out on purpose
 
