@@ -1,4 +1,23 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useInsertionEffect, useRef } from 'react';
+
+const STYLE_ID = 'bl-wobble-card-tw';
+const CSS = `
+/* theme tokens */
+.bl-wobble { --bl-bg: #262b44; --bl-ink: #f4f4f4; --bl-line: #333c57; --bl-accent: #73eff7; --bl-sheen: rgba(115,239,247,0.18); }
+:where(.light, [data-theme="light"]) .bl-wobble, .bl-wobble:where(.light, [data-theme="light"]) { --bl-bg: #ebe5d8; --bl-ink: #1a1c2c; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-sheen: rgba(22,127,143,0.18); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-wobble, :where(.light, [data-theme="light"]) .bl-wobble:where(.dark, [data-theme="dark"]) { --bl-bg: #262b44; --bl-ink: #f4f4f4; --bl-line: #333c57; --bl-accent: #73eff7; --bl-sheen: rgba(115,239,247,0.18); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-wobble, .bl-wobble:where([data-theme="system"]) { --bl-bg: #ebe5d8; --bl-ink: #1a1c2c; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-sheen: rgba(22,127,143,0.18); } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -15,15 +34,16 @@ export default function WobbleCard({
   width = 360,
   padding = 24,
   radius = 18,
-  backgroundColor = '#262b44',
-  textColor = '#f4f4f4',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  sheenColor = 'rgba(115,239,247,0.18)',
+  backgroundColor,
+  textColor,
+  lineColor,
+  accentColor,
+  sheenColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }) {
+  useStyles();
   const rootRef = useRef(null);
   const bodyRef = useRef(null);
 
@@ -101,7 +121,7 @@ export default function WobbleCard({
   }, [intensity, stiffness, damping]);
 
   return (
-    <div ref={rootRef} className={`group/wob relative box-border w-full max-w-(--bl-w) touch-pan-y ${className}`} style={{ '--bl-w': `${width}px`, '--bl-pad': `${padding}px`, '--bl-radius': `${radius}px`, '--bl-bg': backgroundColor, '--bl-ink': textColor, '--bl-line': lineColor, '--bl-accent': accentColor, '--bl-sheen': sheenColor, '--bl-font': fontFamily, ...style }}>
+    <div ref={rootRef} className={`bl-wobble group/wob relative box-border w-full max-w-(--bl-w) touch-pan-y ${className}`} style={{ '--bl-w': `${width}px`, '--bl-pad': `${padding}px`, '--bl-radius': `${radius}px`, '--bl-bg': backgroundColor, '--bl-ink': textColor, '--bl-line': lineColor, '--bl-accent': accentColor, '--bl-sheen': sheenColor, '--bl-font': fontFamily, ...style }}>
       <div ref={bodyRef} className="relative box-border origin-center overflow-hidden rounded-(--bl-radius) bg-(--bl-bg) p-(--bl-pad) font-(family-name:--bl-font) text-(--bl-ink) shadow-[0_0_0_2px_var(--bl-line),0_18px_40px_-22px_rgba(0,0,0,0.8)] will-change-transform [transition:box-shadow_200ms] before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-[radial-gradient(circle_at_var(--bl-mx,50%)_var(--bl-my,50%),var(--bl-sheen),transparent_60%)] before:opacity-0 before:[transition:opacity_250ms] before:content-[''] group-data-[active]/wob:shadow-[0_0_0_2px_var(--bl-accent),0_24px_48px_-22px_rgba(0,0,0,0.85)] group-data-[active]/wob:before:opacity-100 group-focus-within/wob:shadow-[0_0_0_2px_var(--bl-accent),0_18px_40px_-22px_rgba(0,0,0,0.8)]!">
         <div className="relative">{children}</div>
       </div>

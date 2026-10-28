@@ -12,6 +12,12 @@ import { createPortal } from 'react-dom';
 
 const STYLE_ID = 'bl-context-orb-tw';
 const CSS = `
+/* theme tokens */
+.bl-corb-area { --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-corb-area, .bl-corb-area:where(.light, [data-theme="light"]) { --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-corb-area, :where(.light, [data-theme="light"]) .bl-corb-area:where(.dark, [data-theme="dark"]) { --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-corb-area, .bl-corb-area:where([data-theme="system"]) { --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-corb-hub { from { transform: scale(0.3); opacity: 0; } }
 @keyframes bl-corb-item { from { transform: translate(0, 0) scale(0.2); opacity: 0; } }
 @keyframes bl-corb-out { to { opacity: 0; scale: 0.6; } }
@@ -41,7 +47,7 @@ export default function ContextOrb({
   backgroundColor = '#1a1c2c',
   textColor = '#f4f4f4',
   lineColor = '#333c57',
-  accentColor = '#73eff7',
+  accentColor,
   dangerColor = '#ef7d57',
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
@@ -215,7 +221,7 @@ export default function ContextOrb({
   return (
     <div
       ref={areaRef}
-      className={`relative outline-none [-webkit-touch-callout:none] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-dashed focus-visible:outline-(--bl-accent) ${className}`}
+      className={`bl-corb-area relative outline-none [-webkit-touch-callout:none] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-dashed focus-visible:outline-(--bl-accent) ${className}`}
       tabIndex={0}
       aria-haspopup="menu"
       aria-expanded={!!menu && !menu.closing}
@@ -240,7 +246,7 @@ export default function ContextOrb({
               '--bl-bg': backgroundColor,
               '--bl-ink': textColor,
               '--bl-line': lineColor,
-              '--bl-accent': accentColor,
+              '--bl-accent': accentColor ?? 'var(--bl-accent)',
               '--bl-danger': dangerColor,
               '--bl-font': fontFamily
             }}

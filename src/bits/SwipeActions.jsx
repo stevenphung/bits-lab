@@ -8,6 +8,12 @@ import { useEffect, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-swipe-actions';
 const CSS = `
+/* theme tokens */
+.bl-swipe { --bl-bg: #262b44; --bl-under: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-swipe, .bl-swipe:where(.light, [data-theme="light"]) { --bl-bg: #ebe5d8; --bl-under: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-swipe, :where(.light, [data-theme="light"]) .bl-swipe:where(.dark, [data-theme="dark"]) { --bl-bg: #262b44; --bl-under: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-swipe, .bl-swipe:where([data-theme="system"]) { --bl-bg: #ebe5d8; --bl-under: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-swipe { position: relative; overflow: hidden; border-radius: var(--bl-radius); background: var(--bl-under); font-family: var(--bl-font); color: var(--bl-ink); touch-action: pan-y; }
 .bl-swipe[data-gone] { animation: bl-swipe-collapse 260ms 200ms ease forwards; }
 .bl-swipe__side { position: absolute; top: 0; bottom: 0; display: flex; }
@@ -45,11 +51,11 @@ export default function SwipeActions({
   actionWidth = 76,
   label = 'Actions',
   radius = 12,
-  backgroundColor = '#262b44',
-  underColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
+  backgroundColor,
+  underColor,
+  textColor,
+  mutedColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style

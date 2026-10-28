@@ -37,6 +37,12 @@ interface Chapter {
 
 const STYLE_ID = 'bl-chapter-progress';
 const CSS = `
+/* theme tokens */
+.bl-chap { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-chap, .bl-chap:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-chap, :where(.light, [data-theme="light"]) .bl-chap:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-chap, .bl-chap:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-chap { position: relative; z-index: 10; display: grid; gap: 8px; padding: 10px 14px 12px; background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); font-size: 13px; box-shadow: 0 1px 0 var(--bl-line), 0 10px 24px -18px rgba(0,0,0,0.8); }
 .bl-chap__row { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .bl-chap__current { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
@@ -87,12 +93,12 @@ export default function ChapterProgress({
   showTime = true,
   listLabel = 'Chapters',
   label = 'Reading progress',
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  trackColor = '#333c57',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  trackColor,
+  lineColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

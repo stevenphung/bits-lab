@@ -7,6 +7,12 @@ import { useEffect, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-logo-orbit';
 const CSS = `
+/* theme tokens */
+.bl-orbit { --bl-bg: #1a1c2c; --bl-item-bg: #262b44; --bl-center-bg: #333c57; --bl-line: rgba(148,176,194,0.25); --bl-accent: #73eff7; --bl-ink: #f4f4f4; }
+:where(.light, [data-theme="light"]) .bl-orbit, .bl-orbit:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-item-bg: #ebe5d8; --bl-center-bg: #ddd4c0; --bl-line: rgba(86,108,134,0.25); --bl-accent: #167f8f; --bl-ink: #1a1c2c; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-orbit, :where(.light, [data-theme="light"]) .bl-orbit:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-item-bg: #262b44; --bl-center-bg: #333c57; --bl-line: rgba(148,176,194,0.25); --bl-accent: #73eff7; --bl-ink: #f4f4f4; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-orbit, .bl-orbit:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-item-bg: #ebe5d8; --bl-center-bg: #ddd4c0; --bl-line: rgba(86,108,134,0.25); --bl-accent: #167f8f; --bl-ink: #1a1c2c; } }
+/* theme tokens end */
 .bl-orbit { position: relative; width: min(var(--bl-size), 100%); aspect-ratio: 1; margin: 0 auto; container-type: inline-size; color: var(--bl-ink); font-family: var(--bl-font); }
 .bl-orbit__ring { position: absolute; inset: 0; animation: bl-orbit-spin var(--bl-dur) linear infinite; animation-direction: var(--bl-dir); pointer-events: none; }
 .bl-orbit__track { position: absolute; left: 50%; top: 50%; width: calc(var(--bl-r) * 2cqi); height: calc(var(--bl-r) * 2cqi); border-radius: 50%; border: 1px dashed var(--bl-line); transform: translate(-50%, -50%); pointer-events: none; }
@@ -54,12 +60,12 @@ export default function LogoOrbit({
   pauseOnHover = true,
   showTracks = true,
   label = 'Integrations',
-  backgroundColor = '#1a1c2c',
-  itemColor = '#262b44',
-  centerColor = '#333c57',
-  lineColor = 'rgba(148,176,194,0.25)',
-  accentColor = '#73eff7',
-  textColor = '#f4f4f4',
+  backgroundColor,
+  itemColor,
+  centerColor,
+  lineColor,
+  accentColor,
+  textColor,
   itemRadius = 14,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',

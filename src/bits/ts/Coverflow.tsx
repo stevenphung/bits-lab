@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-coverflow';
 const CSS = `
+/* theme tokens */
+.bl-cover { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-chip: rgba(255,255,255,0.08); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-cover, .bl-cover:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-chip: rgba(26,28,44,0.08); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-cover, :where(.light, [data-theme="light"]) .bl-cover:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-chip: rgba(255,255,255,0.08); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-cover, .bl-cover:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-chip: rgba(26,28,44,0.08); --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-cover { display: grid; gap: 14px; justify-items: center; width: 100%; font-family: var(--bl-font); color: var(--bl-ink); }
 .bl-cover__stage { position: relative; width: 100%; height: var(--bl-h); perspective: 1100px; touch-action: pan-y; outline: none; overflow: hidden; }
 .bl-cover__stage:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 4px; border-radius: 12px; }
@@ -79,11 +85,11 @@ export default function Coverflow({
   depth = 120,
   range = 4,
   label = 'Gallery',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  chipColor = 'rgba(255,255,255,0.08)',
-  accentColor = '#73eff7',
+  textColor,
+  mutedColor,
+  lineColor,
+  chipColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style

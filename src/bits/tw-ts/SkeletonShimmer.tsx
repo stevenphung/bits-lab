@@ -45,6 +45,12 @@ interface Box {
 
 const STYLE_ID = 'bl-skeleton-shimmer-tw';
 const CSS = `
+/* theme tokens */
+.bl-skel { --bl-base: #262b44; --bl-shine: #3a4266; }
+:where(.light, [data-theme="light"]) .bl-skel, .bl-skel:where(.light, [data-theme="light"]) { --bl-base: #e3dccd; --bl-shine: #f4f1e8; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-skel, :where(.light, [data-theme="light"]) .bl-skel:where(.dark, [data-theme="dark"]) { --bl-base: #262b44; --bl-shine: #3a4266; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-skel, .bl-skel:where([data-theme="system"]) { --bl-base: #e3dccd; --bl-shine: #f4f1e8; } }
+/* theme tokens end */
 @keyframes bl-skel-shine { from { background-position: 100% 0; } to { background-position: 0 0; } }
 `;
 
@@ -105,8 +111,8 @@ export default function SkeletonShimmer({
   lineScale = 0.62,
   fade = 320,
   speed = 1400,
-  baseColor = '#262b44',
-  shineColor = '#3a4266',
+  baseColor,
+  shineColor,
   loadingLabel = 'Loading…',
   className = '',
   style
@@ -139,7 +145,7 @@ export default function SkeletonShimmer({
   }, [loading, showBones, fade]);
 
   return (
-    <div className={`group/skel relative ${className}`} data-loading={loading || undefined} aria-busy={loading} style={{ '--bl-fade': `${fade}ms`, '--bl-speed': `${speed}ms`, '--bl-base': baseColor, '--bl-shine': shineColor, ...style } as CSSVars}>
+    <div className={`bl-skel group/skel relative ${className}`} data-loading={loading || undefined} aria-busy={loading} style={{ '--bl-fade': `${fade}ms`, '--bl-speed': `${speed}ms`, '--bl-base': baseColor, '--bl-shine': shineColor, ...style } as CSSVars}>
       <div ref={contentRef} className="transition-opacity duration-(--bl-fade) ease-[ease] group-data-[loading]/skel:invisible group-data-[loading]/skel:opacity-0 motion-reduce:transition-none" inert={loading || undefined}>
         {children}
       </div>

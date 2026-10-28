@@ -1,14 +1,25 @@
-import { useId, useLayoutEffect, useRef, type CSSProperties } from 'react';
+import { useId, useInsertionEffect, useLayoutEffect, useRef, type CSSProperties } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// An analog gauge. The needle swings to each new value on a real spring (it overshoots and
-// settles), the value arc fills in the color of the zone it's in, and labelled ticks run
-// round the dial. The center shows the value, unit and the zone's name with an icon, so the
-// state never rests on color alone. Exposed as a meter. Holds still under reduced motion.
+const STYLE_ID = 'bl-gauge-meter-tw';
+const CSS = `
+/* theme tokens */
+.bl-gauge { --bl-tick: #566c86; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; }
+:where(.light, [data-theme="light"]) .bl-gauge, .bl-gauge:where(.light, [data-theme="light"]) { --bl-tick: #8a96a3; --bl-ink: #1a1c2c; --bl-muted: #566c86; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-gauge, :where(.light, [data-theme="light"]) .bl-gauge:where(.dark, [data-theme="dark"]) { --bl-tick: #566c86; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-gauge, .bl-gauge:where([data-theme="system"]) { --bl-tick: #8a96a3; --bl-ink: #1a1c2c; --bl-muted: #566c86; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Status colors (fixed) with icons, so a zone is never just a color.
 export const DEFAULT_ZONES: GaugeZone[] = [
@@ -79,15 +90,15 @@ export default function GaugeMeter({
   size = 260,
   thickness = 12,
   trackColor = '#262b44',
-  tickColor = '#566c86',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
+  tickColor,
+  textColor,
+  mutedColor,
   needleColor = '#f4f4f4',
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }: GaugeMeterProps) {
-  
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const needleRef = useRef<SVGGElement>(null);
   const fillRef = useRef<SVGPathElement>(null);
@@ -180,7 +191,7 @@ export default function GaugeMeter({
 
   return (
     <div
-      className={`relative grid w-[min(var(--bl-size),100%)] justify-items-center font-(family-name:--bl-font) text-(--bl-ink) [&_svg]:block [&_svg]:h-auto [&_svg]:w-full [&_svg]:overflow-visible ${className}`}
+      className={`bl-gauge relative grid w-[min(var(--bl-size),100%)] justify-items-center font-(family-name:--bl-font) text-(--bl-ink) [&_svg]:block [&_svg]:h-auto [&_svg]:w-full [&_svg]:overflow-visible ${className}`}
       role="meter"
       aria-valuemin={min}
       aria-valuemax={max}

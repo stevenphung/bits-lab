@@ -10,6 +10,12 @@ import { useEffect, useId, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-feed-list-tw';
 const CSS = `
+/* theme tokens */
+.bl-feed { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-hover: rgba(255,255,255,0.05); --bl-chip: rgba(255,255,255,0.07); --bl-line: #333c57; --bl-accent: #73eff7; --bl-flash: rgba(115,239,247,0.14); }
+:where(.light, [data-theme="light"]) .bl-feed, .bl-feed:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-hover: rgba(26,28,44,0.05); --bl-chip: rgba(26,28,44,0.07); --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-flash: rgba(22,127,143,0.14); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-feed, :where(.light, [data-theme="light"]) .bl-feed:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-hover: rgba(255,255,255,0.05); --bl-chip: rgba(255,255,255,0.07); --bl-line: #333c57; --bl-accent: #73eff7; --bl-flash: rgba(115,239,247,0.14); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-feed, .bl-feed:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-hover: rgba(26,28,44,0.05); --bl-chip: rgba(26,28,44,0.07); --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-flash: rgba(22,127,143,0.14); } }
+/* theme tokens end */
 @keyframes bl-feed-in { 0% { opacity: 0; transform: translateY(-10px); background: var(--bl-flash); } 60% { background: var(--bl-flash); } }
 `;
 
@@ -43,14 +49,14 @@ export default function FeedList({
   width = 480,
   maxHeight = 420,
   radius = 14,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  hoverColor = 'rgba(255,255,255,0.05)',
-  chipColor = 'rgba(255,255,255,0.07)',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  flashColor = 'rgba(115,239,247,0.14)',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  hoverColor,
+  chipColor,
+  lineColor,
+  accentColor,
+  flashColor,
   fontFamily = 'inherit',
   className = '',
   style
@@ -113,7 +119,7 @@ export default function FeedList({
     <>
       <ul
         ref={listRef}
-        className={`m-0 box-border max-h-(--bl-max-h) w-full max-w-(--bl-w) list-none overflow-y-auto rounded-(--bl-radius) bg-(--bl-bg) p-1.5 font-(family-name:--bl-font) text-(--bl-ink) shadow-[inset_0_0_0_1px_var(--bl-line)] outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--bl-accent)] ${className}`}
+        className={`bl-feed m-0 box-border max-h-(--bl-max-h) w-full max-w-(--bl-w) list-none overflow-y-auto rounded-(--bl-radius) bg-(--bl-bg) p-1.5 font-(family-name:--bl-font) text-(--bl-ink) shadow-[inset_0_0_0_1px_var(--bl-line)] outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--bl-accent)] ${className}`}
         role={selectable ? 'listbox' : 'list'}
         aria-label={label}
         aria-activedescendant={selectable && live.length ? `${uid}-${current}` : undefined}

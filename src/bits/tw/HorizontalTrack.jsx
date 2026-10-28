@@ -1,4 +1,23 @@
-import { Children, useEffect, useRef, useState } from 'react';
+import { Children, useEffect, useInsertionEffect, useRef, useState } from 'react';
+
+const STYLE_ID = 'bl-horizontal-track-tw';
+const CSS = `
+/* theme tokens */
+.bl-htrack { --bl-accent: #ffcd75; --bl-muted: #94b0c2; --bl-track: rgba(148,176,194,0.2); }
+:where(.light, [data-theme="light"]) .bl-htrack, .bl-htrack:where(.light, [data-theme="light"]) { --bl-accent: #a86a12; --bl-muted: #566c86; --bl-track: rgba(86,108,134,0.2); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-htrack, :where(.light, [data-theme="light"]) .bl-htrack:where(.dark, [data-theme="dark"]) { --bl-accent: #ffcd75; --bl-muted: #94b0c2; --bl-track: rgba(148,176,194,0.2); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-htrack, .bl-htrack:where([data-theme="system"]) { --bl-accent: #a86a12; --bl-muted: #566c86; --bl-track: rgba(86,108,134,0.2); } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -25,14 +44,15 @@ export default function HorizontalTrack({
   snap = true,
   showProgress = true,
   label = 'Gallery',
-  accentColor = '#ffcd75',
-  mutedColor = '#94b0c2',
-  trackColor = 'rgba(148,176,194,0.2)',
+  accentColor,
+  mutedColor,
+  trackColor,
   barRadius = 2,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }) {
+  useStyles();
   const rootRef = useRef(null);
   const stageRef = useRef(null);
   const rowRef = useRef(null);
@@ -139,7 +159,7 @@ export default function HorizontalTrack({
   return (
     <section
       ref={rootRef}
-      className={`relative h-(--bl-len) motion-reduce:h-auto ${className}`}
+      className={`bl-htrack relative h-(--bl-len) motion-reduce:h-auto ${className}`}
       aria-label={label}
       style={{
         '--bl-len': length == null ? stageHeight : `${length}px`,

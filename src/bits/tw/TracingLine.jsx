@@ -1,4 +1,23 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useInsertionEffect, useRef, useState } from 'react';
+
+const STYLE_ID = 'bl-tracing-line-tw';
+const CSS = `
+/* theme tokens */
+.bl-trace { --bl-from: #41a6f6; --bl-to: #73eff7; --bl-glow: rgba(115,239,247,0.35); --bl-track: rgba(148,176,194,0.22); --bl-bg: #1a1c2c; }
+:where(.light, [data-theme="light"]) .bl-trace, .bl-trace:where(.light, [data-theme="light"]) { --bl-from: #2470c2; --bl-to: #167f8f; --bl-glow: rgba(22,127,143,0.35); --bl-track: rgba(86,108,134,0.22); --bl-bg: #f4f1e8; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-trace, :where(.light, [data-theme="light"]) .bl-trace:where(.dark, [data-theme="dark"]) { --bl-from: #41a6f6; --bl-to: #73eff7; --bl-glow: rgba(115,239,247,0.35); --bl-track: rgba(148,176,194,0.22); --bl-bg: #1a1c2c; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-trace, .bl-trace:where([data-theme="system"]) { --bl-from: #2470c2; --bl-to: #167f8f; --bl-glow: rgba(22,127,143,0.35); --bl-track: rgba(86,108,134,0.22); --bl-bg: #f4f1e8; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -22,14 +41,15 @@ export default function TracingLine({
   markerOffset = 14,
   square = false,
   activeLine = 0.55,
-  fromColor = '#41a6f6',
-  toColor = '#73eff7',
-  glowColor = 'rgba(115,239,247,0.35)',
-  trackColor = 'rgba(148,176,194,0.22)',
-  backgroundColor = '#1a1c2c',
+  fromColor,
+  toColor,
+  glowColor,
+  trackColor,
+  backgroundColor,
   className = '',
   style
 }) {
+  useStyles();
   const rootRef = useRef(null);
   const contentRef = useRef(null);
   const [markers, setMarkers] = useState([]);
@@ -97,7 +117,7 @@ export default function TracingLine({
   return (
     <div
       ref={rootRef}
-      className={`relative pl-(--bl-gutter) ${className}`}
+      className={`bl-trace relative pl-(--bl-gutter) ${className}`}
       style={{
         '--bl-gutter': `${gutter}px`,
         '--bl-w': `${lineWidth}px`,

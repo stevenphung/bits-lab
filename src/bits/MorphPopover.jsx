@@ -6,6 +6,12 @@ import { useEffect, useId, useInsertionEffect, useLayoutEffect, useRef, useState
 
 const STYLE_ID = 'bl-morph-popover';
 const CSS = `
+/* theme tokens */
+.bl-mp { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-line: rgba(255,255,255,0.14); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-mp, .bl-mp:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-line: rgba(26,28,44,0.14); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-mp, :where(.light, [data-theme="light"]) .bl-mp:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-line: rgba(255,255,255,0.14); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-mp, .bl-mp:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-line: rgba(26,28,44,0.14); --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-mp { position: relative; display: inline-block; vertical-align: top; font-family: var(--bl-font); }
 .bl-mp__button { display: inline-flex; align-items: center; gap: 8px; height: var(--bl-h); padding: 0 18px; border: 0; border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); font: inherit; font-weight: 600; cursor: pointer; box-shadow: inset 0 0 0 1px var(--bl-line); white-space: nowrap; }
 .bl-mp__button:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 2px; }
@@ -42,10 +48,10 @@ export default function MorphPopover({
   duration = 380,
   open: controlledOpen,
   onOpenChange,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  lineColor = 'rgba(255,255,255,0.14)',
-  accentColor = '#73eff7',
+  backgroundColor,
+  textColor,
+  lineColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

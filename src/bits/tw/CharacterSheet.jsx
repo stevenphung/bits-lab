@@ -10,6 +10,12 @@ import { useInsertionEffect } from 'react';
 
 const STYLE_ID = 'bl-character-sheet-tw';
 const CSS = `
+/* theme tokens */
+.bl-char { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-fill: #38b764; --bl-track: #0b0b14; --bl-accent: #73eff7; --bl-gold: #ffcd75; --bl-danger: #ef7d57; }
+:where(.light, [data-theme="light"]) .bl-char, .bl-char:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-fill: #2b8a4a; --bl-track: #e2dacb; --bl-accent: #167f8f; --bl-gold: #a86a12; --bl-danger: #c4502a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-char, :where(.light, [data-theme="light"]) .bl-char:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-fill: #38b764; --bl-track: #0b0b14; --bl-accent: #73eff7; --bl-gold: #ffcd75; --bl-danger: #ef7d57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-char, .bl-char:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-fill: #2b8a4a; --bl-track: #e2dacb; --bl-accent: #167f8f; --bl-gold: #a86a12; --bl-danger: #c4502a; } }
+/* theme tokens end */
 @keyframes bl-char-fill { from { transform: scaleY(0.2); opacity: 0.3; } }
 `;
 
@@ -35,16 +41,16 @@ export default function CharacterSheet({
   blocks = 16,
   width = 320,
   label,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  fillColor = '#38b764',
-  trackColor = '#0b0b14',
-  accentColor = '#73eff7',
-  goldColor = '#ffcd75',
-  dangerColor = '#ef7d57',
+  backgroundColor,
+  chipColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  fillColor,
+  trackColor,
+  accentColor,
+  goldColor,
+  dangerColor,
   fontFamily = 'inherit',
   className = '',
   style
@@ -57,7 +63,7 @@ export default function CharacterSheet({
 
   return (
     <section
-      className={`grid gap-[14px] p-4 w-[min(var(--bl-w),100%)] box-border bg-(--bl-bg) text-(--bl-ink) font-(family-name:--bl-font) text-[14px] shadow-[inset_0_0_0_3px_var(--bl-line),6px_6px_0_rgba(0,0,0,0.45)] ${className}`}
+      className={`bl-char grid gap-[14px] p-4 w-[min(var(--bl-w),100%)] box-border bg-(--bl-bg) text-(--bl-ink) font-(family-name:--bl-font) text-[14px] shadow-[inset_0_0_0_3px_var(--bl-line),6px_6px_0_rgba(0,0,0,0.45)] ${className}`}
       aria-label={label ?? `${name}, level ${level}`}
       style={{ '--bl-w': `${width}px`, '--bl-bg': backgroundColor, '--bl-chip': chipColor, '--bl-line': lineColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-fill': fillColor, '--bl-track': trackColor, '--bl-accent': accentColor, '--bl-gold': goldColor, '--bl-danger': dangerColor, '--bl-font': fontFamily, '--bl-n': blocks, ...style }}
     >
@@ -100,7 +106,7 @@ export default function CharacterSheet({
           </div>
           <div className="grid h-2.5 grid-cols-[repeat(var(--bl-n),1fr)] gap-0.5" role="progressbar" aria-label={setup.label ?? 'Setup'} aria-valuemin={0} aria-valuemax={setup.total} aria-valuenow={setup.done}>
             {Array.from({ length: blocks }, (_, i) => (
-              <span key={i} className="bg-(--bl-track) data-[on]:animate-[bl-char-fill_260ms_steps(2)_calc(var(--i)_*_30ms)_both] data-[on]:bg-(--bl-fill) motion-reduce:data-[on]:animate-none" data-on={i < setupLit || undefined} style={{ '--i': i, '--bl-fill': accentColor }} />
+              <span key={i} className="bg-(--bl-track) data-[on]:animate-[bl-char-fill_260ms_steps(2)_calc(var(--i)_*_30ms)_both] data-[on]:bg-(--bl-fill) motion-reduce:data-[on]:animate-none" data-on={i < setupLit || undefined} style={{ '--i': i, '--bl-fill': accentColor ?? 'var(--bl-accent)' }} />
             ))}
           </div>
           {setup.next && (

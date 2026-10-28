@@ -8,6 +8,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-health-bar';
 const CSS = `
+/* theme tokens */
+.bl-hp { --bl-track: #1a1c2c; --bl-label: #f4f4f4; }
+:where(.light, [data-theme="light"]) .bl-hp, .bl-hp:where(.light, [data-theme="light"]) { --bl-track: #f4f1e8; --bl-label: #1a1c2c; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-hp, :where(.light, [data-theme="light"]) .bl-hp:where(.dark, [data-theme="dark"]) { --bl-track: #1a1c2c; --bl-label: #f4f4f4; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-hp, .bl-hp:where([data-theme="system"]) { --bl-track: #f4f1e8; --bl-label: #1a1c2c; } }
+/* theme tokens end */
 .bl-hp { display: grid; gap: 6px; font-family: var(--bl-font, "Press Start 2P", ui-monospace, monospace); color: var(--bl-label); }
 .bl-hp__head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 10px; text-transform: uppercase; }
 .bl-hp__value { font-variant-numeric: tabular-nums; }
@@ -91,8 +97,8 @@ export default function HealthBar({
   lowColor = '#b13e53',
   damageColor = '#f4f4f4',
   healColor = '#a7f070',
-  trackColor = '#1a1c2c',
-  labelColor = '#f4f4f4',
+  trackColor,
+  labelColor,
   lowThreshold = 0.25,
   delay = 350,
   drainDuration = 600,

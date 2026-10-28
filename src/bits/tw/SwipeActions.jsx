@@ -11,6 +11,12 @@ import { useEffect, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-swipe-actions-tw';
 const CSS = `
+/* theme tokens */
+.bl-swipe { --bl-bg: #262b44; --bl-under: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-swipe, .bl-swipe:where(.light, [data-theme="light"]) { --bl-bg: #ebe5d8; --bl-under: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-swipe, :where(.light, [data-theme="light"]) .bl-swipe:where(.dark, [data-theme="dark"]) { --bl-bg: #262b44; --bl-under: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-swipe, .bl-swipe:where([data-theme="system"]) { --bl-bg: #ebe5d8; --bl-under: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-swipe-collapse { to { height: 0; opacity: 0; } }
 `;
 
@@ -31,11 +37,11 @@ export default function SwipeActions({
   actionWidth = 76,
   label = 'Actions',
   radius = 12,
-  backgroundColor = '#262b44',
-  underColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
+  backgroundColor,
+  underColor,
+  textColor,
+  mutedColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style
@@ -116,7 +122,7 @@ export default function SwipeActions({
   return (
     <div
       ref={rootRef}
-      className={`group/sw relative touch-pan-y overflow-hidden rounded-(--bl-radius) bg-(--bl-under) font-(family-name:--bl-font) text-(--bl-ink) data-[gone]:animate-[bl-swipe-collapse_260ms_ease_200ms_forwards] motion-reduce:data-[gone]:hidden motion-reduce:data-[gone]:animate-none ${className}`}
+      className={`bl-swipe group/sw relative touch-pan-y overflow-hidden rounded-(--bl-radius) bg-(--bl-under) font-(family-name:--bl-font) text-(--bl-ink) data-[gone]:animate-[bl-swipe-collapse_260ms_ease_200ms_forwards] motion-reduce:data-[gone]:hidden motion-reduce:data-[gone]:animate-none ${className}`}
       data-dragging={dragging || undefined}
       data-gone={gone || undefined}
       style={{ '--x': `${x}px`, '--bl-action': `${actionWidth}px`, '--bl-radius': `${radius}px`, '--bl-bg': backgroundColor, '--bl-under': underColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-accent': accentColor, '--bl-font': fontFamily, ...style }}

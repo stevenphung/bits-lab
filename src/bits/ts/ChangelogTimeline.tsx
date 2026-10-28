@@ -44,6 +44,12 @@ export interface ChangelogTimelineProps {
 
 const STYLE_ID = 'bl-changelog';
 const CSS = `
+/* theme tokens */
+.bl-log { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-log, .bl-log:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-log, :where(.light, [data-theme="light"]) .bl-log:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-log, .bl-log:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-log { position: relative; container-type: inline-size; width: 100%; max-width: var(--bl-w); margin: 0 auto; color: var(--bl-ink); font-family: var(--bl-font); }
 .bl-log__list { position: relative; margin: 0; padding: 0; list-style: none; }
 .bl-log__line { position: absolute; top: 6px; bottom: 6px; left: var(--bl-x); width: 2px; margin-left: -1px; background: var(--bl-track); }
@@ -89,11 +95,11 @@ export default function ChangelogTimeline({
   dateColumn = 140,
   stickyTop = 24,
   width = 760,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  trackColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  trackColor,
+  accentColor,
   mediaRadius = 12,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   label = 'Changelog',

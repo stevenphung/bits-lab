@@ -13,6 +13,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-toast-stack-tw';
 const CSS = `
+/* theme tokens */
+.bl-toaster { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.12); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-toaster, .bl-toaster:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.12); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-toaster, :where(.light, [data-theme="light"]) .bl-toaster:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.12); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-toaster, .bl-toaster:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.12); --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-toast-spin { to { transform: rotate(360deg); } }
 `;
 
@@ -298,11 +304,11 @@ export default function Toaster({
   offset = 24,
   contained = false,
   radius = 12,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = 'rgba(255,255,255,0.12)',
-  accentColor = '#73eff7',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
   successColor = '#38b764',
   errorColor = '#b13e53',
   infoColor = '#41a6f6',
@@ -341,7 +347,7 @@ export default function Toaster({
 
   return (
     <ol
-      className={`group/toaster pointer-events-none fixed z-1100 m-0 w-(--bl-w) max-w-[calc(100%_-_32px)] list-none p-0 font-(family-name:--bl-font) data-[contained]:absolute data-[x=center]:left-1/2 data-[x=center]:[transform:translateX(-50%)] data-[x=left]:left-(--bl-offset) data-[x=right]:right-(--bl-offset) data-[y=bottom]:bottom-(--bl-offset) data-[y=top]:top-(--bl-offset) ${className}`}
+      className={`bl-toaster group/toaster pointer-events-none fixed z-1100 m-0 w-(--bl-w) max-w-[calc(100%_-_32px)] list-none p-0 font-(family-name:--bl-font) data-[contained]:absolute data-[x=center]:left-1/2 data-[x=center]:[transform:translateX(-50%)] data-[x=left]:left-(--bl-offset) data-[x=right]:right-(--bl-offset) data-[y=bottom]:bottom-(--bl-offset) data-[y=top]:top-(--bl-offset) ${className}`}
       data-x={x ?? 'right'}
       data-y={y}
       data-contained={contained || undefined}

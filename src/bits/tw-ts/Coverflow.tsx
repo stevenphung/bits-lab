@@ -1,15 +1,25 @@
-import { Children, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent, type ReactElement, type ReactNode } from 'react';
+import { Children, useEffect, useInsertionEffect, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent, type ReactElement, type ReactNode } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// A 3D shelf. The chosen item faces you in the middle; its neighbours turn away and step back
-// on either side like records in a crate. Drag or swipe to flick through, scroll sideways with a
-// wheel or trackpad, click an item at the side to bring it forward, or use the arrow keys and
-// buttons. The current item is announced; items off to the side are inert. Reduced motion slides
-// without the turn.
+const STYLE_ID = 'bl-coverflow-tw';
+const CSS = `
+/* theme tokens */
+.bl-cover { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-chip: rgba(255,255,255,0.08); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-cover, .bl-cover:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-chip: rgba(26,28,44,0.08); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-cover, :where(.light, [data-theme="light"]) .bl-cover:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-chip: rgba(255,255,255,0.08); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-cover, .bl-cover:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-chip: rgba(26,28,44,0.08); --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 const Arrow = ({ flip }: { flip?: boolean }) => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ transform: flip ? 'scaleX(-1)' : undefined }}>
@@ -55,16 +65,16 @@ export default function Coverflow({
   depth = 120,
   range = 4,
   label = 'Gallery',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  chipColor = 'rgba(255,255,255,0.08)',
-  accentColor = '#73eff7',
+  textColor,
+  mutedColor,
+  lineColor,
+  chipColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style
 }: CoverflowProps) {
-  
+  useStyles();
   const items = Children.toArray(children);
   const n = items.length;
   const [inner, setInner] = useState(defaultIndex);
@@ -125,7 +135,7 @@ export default function Coverflow({
 
   return (
     <div
-      className={`grid w-full justify-items-center gap-3.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-cover grid w-full justify-items-center gap-3.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       style={{ '--bl-h': `${height}px`, '--bl-item': `${itemWidth}px`, '--bl-spacing': spacing, '--bl-angle': `${angle}deg`, '--bl-depth': `${depth}px`, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-line': lineColor, '--bl-chip': chipColor, '--bl-accent': accentColor, '--bl-font': fontFamily, ...style } as CSSVars}
     >
       <div

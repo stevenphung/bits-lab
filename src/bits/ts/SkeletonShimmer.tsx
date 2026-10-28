@@ -42,6 +42,12 @@ interface Box {
 
 const STYLE_ID = 'bl-skeleton-shimmer';
 const CSS = `
+/* theme tokens */
+.bl-skel { --bl-base: #262b44; --bl-shine: #3a4266; }
+:where(.light, [data-theme="light"]) .bl-skel, .bl-skel:where(.light, [data-theme="light"]) { --bl-base: #e3dccd; --bl-shine: #f4f1e8; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-skel, :where(.light, [data-theme="light"]) .bl-skel:where(.dark, [data-theme="dark"]) { --bl-base: #262b44; --bl-shine: #3a4266; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-skel, .bl-skel:where([data-theme="system"]) { --bl-base: #e3dccd; --bl-shine: #f4f1e8; } }
+/* theme tokens end */
 .bl-skel { position: relative; }
 .bl-skel__content { transition: opacity var(--bl-fade) ease; }
 .bl-skel[data-loading] .bl-skel__content { opacity: 0; visibility: hidden; }
@@ -110,8 +116,8 @@ export default function SkeletonShimmer({
   lineScale = 0.62,
   fade = 320,
   speed = 1400,
-  baseColor = '#262b44',
-  shineColor = '#3a4266',
+  baseColor,
+  shineColor,
   loadingLabel = 'Loading…',
   className = '',
   style

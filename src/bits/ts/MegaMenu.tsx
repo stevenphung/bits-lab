@@ -49,6 +49,12 @@ interface Pane {
 
 const STYLE_ID = 'bl-mega-menu';
 const CSS = `
+/* theme tokens */
+.bl-mega { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-hover: rgba(255,255,255,0.06); --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-mega, .bl-mega:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-hover: rgba(26,28,44,0.06); --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-mega, :where(.light, [data-theme="light"]) .bl-mega:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-hover: rgba(255,255,255,0.06); --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-mega, .bl-mega:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-hover: rgba(26,28,44,0.06); --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-mega { position: relative; color: var(--bl-ink); font-family: var(--bl-font); }
 .bl-mega__bar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 0; padding: 0; list-style: none; }
 .bl-mega__trigger { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border: 0; border-radius: 999px; background: transparent; color: var(--bl-muted); font: inherit; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; transition: color 150ms, background-color 150ms; }
@@ -102,12 +108,12 @@ export default function MegaMenu({
   maxPanelWidth = 640,
   duration = 320,
   label = 'Main',
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  hoverColor = 'rgba(255,255,255,0.06)',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  hoverColor,
+  lineColor,
+  accentColor,
   radius = 14,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',

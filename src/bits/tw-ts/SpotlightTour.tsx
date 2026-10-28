@@ -53,6 +53,12 @@ export interface SpotlightTourProps {
 
 const STYLE_ID = 'bl-spotlight-tour-tw';
 const CSS = `
+/* theme tokens */
+.bl-tour { --bl-dim: rgba(8,8,16,0.68); --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; }
+:where(.light, [data-theme="light"]) .bl-tour, .bl-tour:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tour, :where(.light, [data-theme="light"]) .bl-tour:where(.dark, [data-theme="dark"]) { --bl-dim: rgba(8,8,16,0.68); --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tour, .bl-tour:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-tour-in { from { opacity: 0; } }
 @keyframes bl-tour-card { from { opacity: 0; transform: translateY(8px) scale(0.96); } }
 `;
@@ -84,13 +90,13 @@ export default function SpotlightTour({
   nextLabel = 'Next',
   doneLabel = 'Done',
   skipLabel = 'Skip tour',
-  dimColor = 'rgba(8,8,16,0.68)',
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  onAccentColor = '#0b0b14',
+  dimColor,
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
+  onAccentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif'
 }: SpotlightTourProps) {
   useStyles();
@@ -219,7 +225,7 @@ export default function SpotlightTour({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-1950 font-(family-name:--bl-font)" style={vars}>
+    <div className="bl-tour fixed inset-0 z-1950 font-(family-name:--bl-font)" style={vars}>
       <div className="fixed inset-0" onClick={() => closeOnBackdrop && finish(false)} />
       <div
         className="pointer-events-none fixed top-0 left-0 animate-[bl-tour-in_260ms_ease_both] rounded-(--bl-radius) shadow-[0_0_0_2px_var(--bl-accent),0_0_0_200vmax_var(--bl-dim)] [transition:transform_420ms_cubic-bezier(.3,1.2,.5,1),width_420ms_cubic-bezier(.3,1.2,.5,1),height_420ms_cubic-bezier(.3,1.2,.5,1)] data-[none]:h-0! data-[none]:w-0! data-[none]:shadow-[0_0_0_200vmax_var(--bl-dim)] motion-reduce:[transition:none]"

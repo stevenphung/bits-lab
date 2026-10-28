@@ -7,6 +7,12 @@ import { useId, useInsertionEffect, useState } from 'react';
 
 const STYLE_ID = 'bl-loot-filter';
 const CSS = `
+/* theme tokens */
+.bl-loot { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-gold: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-loot, .bl-loot:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-gold: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-loot, :where(.light, [data-theme="light"]) .bl-loot:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-gold: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-loot, .bl-loot:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-gold: #a86a12; } }
+/* theme tokens end */
 .bl-loot { display: grid; gap: 10px; width: min(var(--bl-w), 100%); padding: 14px; box-sizing: border-box; background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); font-size: 14px; box-shadow: inset 0 0 0 3px var(--bl-line), 6px 6px 0 rgba(0,0,0,0.45); }
 .bl-loot__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .bl-loot__title { margin: 0; color: var(--bl-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
@@ -55,13 +61,13 @@ export default function LootFilter({
   clearLabel = 'Clear all',
   emptyLabel = 'No filters yet',
   width = 320,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
-  goldColor = '#ffcd75',
+  backgroundColor,
+  chipColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  accentColor,
+  goldColor,
   fontFamily = 'inherit',
   className = '',
   style

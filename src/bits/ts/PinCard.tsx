@@ -28,6 +28,12 @@ export interface PinCardProps {
 
 const STYLE_ID = 'bl-pin-card';
 const CSS = `
+/* theme tokens */
+.bl-pin { --bl-bg: #1a1c2c; --bl-label-bg: #0b0b14; --bl-ink: #f4f4f4; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-pin, .bl-pin:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-pin, :where(.light, [data-theme="light"]) .bl-pin:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-label-bg: #0b0b14; --bl-ink: #f4f4f4; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-pin, .bl-pin:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-pin { position: relative; display: grid; justify-items: center; width: var(--bl-w); max-width: 100%; padding-top: 56px; perspective: 1000px; color: var(--bl-ink); font-family: var(--bl-font); text-decoration: none; outline: none; }
 .bl-pin__label { position: absolute; top: 0; left: 50%; z-index: 3; padding: 5px 12px; border-radius: 999px; background: var(--bl-label-bg); box-shadow: 0 0 0 1px var(--bl-line); color: var(--bl-ink); font-size: 13px; font-weight: 600; white-space: nowrap; opacity: 0; transform: translate(-50%, 10px); transition: opacity 200ms, transform 300ms cubic-bezier(.3,1.4,.5,1); }
 .bl-pin__card { position: relative; z-index: 2; width: 100%; border-radius: var(--bl-radius); background: var(--bl-bg); box-shadow: 0 0 0 1px var(--bl-line), 0 18px 40px -20px rgba(0,0,0,0.7); transform-origin: 50% 100%; transition: transform 600ms cubic-bezier(.2,.9,.25,1), box-shadow 400ms; overflow: hidden; }
@@ -67,11 +73,11 @@ export default function PinCard({
   target,
   width = 300,
   radius = 16,
-  backgroundColor = '#1a1c2c',
-  labelColor = '#0b0b14',
-  textColor = '#f4f4f4',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  labelColor,
+  textColor,
+  lineColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

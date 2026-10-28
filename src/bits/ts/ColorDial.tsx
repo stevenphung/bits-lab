@@ -46,6 +46,12 @@ export interface ColorDialProps {
 
 const STYLE_ID = 'bl-color-dial';
 const CSS = `
+/* theme tokens */
+.bl-dial { --bl-bg: #1a1c2c; --bl-field: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; --bl-error: #ef7d57; }
+:where(.light, [data-theme="light"]) .bl-dial, .bl-dial:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-field: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-error: #c4502a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-dial, :where(.light, [data-theme="light"]) .bl-dial:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-field: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; --bl-error: #ef7d57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-dial, .bl-dial:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-field: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-error: #c4502a; } }
+/* theme tokens end */
 .bl-dial { display: grid; justify-items: center; gap: 14px; width: min(var(--bl-size), 100%); font-family: var(--bl-font); color: var(--bl-ink); }
 .bl-dial__wheel { position: relative; width: 100%; aspect-ratio: 1; touch-action: none; user-select: none; -webkit-user-select: none; }
 .bl-dial__ring { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(#f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--bl-ring) - 1px), #000 calc(100% - var(--bl-ring))); mask: radial-gradient(farthest-side, transparent calc(100% - var(--bl-ring) - 1px), #000 calc(100% - var(--bl-ring))); cursor: crosshair; }
@@ -115,13 +121,13 @@ export default function ColorDial({
   ringWidth = 22,
   eyedropper = true,
   label = 'Color',
-  backgroundColor = '#1a1c2c',
-  fieldColor = '#0b0b14',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  errorColor = '#ef7d57',
+  backgroundColor,
+  fieldColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
+  errorColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

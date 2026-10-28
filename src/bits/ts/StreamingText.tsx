@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-streaming-text';
 const CSS = `
+/* theme tokens */
+.bl-stream { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.2); --bl-accent: #73eff7; --bl-cursor: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-stream, .bl-stream:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.2); --bl-accent: #167f8f; --bl-cursor: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-stream, :where(.light, [data-theme="light"]) .bl-stream:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.2); --bl-accent: #73eff7; --bl-cursor: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-stream, .bl-stream:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.2); --bl-accent: #167f8f; --bl-cursor: #167f8f; } }
+/* theme tokens end */
 .bl-stream { color: var(--bl-ink); font-family: var(--bl-font); font-size: var(--bl-size); line-height: 1.65; overflow-wrap: anywhere; }
 .bl-stream > :first-child { margin-top: 0; }
 .bl-stream > :last-child { margin-bottom: 0; }
@@ -194,12 +200,12 @@ export default function StreamingText({
   tail = 6,
   onDone,
   fontSize = 16,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = 'rgba(255,255,255,0.2)',
+  textColor,
+  mutedColor,
+  lineColor,
   codeBackground = 'rgba(255,255,255,0.07)',
-  accentColor = '#73eff7',
-  cursorColor = '#73eff7',
+  accentColor,
+  cursorColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   monoFontFamily = 'ui-monospace, SFMono-Regular, Menlo, monospace',
   className = '',

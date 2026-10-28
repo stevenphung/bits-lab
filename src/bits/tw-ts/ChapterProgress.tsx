@@ -1,14 +1,6 @@
-import { useEffect, useId, useRef, useState, type CSSProperties, type RefObject } from 'react';
+import { useEffect, useId, useInsertionEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
-
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// A reading-progress bar for long articles. It finds the chapter headings in your article,
-// marks each one as a tick on the bar, names the chapter you're in, estimates the reading
-// time left, and lets you jump: click a tick, or open the chapter list (the keyboard path).
-// Place it as a sticky bar above the article; it works with the page or any scroller.
 
 export interface ChapterProgressProps {
   /** The article to track. */
@@ -38,6 +30,25 @@ interface Chapter {
   at: number;
 }
 
+const STYLE_ID = 'bl-chapter-progress-tw';
+const CSS = `
+/* theme tokens */
+.bl-chap { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-chap, .bl-chap:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-chap, :where(.light, [data-theme="light"]) .bl-chap:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-chap, .bl-chap:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
+
 function scrollParent(node: HTMLElement | null): HTMLElement | Window {
   for (let el = node?.parentElement; el; el = el.parentElement) {
     if (/(auto|scroll|overlay)/.test(getComputedStyle(el).overflowY) && el.scrollHeight > el.clientHeight) return el;
@@ -53,17 +64,17 @@ export default function ChapterProgress({
   showTime = true,
   listLabel = 'Chapters',
   label = 'Reading progress',
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  trackColor = '#333c57',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  trackColor,
+  lineColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }: ChapterProgressProps) {
-  
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const rootRef = useRef<HTMLElement>(null);
   const fillRef = useRef<HTMLDivElement>(null);
@@ -179,7 +190,7 @@ export default function ChapterProgress({
   return (
     <nav
       ref={rootRef}
-      className={`relative z-10 grid gap-2 bg-(--bl-bg) px-3.5 pt-2.5 pb-3 font-(family-name:--bl-font) text-[13px] text-(--bl-ink) shadow-[0_1px_0_var(--bl-line),0_10px_24px_-18px_rgba(0,0,0,0.8)] ${className}`}
+      className={`bl-chap relative z-10 grid gap-2 bg-(--bl-bg) px-3.5 pt-2.5 pb-3 font-(family-name:--bl-font) text-[13px] text-(--bl-ink) shadow-[0_1px_0_var(--bl-line),0_10px_24px_-18px_rgba(0,0,0,0.8)] ${className}`}
       aria-label={label}
       style={{ '--bl-bg': backgroundColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-track': trackColor, '--bl-line': lineColor, '--bl-accent': accentColor, '--bl-font': fontFamily, ...style } as CSSVars}
     >

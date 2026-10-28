@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-shadow-stack';
 const CSS = `
+/* theme tokens */
+.bl-stack { --bl-face: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-stack, .bl-stack:where(.light, [data-theme="light"]) { --bl-face: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-stack, :where(.light, [data-theme="light"]) .bl-stack:where(.dark, [data-theme="dark"]) { --bl-face: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-stack, .bl-stack:where([data-theme="system"]) { --bl-face: #a86a12; } }
+/* theme tokens end */
 .bl-stack { margin: 0; color: var(--bl-face); font-family: var(--bl-font); font-size: var(--bl-size); line-height: 1.1; text-shadow: var(--bl-shadow); transform: translate(var(--bl-push-x), var(--bl-push-y)); transition: text-shadow 160ms steps(4), transform 160ms steps(4); }
 .bl-stack[data-mode="echo"] { animation: bl-stack-breathe 2.6s ease-in-out infinite; }
 .bl-stack[data-follow] { cursor: default; user-select: none; }
@@ -100,7 +106,7 @@ export default function ShadowStack({
   spacing = 6,
   follow = false,
   press = true,
-  faceColor = '#ffcd75',
+  faceColor,
   colors = ['#ef7d57', '#b13e53', '#5d275d', '#1a1c2c'],
   fontSize = 56,
   fontFamily = '"Press Start 2P", ui-monospace, monospace',

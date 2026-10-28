@@ -13,6 +13,12 @@ const LAND = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 const STYLE_ID = 'bl-dot-map-tw';
 const CSS = `
+/* theme tokens */
+.bl-map { --bl-dot: rgba(148,176,194,0.55); --bl-marker: #ef7d57; --bl-route: #ffcd75; --bl-label: #f4f4f4; }
+:where(.light, [data-theme="light"]) .bl-map, .bl-map:where(.light, [data-theme="light"]) { --bl-dot: rgba(86,108,134,0.55); --bl-marker: #c4502a; --bl-route: #a86a12; --bl-label: #1a1c2c; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-map, :where(.light, [data-theme="light"]) .bl-map:where(.dark, [data-theme="dark"]) { --bl-dot: rgba(148,176,194,0.55); --bl-marker: #ef7d57; --bl-route: #ffcd75; --bl-label: #f4f4f4; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-map, .bl-map:where([data-theme="system"]) { --bl-dot: rgba(86,108,134,0.55); --bl-marker: #c4502a; --bl-route: #a86a12; --bl-label: #1a1c2c; } }
+/* theme tokens end */
 @keyframes bl-map-travel { from { stroke-dashoffset: 0.18; } to { stroke-dashoffset: -1; } }
 @keyframes bl-map-pulse { from { transform: scale(1); opacity: 0.9; } to { transform: scale(4); opacity: 0; } }
 `;
@@ -91,10 +97,10 @@ export default function DotMap({
   dotRadius = 0.55,
   square = false,
   cropAntarctica = true,
-  dotColor = 'rgba(148,176,194,0.55)',
-  markerColor = '#ef7d57',
-  routeColor = '#ffcd75',
-  labelColor = '#f4f4f4',
+  dotColor,
+  markerColor,
+  routeColor,
+  labelColor,
   labelHalo = '#1a1c2c',
   labelSize = 4,
   showLabels = true,
@@ -114,7 +120,7 @@ export default function DotMap({
 
   return (
     <figure
-      className={`group/map relative w-full [font-family:var(--bl-font,ui-sans-serif,system-ui,sans-serif)] text-(--bl-dot) [&_svg]:block [&_svg]:h-auto [&_svg]:w-full [&_svg]:overflow-visible ${className}`}
+      className={`bl-map group/map relative w-full [font-family:var(--bl-font,ui-sans-serif,system-ui,sans-serif)] text-(--bl-dot) [&_svg]:block [&_svg]:h-auto [&_svg]:w-full [&_svg]:overflow-visible ${className}`}
       style={{
         '--bl-dot': dotColor,
         '--bl-marker': markerColor,

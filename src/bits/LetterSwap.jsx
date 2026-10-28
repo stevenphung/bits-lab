@@ -7,6 +7,12 @@ import { useInsertionEffect } from 'react';
 
 const STYLE_ID = 'bl-letter-swap';
 const CSS = `
+/* theme tokens */
+.bl-swap { --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-swap, .bl-swap:where(.light, [data-theme="light"]) { --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-swap, :where(.light, [data-theme="light"]) .bl-swap:where(.dark, [data-theme="dark"]) { --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-swap, .bl-swap:where([data-theme="system"]) { --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-swap { display: inline-flex; flex-wrap: wrap; color: inherit; font: inherit; text-decoration: none; perspective: 600px; cursor: pointer; }
 a.bl-swap, button.bl-swap { border: 0; background: none; padding: 0; }
 .bl-swap:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 4px; border-radius: 4px; }
@@ -53,7 +59,7 @@ export default function LetterSwap({
   duration = 500,
   active,
   altColor = 'currentColor',
-  accentColor = '#73eff7',
+  accentColor,
   className = '',
   style,
   ...rest

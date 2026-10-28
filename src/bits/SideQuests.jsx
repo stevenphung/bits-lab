@@ -7,6 +7,12 @@ import { useInsertionEffect, useState } from 'react';
 
 const STYLE_ID = 'bl-side-quests';
 const CSS = `
+/* theme tokens */
+.bl-sideq { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-done: #38b764; --bl-gold: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-sideq, .bl-sideq:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-done: #2b8a4a; --bl-gold: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-sideq, :where(.light, [data-theme="light"]) .bl-sideq:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-done: #38b764; --bl-gold: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-sideq, .bl-sideq:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-done: #2b8a4a; --bl-gold: #a86a12; } }
+/* theme tokens end */
 .bl-sideq { display: grid; gap: 12px; font-family: var(--bl-font); font-size: 14px; color: var(--bl-ink); }
 .bl-sideq__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin: 0; }
 .bl-sideq__title { color: var(--bl-gold); font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
@@ -48,14 +54,14 @@ export default function SideQuests({
   title = 'Side quests',
   doneLabel = 'Done',
   minWidth = 220,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
-  doneColor = '#38b764',
-  goldColor = '#ffcd75',
+  backgroundColor,
+  chipColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  accentColor,
+  doneColor,
+  goldColor,
   fontFamily = 'inherit',
   className = '',
   style

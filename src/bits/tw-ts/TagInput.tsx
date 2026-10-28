@@ -41,6 +41,12 @@ export interface TagInputProps {
 
 const STYLE_ID = 'bl-tag-input-tw';
 const CSS = `
+/* theme tokens */
+.bl-tags { --bl-bg: #1a1c2c; --bl-chip: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-line: #333c57; --bl-accent: #73eff7; --bl-error: #ef7d57; }
+:where(.light, [data-theme="light"]) .bl-tags, .bl-tags:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ddd4c0; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-error: #c4502a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tags, :where(.light, [data-theme="light"]) .bl-tags:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-line: #333c57; --bl-accent: #73eff7; --bl-error: #ef7d57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tags, .bl-tags:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ddd4c0; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-error: #c4502a; } }
+/* theme tokens end */
 @keyframes bl-tags-in { from { transform: scale(0.4); opacity: 0; } }
 @keyframes bl-tags-out { to { transform: scale(0.4); opacity: 0; } }
 @keyframes bl-tags-shake { 20%, 60% { transform: translateX(-4px); } 40%, 80% { transform: translateX(4px); } }
@@ -71,14 +77,14 @@ export default function TagInput({
   placeholder = 'Add a tag…',
   hint = 'Enter or comma to add. Paste a list to add many.',
   width = 520,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  dimColor = '#566c86',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  errorColor = '#ef7d57',
+  backgroundColor,
+  chipColor,
+  textColor,
+  mutedColor,
+  dimColor,
+  lineColor,
+  accentColor,
+  errorColor,
   radius = 12,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
@@ -223,7 +229,7 @@ export default function TagInput({
 
   return (
     <div
-      className={`relative w-full max-w-(--bl-w) font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-tags relative w-full max-w-(--bl-w) font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       style={{
         '--bl-w': `${width}px`,
         '--bl-bg': backgroundColor,

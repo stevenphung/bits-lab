@@ -156,6 +156,12 @@ function MakerRow() {
   );
 }
 
+// In the light preview, colour props still at their demo defaults are left out, so the
+// component's own light palette shows; colours you changed in Customize still win.
+function withoutDefaultColors(props, defaults = {}) {
+  return Object.fromEntries(Object.entries(props).filter(([name, value]) => !(/Colors?$/.test(name) && value === defaults[name])));
+}
+
 function plural(count, word) {
   return `${count} ${word}${count === 1 ? '' : 's'}`;
 }
@@ -167,6 +173,7 @@ export default function ComponentPage({ item, categoryName }) {
   const [usageCopied, copyUsage] = useCopy();
   const [lang, setLang] = useStoredChoice('bitslab-code-lang', ['js', 'ts']);
   const [styling, setStyling] = useStoredChoice('bitslab-code-styling', ['css', 'tw']);
+  const [theme, setTheme] = useStoredChoice('bitslab-preview-theme', ['dark', 'light']);
 
   const usage = useMemo(() => injectProps(item.usage, props, item.defaults, item.demoOnly), [item, props]);
   const replay = () => setReplayKey(key => key + 1);
@@ -202,14 +209,18 @@ export default function ComponentPage({ item, categoryName }) {
         </div>
       </div>
 
-      <div className={`lab-stage ${item.fullBleed ? 'lab-stage-bleed' : ''}`}>
+      {/* The stage is the themed ancestor: components pick their light palette from data-theme. */}
+      <div className={`lab-stage ${item.fullBleed ? 'lab-stage-bleed' : ''}`} data-theme={theme}>
         <span className="stage-badge">Bits Lab original</span>
+        <button type="button" className="stage-theme" aria-pressed={theme === 'light'} onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} title="Preview in light or dark mode">
+          {theme === 'light' ? '☾ Dark' : '☀ Light'}
+        </button>
         <button type="button" className="replay" onClick={replay} title="Replay the animation">
           <Icon name="replay" size={14} />
           Respawn
         </button>
         <div key={replayKey} className="lab-stage-inner">
-          {item.render(props)}
+          {item.render(theme === 'light' ? withoutDefaultColors(props, item.defaults) : props)}
         </div>
       </div>
 

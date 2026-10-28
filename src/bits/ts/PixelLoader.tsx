@@ -7,6 +7,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-pixel-loader';
 const CSS = `
+/* theme tokens */
+.bl-loader { --bl-accent: #a7f070; --bl-frame: #566c86; --bl-text: #f4f4f4; --bl-muted: #94b0c2; }
+:where(.light, [data-theme="light"]) .bl-loader, .bl-loader:where(.light, [data-theme="light"]) { --bl-accent: #2f7d22; --bl-frame: #8a96a3; --bl-text: #1a1c2c; --bl-muted: #566c86; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-loader, :where(.light, [data-theme="light"]) .bl-loader:where(.dark, [data-theme="dark"]) { --bl-accent: #a7f070; --bl-frame: #566c86; --bl-text: #f4f4f4; --bl-muted: #94b0c2; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-loader, .bl-loader:where([data-theme="system"]) { --bl-accent: #2f7d22; --bl-frame: #8a96a3; --bl-text: #1a1c2c; --bl-muted: #566c86; } }
+/* theme tokens end */
 .bl-loader { display: grid; justify-items: center; gap: 18px; width: min(var(--bl-width), 100%); color: var(--bl-text); font-family: var(--bl-font, "Press Start 2P", ui-monospace, monospace); text-transform: uppercase; }
 .bl-loader__title { display: flex; align-items: center; gap: 14px; font-size: 14px; }
 .bl-loader__spinner { position: relative; width: 24px; height: 24px; animation: bl-loader-spin 0.8s steps(8) infinite; }
@@ -81,10 +87,10 @@ export default function PixelLoader({
   tipInterval = 3200,
   chunks = 20,
   width = 440,
-  accentColor = '#a7f070',
-  frameColor = '#566c86',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
+  accentColor,
+  frameColor,
+  textColor,
+  mutedColor,
   simulateDuration = 6000,
   loop = true,
   showPercent = true,

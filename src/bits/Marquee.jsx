@@ -8,6 +8,12 @@ import { useEffect, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-marquee-wall';
 const CSS = `
+/* theme tokens */
+.bl-mwall { --bl-ink: #f4f4f4; --bl-accent: #73eff7; --bl-chip: rgba(255,255,255,0.08); }
+:where(.light, [data-theme="light"]) .bl-mwall, .bl-mwall:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-accent: #167f8f; --bl-chip: rgba(26,28,44,0.08); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-mwall, :where(.light, [data-theme="light"]) .bl-mwall:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-accent: #73eff7; --bl-chip: rgba(255,255,255,0.08); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-mwall, .bl-mwall:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-accent: #167f8f; --bl-chip: rgba(26,28,44,0.08); } }
+/* theme tokens end */
 .bl-mwall { position: relative; display: grid; gap: 10px; color: var(--bl-ink); font-family: var(--bl-font); }
 .bl-mwall__lanes { display: flex; flex-direction: column; gap: var(--bl-gap); }
 .bl-mwall[data-vertical] .bl-mwall__lanes { flex-direction: row; height: var(--bl-h); }
@@ -145,9 +151,9 @@ export default function Marquee({
   height = 420,
   showPause = true,
   label = 'Featured',
-  textColor = '#f4f4f4',
-  accentColor = '#73eff7',
-  chipColor = 'rgba(255,255,255,0.08)',
+  textColor,
+  accentColor,
+  chipColor,
   fontFamily = 'inherit',
   className = '',
   style

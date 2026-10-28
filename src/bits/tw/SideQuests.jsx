@@ -10,6 +10,12 @@ import { useInsertionEffect, useState } from 'react';
 
 const STYLE_ID = 'bl-side-quests-tw';
 const CSS = `
+/* theme tokens */
+.bl-sideq { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-done: #38b764; --bl-gold: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-sideq, .bl-sideq:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-done: #2b8a4a; --bl-gold: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-sideq, :where(.light, [data-theme="light"]) .bl-sideq:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-done: #38b764; --bl-gold: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-sideq, .bl-sideq:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-done: #2b8a4a; --bl-gold: #a86a12; } }
+/* theme tokens end */
 @keyframes bl-sideq-stamp { from { opacity: 0; transform: rotate(8deg) scale(2); } }
 @keyframes bl-sideq-float { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-28px); } }
 `;
@@ -31,14 +37,14 @@ export default function SideQuests({
   title = 'Side quests',
   doneLabel = 'Done',
   minWidth = 220,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
-  doneColor = '#38b764',
-  goldColor = '#ffcd75',
+  backgroundColor,
+  chipColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  accentColor,
+  doneColor,
+  goldColor,
   fontFamily = 'inherit',
   className = '',
   style
@@ -60,7 +66,7 @@ export default function SideQuests({
   };
 
   return (
-    <section className={`grid gap-3 font-(family-name:--bl-font) text-[14px] text-(--bl-ink) ${className}`} aria-label={title} style={{ '--bl-min': `${minWidth}px`, '--bl-bg': backgroundColor, '--bl-chip': chipColor, '--bl-line': lineColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-accent': accentColor, '--bl-done': doneColor, '--bl-gold': goldColor, '--bl-font': fontFamily, ...style }}>
+    <section className={`bl-sideq grid gap-3 font-(family-name:--bl-font) text-[14px] text-(--bl-ink) ${className}`} aria-label={title} style={{ '--bl-min': `${minWidth}px`, '--bl-bg': backgroundColor, '--bl-chip': chipColor, '--bl-line': lineColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-accent': accentColor, '--bl-done': doneColor, '--bl-gold': goldColor, '--bl-font': fontFamily, ...style }}>
       <p className="m-0 flex flex-wrap items-center justify-between gap-2">
         <span className="text-[12px] font-extrabold tracking-[0.06em] uppercase text-(--bl-gold)">{title}</span>
         <span className="text-[12px] font-bold text-(--bl-muted)" aria-live="polite">

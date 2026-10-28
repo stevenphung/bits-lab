@@ -12,6 +12,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-pixel-spinners-tw';
 const CSS = `
+/* theme tokens */
+.bl-spin { --bl-off: #333c57; --bl-muted: #94b0c2; }
+:where(.light, [data-theme="light"]) .bl-spin, .bl-spin:where(.light, [data-theme="light"]) { --bl-off: #ddd4c0; --bl-muted: #566c86; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-spin, :where(.light, [data-theme="light"]) .bl-spin:where(.dark, [data-theme="dark"]) { --bl-off: #333c57; --bl-muted: #94b0c2; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-spin, .bl-spin:where([data-theme="system"]) { --bl-off: #ddd4c0; --bl-muted: #566c86; } }
+/* theme tokens end */
 @keyframes bl-spin-chase { 0%, 12% { background: var(--bl-on); } 13%, 100% { background: var(--bl-off); } }
 @keyframes bl-spin-run { to { transform: translateX(calc((var(--bl-cell) + var(--bl-gap)) * 7)); } }
 @keyframes bl-spin-hop { 0%, 60%, 100% { transform: none; } 30% { transform: translateY(calc(var(--bl-cell) * -2)); } }
@@ -91,8 +97,8 @@ export default function PixelSpinners({
   gap = 2,
   speed = 1.2,
   color = '#73eff7',
-  dimColor = '#333c57',
-  mutedColor = '#94b0c2',
+  dimColor,
+  mutedColor,
   fontFamily = 'inherit',
   className = '',
   style
@@ -100,7 +106,7 @@ export default function PixelSpinners({
   useStyles();
   return (
     <span
-      className={`group/spin inline-grid justify-items-center gap-2 font-(family-name:--bl-font) text-[12px] text-(--bl-on) ${className}`}
+      className={`bl-spin group/spin inline-grid justify-items-center gap-2 font-(family-name:--bl-font) text-[12px] text-(--bl-on) ${className}`}
       role="status"
       data-type={type}
       style={{ '--bl-cell': `${cell}px`, '--bl-gap': `${gap}px`, '--bl-speed': `${speed}s`, '--bl-on': color, '--bl-off': dimColor, '--bl-muted': mutedColor, '--bl-font': fontFamily, ...style } as CSSVars}

@@ -1,15 +1,25 @@
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent } from 'react';
+import { useEffect, useInsertionEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// A funnel as a flow. Each stage is a bar sized by its count, joined to the next by a band
-// that narrows to match, and particles stream through the bands: the share that converts
-// carries on, the rest peel off and fall away. Conversion between stages sits on each band.
-// Hover a stage, or focus the chart and use the arrow keys, to read its numbers. Screen
-// readers get a summary and a table; particles pause off-screen and stop for reduced motion.
+const STYLE_ID = 'bl-funnel-flow-tw';
+const CSS = `
+/* theme tokens */
+.bl-funnel { --bl-bar: #3b5dc9; --bl-bar-active: #73eff7; --bl-band: rgba(59,93,201,0.22); --bl-band-active: rgba(115,239,247,0.22); --bl-particle: #a5c8ff; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-chip: #1a1c2c; --bl-tip: #262b44; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-funnel, .bl-funnel:where(.light, [data-theme="light"]) { --bl-bar-active: #167f8f; --bl-band-active: rgba(22,127,143,0.22); --bl-particle: #3b5dc9; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-chip: #f4f1e8; --bl-tip: #ebe5d8; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-funnel, :where(.light, [data-theme="light"]) .bl-funnel:where(.dark, [data-theme="dark"]) { --bl-bar: #3b5dc9; --bl-bar-active: #73eff7; --bl-band: rgba(59,93,201,0.22); --bl-band-active: rgba(115,239,247,0.22); --bl-particle: #a5c8ff; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-chip: #1a1c2c; --bl-tip: #262b44; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-funnel, .bl-funnel:where([data-theme="system"]) { --bl-bar-active: #167f8f; --bl-band-active: rgba(22,127,143,0.22); --bl-particle: #3b5dc9; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-chip: #f4f1e8; --bl-tip: #ebe5d8; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 export interface FunnelStage {
   label: string;
@@ -62,22 +72,22 @@ export default function FunnelFlow({
   particleSize = 3,
   locale = 'en-US',
   label = 'Conversion funnel',
-  barColor = '#3b5dc9',
-  activeColor = '#73eff7',
-  bandColor = 'rgba(59,93,201,0.22)',
-  bandActiveColor = 'rgba(115,239,247,0.22)',
-  particleColor = '#a5c8ff',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  chipColor = '#1a1c2c',
-  tooltipColor = '#262b44',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  barColor,
+  activeColor,
+  bandColor,
+  bandActiveColor,
+  particleColor,
+  textColor,
+  mutedColor,
+  chipColor,
+  tooltipColor,
+  lineColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }: FunnelFlowProps) {
-  
+  useStyles();
   const rootRef = useRef<HTMLDivElement>(null);
   const dotsRef = useRef<SVGGElement>(null);
   const [width, setWidth] = useState(640);
@@ -228,7 +238,7 @@ export default function FunnelFlow({
   return (
     <div
       ref={rootRef}
-      className={`relative w-full font-(family-name:--bl-font) text-(--bl-ink) focus-visible:rounded-[8px] focus-visible:outline-2 focus-visible:outline-(--bl-accent) focus-visible:outline-solid focus-visible:outline-offset-4 ${className}`}
+      className={`bl-funnel relative w-full font-(family-name:--bl-font) text-(--bl-ink) focus-visible:rounded-[8px] focus-visible:outline-2 focus-visible:outline-(--bl-accent) focus-visible:outline-solid focus-visible:outline-offset-4 ${className}`}
       tabIndex={0}
       role="group"
       aria-label={`${summary} Use the arrow keys to read each stage.`}

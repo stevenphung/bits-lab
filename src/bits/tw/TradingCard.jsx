@@ -1,4 +1,23 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useInsertionEffect, useRef, useState } from 'react';
+
+const STYLE_ID = 'bl-trading-card-tw';
+const CSS = `
+/* theme tokens */
+.bl-tcard { --bl-card: #262b44; --bl-back: #29366f; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-tcard, .bl-tcard:where(.light, [data-theme="light"]) { --bl-card: #ebe5d8; --bl-back: #dfe3f0; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tcard, :where(.light, [data-theme="light"]) .bl-tcard:where(.dark, [data-theme="dark"]) { --bl-card: #262b44; --bl-back: #29366f; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tcard, .bl-tcard:where([data-theme="system"]) { --bl-card: #ebe5d8; --bl-back: #dfe3f0; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -28,16 +47,17 @@ export default function TradingCard({
   tilt = 14,
   width = 240,
   radius = 14,
-  cardColor = '#262b44',
-  backColor = '#29366f',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
+  cardColor,
+  backColor,
+  textColor,
+  mutedColor,
+  accentColor,
   frameColor,
   fontFamily = 'inherit',
   className = '',
   style
 }) {
+  useStyles();
   const rootRef = useRef(null);
   const [inner, setInner] = useState(false);
   const flipped = controlled ?? inner;
@@ -110,7 +130,7 @@ export default function TradingCard({
   return (
     <div
       ref={rootRef}
-      className={`group/tc inline-block w-(--bl-w) font-(family-name:--bl-font) text-(--bl-ink) [--gx:50%] [--gy:50%] [--rx:0deg] [--ry:0deg] [--shift:0.5] [perspective:900px] ${className}`}
+      className={`bl-tcard group/tc inline-block w-(--bl-w) font-(family-name:--bl-font) text-(--bl-ink) [--gx:50%] [--gy:50%] [--rx:0deg] [--ry:0deg] [--shift:0.5] [perspective:900px] ${className}`}
       data-flippable={back ? '' : undefined}
       style={{ '--bl-w': `${width}px`, '--bl-radius': `${radius}px`, '--bl-card': cardColor, '--bl-back': backColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-accent': accentColor, '--bl-frame': frameColor ?? tier.frame, '--bl-foil': tier.foil, '--turn': flipped ? '180deg' : '0deg', '--bl-font': fontFamily, ...style }}
     >

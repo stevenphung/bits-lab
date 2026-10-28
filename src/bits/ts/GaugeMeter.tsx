@@ -9,6 +9,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-gauge-meter';
 const CSS = `
+/* theme tokens */
+.bl-gauge { --bl-tick: #566c86; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; }
+:where(.light, [data-theme="light"]) .bl-gauge, .bl-gauge:where(.light, [data-theme="light"]) { --bl-tick: #8a96a3; --bl-ink: #1a1c2c; --bl-muted: #566c86; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-gauge, :where(.light, [data-theme="light"]) .bl-gauge:where(.dark, [data-theme="dark"]) { --bl-tick: #566c86; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-gauge, .bl-gauge:where([data-theme="system"]) { --bl-tick: #8a96a3; --bl-ink: #1a1c2c; --bl-muted: #566c86; } }
+/* theme tokens end */
 .bl-gauge { position: relative; display: grid; justify-items: center; width: min(var(--bl-size), 100%); color: var(--bl-ink); font-family: var(--bl-font); }
 .bl-gauge__dial { position: relative; width: 100%; }
 .bl-gauge svg { display: block; width: 100%; height: auto; overflow: visible; }
@@ -103,9 +109,9 @@ export default function GaugeMeter({
   size = 260,
   thickness = 12,
   trackColor = '#262b44',
-  tickColor = '#566c86',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
+  tickColor,
+  textColor,
+  mutedColor,
   needleColor = '#f4f4f4',
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',

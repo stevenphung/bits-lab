@@ -1,4 +1,23 @@
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useInsertionEffect, useMemo, useRef, useState } from 'react';
+
+const STYLE_ID = 'bl-bar-race-tw';
+const CSS = `
+/* theme tokens */
+.bl-race { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-grid: rgba(148,176,194,0.14); --bl-period: rgba(148,176,194,0.28); --bl-accent: #73eff7; --bl-on-accent: #0b0b14; }
+:where(.light, [data-theme="light"]) .bl-race, .bl-race:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-grid: rgba(86,108,134,0.14); --bl-period: rgba(86,108,134,0.28); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-race, :where(.light, [data-theme="light"]) .bl-race:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-grid: rgba(148,176,194,0.14); --bl-period: rgba(148,176,194,0.28); --bl-accent: #73eff7; --bl-on-accent: #0b0b14; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-race, .bl-race:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-grid: rgba(86,108,134,0.14); --bl-period: rgba(86,108,134,0.28); --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -36,18 +55,19 @@ export default function BarRace({
   nameWidth = 110,
   colors = RACE_COLORS,
   width = 720,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  dimColor = '#566c86',
-  gridColor = 'rgba(148,176,194,0.14)',
-  periodColor = 'rgba(148,176,194,0.28)',
-  accentColor = '#73eff7',
-  onAccentColor = '#0b0b14',
+  textColor,
+  mutedColor,
+  dimColor,
+  gridColor,
+  periodColor,
+  accentColor,
+  onAccentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   label = 'Bar chart race',
   className = '',
   style
 }) {
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const last = Math.max(0, steps.length - 1);
   const [t, setT] = useState(0);
@@ -126,7 +146,7 @@ export default function BarRace({
   return (
     <figure
       ref={rootRef}
-      className={`relative w-full max-w-(--bl-w) font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-race relative w-full max-w-(--bl-w) font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       aria-labelledby={title ? `${uid}-title` : undefined}
       aria-label={title ? undefined : label}
       style={{

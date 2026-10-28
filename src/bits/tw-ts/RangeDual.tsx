@@ -1,15 +1,6 @@
-import { useId, useRef, useState, type CSSProperties, type PointerEvent, type KeyboardEvent } from 'react';
+import { useId, useInsertionEffect, useRef, useState, type CSSProperties, type PointerEvent, type KeyboardEvent } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
-
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// A two-thumb range slider for filters like price. A histogram behind the track shows where
-// the data sits, and the bars inside your range light up. Drag either thumb, drag the
-// selected stretch to move both, or click the track to bring the nearest thumb over. Value
-// bubbles show while you hover, drag or focus. Each thumb is a keyboard slider, and optional
-// number fields edit the ends directly.
 
 export type Ends = [number, number];
 
@@ -47,6 +38,25 @@ export interface RangeDualProps {
 
 type Which = 0 | 1 | 'both';
 
+const STYLE_ID = 'bl-range-dual-tw';
+const CSS = `
+/* theme tokens */
+.bl-range { --bl-bg: #1a1c2c; --bl-field: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-range, .bl-range:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-field: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-range, :where(.light, [data-theme="light"]) .bl-range:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-field: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-range, .bl-range:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-field: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
+
 export default function RangeDual({
   min = 0,
   max = 100,
@@ -63,19 +73,19 @@ export default function RangeDual({
   width = 460,
   thumbSize = 22,
   histogramHeight = 56,
-  backgroundColor = '#1a1c2c',
-  fieldColor = '#0b0b14',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  dimColor = '#566c86',
-  trackColor = '#333c57',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  fieldColor,
+  textColor,
+  mutedColor,
+  dimColor,
+  trackColor,
+  lineColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }: RangeDualProps) {
-  
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const [inner, setInner] = useState<Ends>(defaultValue ?? [min, max]);
   const [lo, hi] = value ?? inner;
@@ -209,7 +219,7 @@ export default function RangeDual({
 
   return (
     <div
-      className={`group/range w-full max-w-(--bl-w) pt-[34px] font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-range group/range w-full max-w-(--bl-w) pt-[34px] font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       role="group"
       aria-labelledby={`${uid}-label`}
       data-dragging={active ?? undefined}

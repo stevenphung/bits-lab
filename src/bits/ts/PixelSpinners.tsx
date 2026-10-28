@@ -9,6 +9,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-pixel-spinners';
 const CSS = `
+/* theme tokens */
+.bl-spin { --bl-off: #333c57; --bl-muted: #94b0c2; }
+:where(.light, [data-theme="light"]) .bl-spin, .bl-spin:where(.light, [data-theme="light"]) { --bl-off: #ddd4c0; --bl-muted: #566c86; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-spin, :where(.light, [data-theme="light"]) .bl-spin:where(.dark, [data-theme="dark"]) { --bl-off: #333c57; --bl-muted: #94b0c2; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-spin, .bl-spin:where([data-theme="system"]) { --bl-off: #ddd4c0; --bl-muted: #566c86; } }
+/* theme tokens end */
 .bl-spin { display: inline-grid; gap: 8px; justify-items: center; color: var(--bl-on); font-family: var(--bl-font); font-size: 12px; }
 .bl-spin__art { position: relative; display: grid; gap: var(--bl-gap); }
 .bl-spin__px { width: var(--bl-cell); height: var(--bl-cell); background: var(--bl-off); }
@@ -122,8 +128,8 @@ export default function PixelSpinners({
   gap = 2,
   speed = 1.2,
   color = '#73eff7',
-  dimColor = '#333c57',
-  mutedColor = '#94b0c2',
+  dimColor,
+  mutedColor,
   fontFamily = 'inherit',
   className = '',
   style

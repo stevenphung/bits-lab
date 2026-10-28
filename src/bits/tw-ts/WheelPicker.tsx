@@ -1,15 +1,25 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useInsertionEffect, useRef, useState, type CSSProperties } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// A spinning drum of options, like a slot reel or a date picker. Flick it and it coasts, slows
-// and clicks into place on the nearest option; scroll it with a wheel; or focus it and use the
-// arrow keys, Page Up/Down, Home and End. Options curve away above and below the selection.
-// Screen readers get a spin button that says the current option. Reduced motion snaps without
-// coasting.
+const STYLE_ID = 'bl-wheel-picker-tw';
+const CSS = `
+/* theme tokens */
+.bl-wheel { --bl-bg: #1a1c2c; --bl-band: rgba(115,239,247,0.08); --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-wheel, .bl-wheel:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-band: rgba(22,127,143,0.08); --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-wheel, :where(.light, [data-theme="light"]) .bl-wheel:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-band: rgba(115,239,247,0.08); --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-wheel, .bl-wheel:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-band: rgba(22,127,143,0.08); --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 const asOption = (o: string | number | WheelOption): WheelOption => (typeof o === 'object' && o !== null ? o : { value: o, label: String(o) });
 
@@ -53,17 +63,17 @@ export default function WheelPicker({
   label = 'Pick an option',
   fontSize = 18,
   radius = 14,
-  backgroundColor = '#1a1c2c',
-  bandColor = 'rgba(115,239,247,0.08)',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  bandColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style
 }: WheelPickerProps) {
-  
+  useStyles();
   const opts = options.map(asOption);
   const n = opts.length;
   const indexOf = (v: unknown) => Math.max(0, opts.findIndex(o => o.value === v));
@@ -207,7 +217,7 @@ export default function WheelPicker({
   return (
     <div
       ref={rootRef}
-      className={`relative inline-block h-[calc(var(--bl-row)_*_var(--bl-visible))] w-(--bl-w) cursor-grab touch-none overflow-hidden rounded-(--bl-radius) bg-(--bl-bg) font-(family-name:--bl-font) text-(length:--bl-size) text-(--bl-ink) shadow-[inset_0_0_0_1px_var(--bl-line)] outline-none select-none [perspective:600px] focus-visible:shadow-[inset_0_0_0_2px_var(--bl-accent)] data-[dragging]:cursor-grabbing ${className}`}
+      className={`bl-wheel relative inline-block h-[calc(var(--bl-row)_*_var(--bl-visible))] w-(--bl-w) cursor-grab touch-none overflow-hidden rounded-(--bl-radius) bg-(--bl-bg) font-(family-name:--bl-font) text-(length:--bl-size) text-(--bl-ink) shadow-[inset_0_0_0_1px_var(--bl-line)] outline-none select-none [perspective:600px] focus-visible:shadow-[inset_0_0_0_2px_var(--bl-accent)] data-[dragging]:cursor-grabbing ${className}`}
       role="spinbutton"
       tabIndex={0}
       aria-label={label}

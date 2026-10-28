@@ -12,6 +12,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-bounty-board-tw';
 const CSS = `
+/* theme tokens */
+.bl-bounty { --bl-board: #1a1c2c; --bl-paper: #f4e4c1; --bl-paper-ink: #2b2233; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-reward: #b13e53; --bl-pin: #b13e53; --bl-gold: #ffcd75; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-bounty, .bl-bounty:where(.light, [data-theme="light"]) { --bl-board: #f4f1e8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-gold: #a86a12; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-bounty, :where(.light, [data-theme="light"]) .bl-bounty:where(.dark, [data-theme="dark"]) { --bl-board: #1a1c2c; --bl-paper: #f4e4c1; --bl-paper-ink: #2b2233; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-reward: #b13e53; --bl-pin: #b13e53; --bl-gold: #ffcd75; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-bounty, .bl-bounty:where([data-theme="system"]) { --bl-board: #f4f1e8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-gold: #a86a12; --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-bounty-stamp { from { opacity: 0; transform: translate(-50%, -50%) rotate(-12deg) scale(2.2); } }
 `;
 
@@ -71,18 +77,18 @@ export default function BountyBoard({
   emptyMessage = 'Board cleared. Nice work!',
   foldDelay = 700,
   width = 380,
-  boardColor = '#1a1c2c',
-  paperColor = '#f4e4c1',
-  paperTextColor = '#2b2233',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
+  boardColor,
+  paperColor,
+  paperTextColor,
+  lineColor,
+  textColor,
+  mutedColor,
   acceptColor = '#38b764',
   declineColor = '#b13e53',
-  rewardColor = '#b13e53',
-  pinColor = '#b13e53',
-  goldColor = '#ffcd75',
-  accentColor = '#73eff7',
+  rewardColor,
+  pinColor,
+  goldColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style
@@ -117,7 +123,7 @@ export default function BountyBoard({
 
   return (
     <section
-      className={`grid w-[min(var(--bl-w),100%)] gap-3 box-border bg-(--bl-board) p-[14px] font-(family-name:--bl-font) text-[14px] text-(--bl-ink) shadow-[inset_0_0_0_3px_var(--bl-line),6px_6px_0_rgba(0,0,0,0.45)] ${className}`}
+      className={`bl-bounty grid w-[min(var(--bl-w),100%)] gap-3 box-border bg-(--bl-board) p-[14px] font-(family-name:--bl-font) text-[14px] text-(--bl-ink) shadow-[inset_0_0_0_3px_var(--bl-line),6px_6px_0_rgba(0,0,0,0.45)] ${className}`}
       aria-label={title}
       style={{ '--bl-w': `${width}px`, '--bl-board': boardColor, '--bl-paper': paperColor, '--bl-paper-ink': paperTextColor, '--bl-line': lineColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-yes': acceptColor, '--bl-reward': rewardColor, '--bl-pin': pinColor, '--bl-gold': goldColor, '--bl-accent': accentColor, '--bl-font': fontFamily, ...style } as CSSVars}
     >

@@ -8,6 +8,12 @@ import { useEffect, useInsertionEffect, useMemo, useRef, useState } from 'react'
 
 const STYLE_ID = 'bl-diff-reveal';
 const CSS = `
+/* theme tokens */
+.bl-diff { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-chip: #262b44; --bl-ins: #38b764; --bl-del: #ef7d57; }
+:where(.light, [data-theme="light"]) .bl-diff, .bl-diff:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-chip: #ebe5d8; --bl-ins: #2b8a4a; --bl-del: #c4502a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-diff, :where(.light, [data-theme="light"]) .bl-diff:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-chip: #262b44; --bl-ins: #38b764; --bl-del: #ef7d57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-diff, .bl-diff:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-chip: #ebe5d8; --bl-ins: #2b8a4a; --bl-del: #c4502a; } }
+/* theme tokens end */
 .bl-diff { display: grid; gap: 12px; color: var(--bl-ink); font-family: var(--bl-font); }
 .bl-diff__text { margin: 0; font-size: var(--bl-size); line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
 .bl-diff__del { border-radius: 4px; transition: opacity 260ms, background-color 260ms; }
@@ -118,11 +124,11 @@ export default function DiffReveal({
   onDone,
   as = 'p',
   fontSize = 18,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  chipColor = '#262b44',
-  insertColor = '#38b764',
-  deleteColor = '#ef7d57',
+  textColor,
+  mutedColor,
+  chipColor,
+  insertColor,
+  deleteColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

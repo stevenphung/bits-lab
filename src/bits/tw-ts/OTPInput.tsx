@@ -12,6 +12,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-otp-tw';
 const CSS = `
+/* theme tokens */
+.bl-otp { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.14); --bl-line-filled: rgba(255,255,255,0.32); --bl-error: #ef7d57; --bl-success: #38b764; --bl-success-ink: #0b0b14; }
+:where(.light, [data-theme="light"]) .bl-otp, .bl-otp:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.14); --bl-line-filled: rgba(26,28,44,0.32); --bl-error: #c4502a; --bl-success: #2b8a4a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-otp, :where(.light, [data-theme="light"]) .bl-otp:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.14); --bl-line-filled: rgba(255,255,255,0.32); --bl-error: #ef7d57; --bl-success: #38b764; --bl-success-ink: #0b0b14; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-otp, .bl-otp:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.14); --bl-line-filled: rgba(26,28,44,0.32); --bl-error: #c4502a; --bl-success: #2b8a4a; } }
+/* theme tokens end */
 @keyframes bl-otp-pop { from { transform: scale(0.5); opacity: 0; } }
 @keyframes bl-otp-blink { 50% { opacity: 0; } }
 @keyframes bl-otp-shake { 10%, 90% { transform: translateX(-2px); } 20%, 80% { transform: translateX(4px); } 30%, 50%, 70% { transform: translateX(-7px); } 40%, 60% { transform: translateX(7px); } }
@@ -89,15 +95,15 @@ export default function OTPInput({
   gap = 8,
   radius = 12,
   borderWidth = 1.5,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = 'rgba(255,255,255,0.14)',
-  filledLineColor = 'rgba(255,255,255,0.32)',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  filledLineColor,
   accentColor = '#73eff7',
-  errorColor = '#ef7d57',
-  successColor = '#38b764',
-  successTextColor = '#0b0b14',
+  errorColor,
+  successColor,
+  successTextColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
@@ -140,7 +146,7 @@ export default function OTPInput({
 
   return (
     <div
-      className={`group/otp relative inline-flex max-w-full flex-col items-center gap-2.5 font-(family-name:--bl-font) data-[disabled]:opacity-55 ${className}`}
+      className={`bl-otp group/otp relative inline-flex max-w-full flex-col items-center gap-2.5 font-(family-name:--bl-font) data-[disabled]:opacity-55 ${className}`}
       data-status={status}
       data-focused={focused || undefined}
       data-disabled={disabled || undefined}

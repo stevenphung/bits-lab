@@ -8,6 +8,12 @@ import { useEffect, useId, useInsertionEffect, useLayoutEffect, useRef, useState
 
 const STYLE_ID = 'bl-side-rail';
 const CSS = `
+/* theme tokens */
+.bl-rail { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-hover: rgba(255,255,255,0.05); --bl-active-bg: rgba(115,239,247,0.12); --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; }
+:where(.light, [data-theme="light"]) .bl-rail, .bl-rail:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-hover: rgba(26,28,44,0.05); --bl-active-bg: rgba(22,127,143,0.12); --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-rail, :where(.light, [data-theme="light"]) .bl-rail:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-hover: rgba(255,255,255,0.05); --bl-active-bg: rgba(115,239,247,0.12); --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-rail, .bl-rail:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-hover: rgba(26,28,44,0.05); --bl-active-bg: rgba(22,127,143,0.12); --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-rail { position: relative; display: flex; flex-direction: column; width: var(--bl-w); height: 100%; box-sizing: border-box; padding: 10px; background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); box-shadow: inset -1px 0 0 var(--bl-line); transition: width 320ms cubic-bezier(.3,1.1,.5,1); overflow: hidden; }
 .bl-rail[data-collapsed] { width: var(--bl-rail-w); }
 .bl-rail__head { display: flex; align-items: center; gap: 10px; min-height: 40px; margin-bottom: 8px; padding: 0 4px; }
@@ -78,15 +84,15 @@ export default function SideRail({
   width = 248,
   railWidth = 68,
   label = 'Sidebar',
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  dimColor = '#566c86',
-  hoverColor = 'rgba(255,255,255,0.05)',
-  activeColor = 'rgba(115,239,247,0.12)',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  onAccentColor = '#0b0b14',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  dimColor,
+  hoverColor,
+  activeColor,
+  lineColor,
+  accentColor,
+  onAccentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

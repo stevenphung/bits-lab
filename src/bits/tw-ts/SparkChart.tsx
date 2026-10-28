@@ -12,6 +12,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-spark-chart-tw';
 const CSS = `
+/* theme tokens */
+.bl-spark { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-grid: rgba(255,255,255,0.1); --bl-surface: #1a1c2c; --bl-tip-bg: #11131c; --bl-focus: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-spark, .bl-spark:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-grid: rgba(26,28,44,0.1); --bl-surface: #f4f1e8; --bl-tip-bg: #ffffff; --bl-focus: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-spark, :where(.light, [data-theme="light"]) .bl-spark:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-grid: rgba(255,255,255,0.1); --bl-surface: #1a1c2c; --bl-tip-bg: #11131c; --bl-focus: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-spark, .bl-spark:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-grid: rgba(26,28,44,0.1); --bl-surface: #f4f1e8; --bl-tip-bg: #ffffff; --bl-focus: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-spark-draw { to { stroke-dashoffset: 0; } }
 @keyframes bl-spark-fade { from { opacity: 0; } }
 `;
@@ -103,12 +109,12 @@ export default function SparkChart({
   formatValue = defaultFormat,
   label = 'Trend',
   color = '#3987e5',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  gridColor = 'rgba(255,255,255,0.1)',
-  surfaceColor = '#1a1c2c',
-  tooltipColor = '#11131c',
-  focusColor = '#73eff7',
+  textColor,
+  mutedColor,
+  gridColor,
+  surfaceColor,
+  tooltipColor,
+  focusColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
@@ -177,7 +183,7 @@ export default function SparkChart({
   return (
     <div
       ref={ref}
-      className={`group/spark relative w-full touch-pan-y font-(family-name:--bl-font) text-(--bl-ink) outline-none focus-visible:rounded-[6px] focus-visible:shadow-[0_0_0_2px_var(--bl-focus)] [&_svg]:block [&_svg]:w-full [&_svg]:overflow-visible ${className}`}
+      className={`bl-spark group/spark relative w-full touch-pan-y font-(family-name:--bl-font) text-(--bl-ink) outline-none focus-visible:rounded-[6px] focus-visible:shadow-[0_0_0_2px_var(--bl-focus)] [&_svg]:block [&_svg]:w-full [&_svg]:overflow-visible ${className}`}
       data-draw={animate || undefined}
       tabIndex={values.length ? 0 : undefined}
       role="group"

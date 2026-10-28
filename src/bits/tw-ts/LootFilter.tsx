@@ -12,6 +12,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-loot-filter-tw';
 const CSS = `
+/* theme tokens */
+.bl-loot { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-gold: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-loot, .bl-loot:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-gold: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-loot, :where(.light, [data-theme="light"]) .bl-loot:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-gold: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-loot, .bl-loot:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-gold: #a86a12; } }
+/* theme tokens end */
 @keyframes bl-loot-chip { from { opacity: 0; transform: scale(0.7); } }
 `;
 
@@ -76,13 +82,13 @@ export default function LootFilter({
   clearLabel = 'Clear all',
   emptyLabel = 'No filters yet',
   width = 320,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
-  goldColor = '#ffcd75',
+  backgroundColor,
+  chipColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  accentColor,
+  goldColor,
   fontFamily = 'inherit',
   className = '',
   style
@@ -109,7 +115,7 @@ export default function LootFilter({
 
   return (
     <section
-      className={`grid gap-2.5 p-[14px] w-[min(var(--bl-w),100%)] box-border bg-(--bl-bg) text-(--bl-ink) font-(family-name:--bl-font) text-[14px] shadow-[inset_0_0_0_3px_var(--bl-line),6px_6px_0_rgba(0,0,0,0.45)] [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-offset-1 [&_button:focus-visible]:outline-(--bl-accent) [&_button:focus-visible]:outline-solid ${className}`}
+      className={`bl-loot grid gap-2.5 p-[14px] w-[min(var(--bl-w),100%)] box-border bg-(--bl-bg) text-(--bl-ink) font-(family-name:--bl-font) text-[14px] shadow-[inset_0_0_0_3px_var(--bl-line),6px_6px_0_rgba(0,0,0,0.45)] [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-offset-1 [&_button:focus-visible]:outline-(--bl-accent) [&_button:focus-visible]:outline-solid ${className}`}
       aria-label={title}
       style={{ '--bl-w': `${width}px`, '--bl-bg': backgroundColor, '--bl-chip': chipColor, '--bl-line': lineColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-accent': accentColor, '--bl-gold': goldColor, '--bl-font': fontFamily, ...style } as CSSVars}
     >

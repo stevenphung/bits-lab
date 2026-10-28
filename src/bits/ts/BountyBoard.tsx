@@ -9,6 +9,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-bounty-board';
 const CSS = `
+/* theme tokens */
+.bl-bounty { --bl-board: #1a1c2c; --bl-paper: #f4e4c1; --bl-paper-ink: #2b2233; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-reward: #b13e53; --bl-pin: #b13e53; --bl-gold: #ffcd75; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-bounty, .bl-bounty:where(.light, [data-theme="light"]) { --bl-board: #f4f1e8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-gold: #a86a12; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-bounty, :where(.light, [data-theme="light"]) .bl-bounty:where(.dark, [data-theme="dark"]) { --bl-board: #1a1c2c; --bl-paper: #f4e4c1; --bl-paper-ink: #2b2233; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-reward: #b13e53; --bl-pin: #b13e53; --bl-gold: #ffcd75; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-bounty, .bl-bounty:where([data-theme="system"]) { --bl-board: #f4f1e8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-gold: #a86a12; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-bounty { display: grid; gap: 12px; width: min(var(--bl-w), 100%); padding: 14px; box-sizing: border-box; background: var(--bl-board); font-family: var(--bl-font); font-size: 14px; color: var(--bl-ink); box-shadow: inset 0 0 0 3px var(--bl-line), 6px 6px 0 rgba(0,0,0,0.45); }
 .bl-bounty__head { display: flex; align-items: center; justify-content: space-between; margin: 0; font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--bl-gold); }
 .bl-bounty__list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
@@ -89,18 +95,18 @@ export default function BountyBoard({
   emptyMessage = 'Board cleared. Nice work!',
   foldDelay = 700,
   width = 380,
-  boardColor = '#1a1c2c',
-  paperColor = '#f4e4c1',
-  paperTextColor = '#2b2233',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
+  boardColor,
+  paperColor,
+  paperTextColor,
+  lineColor,
+  textColor,
+  mutedColor,
   acceptColor = '#38b764',
   declineColor = '#b13e53',
-  rewardColor = '#b13e53',
-  pinColor = '#b13e53',
-  goldColor = '#ffcd75',
-  accentColor = '#73eff7',
+  rewardColor,
+  pinColor,
+  goldColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style

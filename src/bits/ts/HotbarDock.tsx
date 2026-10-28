@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-hotbar-dock';
 const CSS = `
+/* theme tokens */
+.bl-hotbar { --bl-bg: #1a1c2c; --bl-slot-bg: #333c57; --bl-hover: #3d4766; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #0b0b14; --bl-select: #f4f4f4; --bl-accent: #73eff7; --bl-tip: #0b0b14; }
+:where(.light, [data-theme="light"]) .bl-hotbar, .bl-hotbar:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-slot-bg: #ddd4c0; --bl-hover: #ddd4c0; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #e2dacb; --bl-select: #1a1c2c; --bl-accent: #167f8f; --bl-tip: #e2dacb; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-hotbar, :where(.light, [data-theme="light"]) .bl-hotbar:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-slot-bg: #333c57; --bl-hover: #3d4766; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #0b0b14; --bl-select: #f4f4f4; --bl-accent: #73eff7; --bl-tip: #0b0b14; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-hotbar, .bl-hotbar:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-slot-bg: #ddd4c0; --bl-hover: #ddd4c0; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #e2dacb; --bl-select: #1a1c2c; --bl-accent: #167f8f; --bl-tip: #e2dacb; } }
+/* theme tokens end */
 .bl-hotbar { display: inline-flex; align-items: flex-end; gap: var(--bl-gap); padding: var(--bl-pad); border-radius: var(--bl-radius); background: var(--bl-bg); box-shadow: 0 0 0 3px var(--bl-line), 0 12px 28px -14px rgba(0,0,0,0.85); font-family: var(--bl-font); }
 .bl-hotbar__slot { --m: 1; position: relative; display: grid; place-items: center; width: var(--bl-slot); height: var(--bl-slot); padding: 0; border: 0; border-radius: 6px; background: var(--bl-slot-bg); color: var(--bl-ink); box-shadow: inset 0 0 0 2px rgba(0,0,0,0.35); cursor: pointer; transform: scale(var(--m)); transform-origin: 50% 100%; margin: 0 calc((var(--m) - 1) * var(--bl-slot) / 2); transition: transform 90ms linear, margin 90ms linear; }
 .bl-hotbar__slot:hover { background: var(--bl-hover); }
@@ -87,15 +93,15 @@ export default function HotbarDock({
   gap = 6,
   padding = 8,
   radius = 10,
-  backgroundColor = '#1a1c2c',
-  slotColor = '#333c57',
-  hoverColor = '#3d4766',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#0b0b14',
-  selectColor = '#f4f4f4',
-  accentColor = '#73eff7',
-  tooltipColor = '#0b0b14',
+  backgroundColor,
+  slotColor,
+  hoverColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  selectColor,
+  accentColor,
+  tooltipColor,
   fontFamily = 'inherit',
   className = '',
   style

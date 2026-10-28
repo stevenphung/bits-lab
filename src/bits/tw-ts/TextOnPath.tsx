@@ -1,13 +1,25 @@
-import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useId, useInsertionEffect, useRef, useState, type CSSProperties } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// Text that flows along a path: a wave, an arc, a full circle (badges, seals) or any SVG
-// path you pass. It can scroll along the path forever, seamlessly, and pauses off-screen.
-// The SVG scales with its container; the text is exposed to screen readers once.
+const STYLE_ID = 'bl-text-on-path-tw';
+const CSS = `
+/* theme tokens */
+.bl-tpath { --bl-ink: #f4f4f4; --bl-guide: rgba(255,255,255,0.18); }
+:where(.light, [data-theme="light"]) .bl-tpath, .bl-tpath:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-guide: rgba(26,28,44,0.18); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tpath, :where(.light, [data-theme="light"]) .bl-tpath:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-guide: rgba(255,255,255,0.18); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tpath, .bl-tpath:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-guide: rgba(26,28,44,0.18); } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Preset paths in a 1000-unit-wide viewBox.
 export type PathPreset = 'wave' | 'arc' | 'smile' | 'circle' | 'loop';
@@ -64,14 +76,14 @@ export default function TextOnPath({
   showPath = false,
   pauseOnHover = true,
   width = 900,
-  textColor = '#f4f4f4',
-  guideColor = 'rgba(255,255,255,0.18)',
+  textColor,
+  guideColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   label,
   className = '',
   style
 }: TextOnPathProps) {
-  
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const preset = typeof path === 'string' && PATHS[path as PathPreset] ? PATHS[path as PathPreset] : null;
   const d = preset ? preset.d : path;
@@ -134,7 +146,7 @@ export default function TextOnPath({
   return (
     <svg
       ref={svgRef}
-      className={`block w-full max-w-(--bl-w) overflow-visible font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-tpath block w-full max-w-(--bl-w) overflow-visible font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       viewBox={box}
       role="img"
       aria-label={label ?? text.trim()}

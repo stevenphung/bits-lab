@@ -9,6 +9,12 @@ import { createPortal } from 'react-dom';
 
 const STYLE_ID = 'bl-spotlight-tour';
 const CSS = `
+/* theme tokens */
+.bl-tour { --bl-dim: rgba(8,8,16,0.68); --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; }
+:where(.light, [data-theme="light"]) .bl-tour, .bl-tour:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tour, :where(.light, [data-theme="light"]) .bl-tour:where(.dark, [data-theme="dark"]) { --bl-dim: rgba(8,8,16,0.68); --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tour, .bl-tour:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-tour { position: fixed; inset: 0; z-index: 1950; font-family: var(--bl-font); }
 .bl-tour__shade { position: fixed; inset: 0; }
 .bl-tour__hole { position: fixed; top: 0; left: 0; border-radius: var(--bl-radius); box-shadow: 0 0 0 2px var(--bl-accent), 0 0 0 200vmax var(--bl-dim); pointer-events: none; transition: transform 420ms cubic-bezier(.3,1.2,.5,1), width 420ms cubic-bezier(.3,1.2,.5,1), height 420ms cubic-bezier(.3,1.2,.5,1); animation: bl-tour-in 260ms ease both; }
@@ -63,13 +69,13 @@ export default function SpotlightTour({
   nextLabel = 'Next',
   doneLabel = 'Done',
   skipLabel = 'Skip tour',
-  dimColor = 'rgba(8,8,16,0.68)',
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  onAccentColor = '#0b0b14',
+  dimColor,
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
+  onAccentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif'
 }) {
   useStyles();

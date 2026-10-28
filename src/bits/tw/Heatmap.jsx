@@ -11,6 +11,12 @@ import { useEffect, useId, useInsertionEffect, useMemo, useRef, useState } from 
 
 const STYLE_ID = 'bl-heatmap-tw';
 const CSS = `
+/* theme tokens */
+.bl-heat { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-accent: #73eff7; --bl-tip: #f4f4f4; --bl-tip-ink: #1a1c2c; }
+:where(.light, [data-theme="light"]) .bl-heat, .bl-heat:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-accent: #167f8f; --bl-tip: #1a1c2c; --bl-tip-ink: #f4f4f4; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-heat, :where(.light, [data-theme="light"]) .bl-heat:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-accent: #73eff7; --bl-tip: #f4f4f4; --bl-tip-ink: #1a1c2c; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-heat, .bl-heat:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-accent: #167f8f; --bl-tip: #1a1c2c; --bl-tip-ink: #f4f4f4; } }
+/* theme tokens end */
 @keyframes bl-heat-in { from { opacity: 0; transform: scale(0.3); } }
 `;
 
@@ -44,12 +50,12 @@ export default function Heatmap({
   gap = 3,
   radius = 2,
   onSelect,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  dimColor = '#566c86',
-  accentColor = '#73eff7',
-  tooltipColor = '#f4f4f4',
-  tooltipTextColor = '#1a1c2c',
+  textColor,
+  mutedColor,
+  dimColor,
+  accentColor,
+  tooltipColor,
+  tooltipTextColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

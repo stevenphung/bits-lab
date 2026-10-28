@@ -48,6 +48,12 @@ export interface MobileTabBarProps {
 
 const STYLE_ID = 'bl-mobile-tab-bar';
 const CSS = `
+/* theme tokens */
+.bl-tabbar { --bl-tab-ink: #94b0c2; --bl-bg: #1a1c2c; --bl-active: #0b0b14; --bl-blob: #73eff7; --bl-line: #333c57; --bl-accent: #f4f4f4; --bl-badge: #b13e53; }
+:where(.light, [data-theme="light"]) .bl-tabbar, .bl-tabbar:where(.light, [data-theme="light"]) { --bl-tab-ink: #566c86; --bl-bg: #f4f1e8; --bl-active: #e2dacb; --bl-blob: #167f8f; --bl-line: #cfc4ad; --bl-accent: #1a1c2c; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tabbar, :where(.light, [data-theme="light"]) .bl-tabbar:where(.dark, [data-theme="dark"]) { --bl-tab-ink: #94b0c2; --bl-bg: #1a1c2c; --bl-active: #0b0b14; --bl-blob: #73eff7; --bl-line: #333c57; --bl-accent: #f4f4f4; --bl-badge: #b13e53; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tabbar, .bl-tabbar:where([data-theme="system"]) { --bl-tab-ink: #566c86; --bl-bg: #f4f1e8; --bl-active: #e2dacb; --bl-blob: #167f8f; --bl-line: #cfc4ad; --bl-accent: #1a1c2c; } }
+/* theme tokens end */
 .bl-tabbar { position: relative; display: flex; width: 100%; box-sizing: border-box; padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px)); background: var(--bl-bg); color: var(--bl-muted); font-family: var(--bl-font); box-shadow: 0 -1px 0 var(--bl-line); }
 .bl-tabbar[data-floating] { width: auto; margin: 0 12px 12px; padding-bottom: 8px; border-radius: 999px; box-shadow: 0 0 0 1px var(--bl-line), 0 16px 40px -16px rgba(0,0,0,0.8); }
 .bl-tabbar[data-fixed] { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; }
@@ -89,13 +95,13 @@ export default function MobileTabBar({
   haptics = false,
   stretch = 1,
   label = 'Main',
-  backgroundColor = '#1a1c2c',
-  textColor = '#94b0c2',
-  activeColor = '#0b0b14',
-  blobColor = '#73eff7',
-  lineColor = '#333c57',
-  accentColor = '#f4f4f4',
-  badgeColor = '#b13e53',
+  backgroundColor,
+  textColor,
+  activeColor,
+  blobColor,
+  lineColor,
+  accentColor,
+  badgeColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
@@ -165,7 +171,7 @@ export default function MobileTabBar({
       data-labels={labels}
       data-floating={floating || undefined}
       data-fixed={fixed || undefined}
-      style={{ '--bl-bg': backgroundColor, '--bl-active': activeColor, '--bl-blob': blobColor, '--bl-line': lineColor, '--bl-accent': accentColor, '--bl-badge': badgeColor, '--bl-font': fontFamily, color: textColor, ...style } as CSSVars}
+      style={{ '--bl-bg': backgroundColor, '--bl-active': activeColor, '--bl-blob': blobColor, '--bl-line': lineColor, '--bl-accent': accentColor, '--bl-badge': badgeColor, '--bl-font': fontFamily, color: textColor ?? 'var(--bl-tab-ink)', ...style } as CSSVars}
     >
       <span className="bl-tabbar__blob" aria-hidden="true" />
       {tabs.map((tab, i) => (

@@ -8,6 +8,12 @@ import { Fragment, useEffect, useInsertionEffect, useRef, useState } from 'react
 
 const STYLE_ID = 'bl-marquee-line';
 const CSS = `
+/* theme tokens */
+.bl-marquee { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-accent: #ffcd75; --bl-chip: rgba(255,255,255,0.08); }
+:where(.light, [data-theme="light"]) .bl-marquee, .bl-marquee:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-accent: #a86a12; --bl-chip: rgba(26,28,44,0.08); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-marquee, :where(.light, [data-theme="light"]) .bl-marquee:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-accent: #ffcd75; --bl-chip: rgba(255,255,255,0.08); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-marquee, .bl-marquee:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-accent: #a86a12; --bl-chip: rgba(26,28,44,0.08); } }
+/* theme tokens end */
 .bl-marquee { position: relative; display: flex; align-items: center; gap: 8px; overflow: hidden; padding: var(--bl-pad) 0; background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); font-size: var(--bl-size); }
 .bl-marquee__viewport { flex: 1; min-width: 0; overflow: hidden; cursor: grab; touch-action: pan-y; -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--bl-fade), #000 calc(100% - var(--bl-fade)), transparent); mask-image: linear-gradient(90deg, transparent, #000 var(--bl-fade), #000 calc(100% - var(--bl-fade)), transparent); }
 .bl-marquee__viewport[data-dragging] { cursor: grabbing; }
@@ -44,10 +50,10 @@ export default function MarqueeLine({
   fade = 48,
   padding = 14,
   fontSize = 22,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  accentColor = '#ffcd75',
-  chipColor = 'rgba(255,255,255,0.08)',
+  backgroundColor,
+  textColor,
+  accentColor,
+  chipColor,
   fontFamily = 'inherit',
   className = '',
   style

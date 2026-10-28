@@ -1,4 +1,23 @@
-import { Children, useEffect, useRef, useState } from 'react';
+import { Children, useEffect, useInsertionEffect, useRef, useState } from 'react';
+
+const STYLE_ID = 'bl-coverflow-tw';
+const CSS = `
+/* theme tokens */
+.bl-cover { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-chip: rgba(255,255,255,0.08); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-cover, .bl-cover:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-chip: rgba(26,28,44,0.08); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-cover, :where(.light, [data-theme="light"]) .bl-cover:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-chip: rgba(255,255,255,0.08); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-cover, .bl-cover:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-chip: rgba(26,28,44,0.08); --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -27,15 +46,16 @@ export default function Coverflow({
   depth = 120,
   range = 4,
   label = 'Gallery',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  chipColor = 'rgba(255,255,255,0.08)',
-  accentColor = '#73eff7',
+  textColor,
+  mutedColor,
+  lineColor,
+  chipColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style
 }) {
+  useStyles();
   const items = Children.toArray(children);
   const n = items.length;
   const [inner, setInner] = useState(defaultIndex);
@@ -96,7 +116,7 @@ export default function Coverflow({
 
   return (
     <div
-      className={`grid w-full justify-items-center gap-3.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-cover grid w-full justify-items-center gap-3.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       style={{ '--bl-h': `${height}px`, '--bl-item': `${itemWidth}px`, '--bl-spacing': spacing, '--bl-angle': `${angle}deg`, '--bl-depth': `${depth}px`, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-line': lineColor, '--bl-chip': chipColor, '--bl-accent': accentColor, '--bl-font': fontFamily, ...style }}
     >
       <div

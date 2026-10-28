@@ -1,4 +1,23 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useInsertionEffect, useRef } from 'react';
+
+const STYLE_ID = 'bl-proximity-type-tw';
+const CSS = `
+/* theme tokens */
+.bl-prox { --bl-ink: #f4f4f4; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-prox, .bl-prox:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-prox, :where(.light, [data-theme="light"]) .bl-prox:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-prox, .bl-prox:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -21,12 +40,13 @@ export default function ProximityType({
   tint = 0,
   ease = 0.2,
   fontSize = 56,
-  textColor = '#f4f4f4',
-  accentColor = '#73eff7',
+  textColor,
+  accentColor,
   fontFamily = '"Roboto Flex", ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }) {
+  useStyles();
   const rootRef = useRef(null);
 
   useEffect(() => {
@@ -117,7 +137,7 @@ export default function ProximityType({
   return (
     <Tag
       ref={rootRef}
-      className={`m-0 touch-pan-y font-(family-name:--bl-font) text-(length:--bl-size) leading-[1.1] text-(--bl-ink) ${className}`}
+      className={`bl-prox m-0 touch-pan-y font-(family-name:--bl-font) text-(length:--bl-size) leading-[1.1] text-(--bl-ink) ${className}`}
       style={{ '--bl-size': typeof fontSize === 'number' ? `${fontSize}px` : fontSize, '--bl-wmin': minWeight, '--bl-wmax': maxWeight, '--bl-dmin': `${minWidth}%`, '--bl-dmax': `${maxWidth}%`, '--bl-lift': `${lift}px`, '--bl-tint': `${tint * 100}%`, '--bl-ink': textColor, '--bl-accent': accentColor, '--bl-font': fontFamily, ...style }}
     >
       {text.split(/(\s+)/).map((part, w) => {

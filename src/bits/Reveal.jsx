@@ -8,6 +8,12 @@ import { Children, useEffect, useInsertionEffect, useRef, useState } from 'react
 
 const STYLE_ID = 'bl-reveal';
 const CSS = `
+/* theme tokens */
+.bl-reveal { --bl-cover: #0b0b14; }
+:where(.light, [data-theme="light"]) .bl-reveal, .bl-reveal:where(.light, [data-theme="light"]) { --bl-cover: #f4f1e8; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-reveal, :where(.light, [data-theme="light"]) .bl-reveal:where(.dark, [data-theme="dark"]) { --bl-cover: #0b0b14; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-reveal, .bl-reveal:where([data-theme="system"]) { --bl-cover: #f4f1e8; } }
+/* theme tokens end */
 .bl-reveal { position: relative; }
 .bl-reveal__part { display: block; transition: opacity var(--bl-dur) cubic-bezier(.2,.8,.2,1), transform var(--bl-dur) cubic-bezier(.2,.8,.2,1), clip-path var(--bl-dur) steps(var(--bl-steps)); transition-delay: calc(var(--bl-delay) + var(--i, 0) * var(--bl-stagger)); }
 .bl-reveal:not([data-shown])[data-effect="fade"] .bl-reveal__part { opacity: 0; }
@@ -49,7 +55,7 @@ export default function Reveal({
   distance = 24,
   steps = 8,
   blocks = [8, 5],
-  coverColor = '#0b0b14',
+  coverColor,
   onReveal,
   className = '',
   style

@@ -12,6 +12,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-thread-trail-tw';
 const CSS = `
+/* theme tokens */
+.bl-thread { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-mention: rgba(115,239,247,0.18); --bl-mention-ink: #73eff7; --bl-ok: #a7f070; }
+:where(.light, [data-theme="light"]) .bl-thread, .bl-thread:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-mention: rgba(22,127,143,0.18); --bl-mention-ink: #167f8f; --bl-ok: #2f7d22; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-thread, :where(.light, [data-theme="light"]) .bl-thread:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-mention: rgba(115,239,247,0.18); --bl-mention-ink: #73eff7; --bl-ok: #a7f070; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-thread, .bl-thread:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-mention: rgba(22,127,143,0.18); --bl-mention-ink: #167f8f; --bl-ok: #2f7d22; } }
+/* theme tokens end */
 @keyframes bl-thread-open { from { opacity: 0; transform: translateY(-4px); } }
 `;
 
@@ -91,15 +97,15 @@ export default function ThreadTrail({
   detailsLabel = 'What I did',
   agentBadge = 'AGENT',
   width = 520,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
-  mentionColor = 'rgba(115,239,247,0.18)',
-  mentionTextColor = '#73eff7',
-  okColor = '#a7f070',
+  backgroundColor,
+  chipColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  accentColor,
+  mentionColor,
+  mentionTextColor,
+  okColor,
   fontFamily = 'inherit',
   className = '',
   style
@@ -157,7 +163,7 @@ export default function ThreadTrail({
 
   return (
     <section
-      className={`grid w-[min(var(--bl-w),100%)] gap-0 font-(family-name:--bl-font) text-[14px] text-(--bl-ink) [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-offset-2 [&_button:focus-visible]:outline-(--bl-accent) [&_button:focus-visible]:outline-solid ${className}`}
+      className={`bl-thread grid w-[min(var(--bl-w),100%)] gap-0 font-(family-name:--bl-font) text-[14px] text-(--bl-ink) [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-offset-2 [&_button:focus-visible]:outline-(--bl-accent) [&_button:focus-visible]:outline-solid ${className}`}
       aria-label="Comment thread"
       style={{ '--bl-w': `${width}px`, '--bl-bg': backgroundColor, '--bl-chip': chipColor, '--bl-line': lineColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-accent': accentColor, '--bl-mention': mentionColor, '--bl-mention-ink': mentionTextColor, '--bl-ok': okColor, '--bl-font': fontFamily, ...style } as CSSVars}
     >

@@ -8,6 +8,12 @@ import { useEffect, useInsertionEffect, useRef } from 'react';
 
 const STYLE_ID = 'bl-scroll-typography';
 const CSS = `
+/* theme tokens */
+.bl-stype { --bl-ink: #f4f4f4; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-stype, .bl-stype:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-stype, :where(.light, [data-theme="light"]) .bl-stype:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-stype, .bl-stype:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-stype { margin: 0; font-family: var(--bl-font); font-size: var(--bl-size); line-height: 1.15; color: var(--bl-ink); text-wrap: balance; }
 .bl-stype__word { --t: 0; --s: 0; display: inline-block; font-weight: calc(var(--bl-wmin) + var(--t) * (var(--bl-wmax) - var(--bl-wmin))); font-stretch: calc(100% + var(--t) * var(--bl-wdth)); color: color-mix(in srgb, var(--bl-accent) calc(var(--t) * 100%), var(--bl-ink)); transform: skewX(calc(var(--s) * var(--bl-skew))) scaleY(calc(1 + var(--t) * var(--bl-stretch))); transform-origin: 50% 100%; will-change: transform; }
 `;
@@ -41,8 +47,8 @@ export default function ScrollTypography({
   skew = 10,
   stagger = 35,
   fontSize = 56,
-  textColor = '#f4f4f4',
-  accentColor = '#73eff7',
+  textColor,
+  accentColor,
   fontFamily = '"Roboto Flex", ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

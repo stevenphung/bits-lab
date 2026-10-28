@@ -1,14 +1,6 @@
-import { type CSSProperties, type HTMLAttributes, type ElementType } from 'react';
+import { useInsertionEffect, type CSSProperties, type HTMLAttributes, type ElementType } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
-
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// Text whose letters roll over in 3D on hover: each letter is a tiny cube that turns to show
-// its other face, one after another, so a wave runs through the word. The other face can
-// repeat the word or show different text (an alternate label). Works on keyboard focus
-// too, and screen readers hear the word once. Reduced motion swaps colour instead.
 
 export interface LetterSwapProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
   text?: string;
@@ -27,6 +19,25 @@ export interface LetterSwapProps extends Omit<HTMLAttributes<HTMLElement>, 'chil
   active?: boolean;
   altColor?: string;
   accentColor?: string;
+}
+
+const STYLE_ID = 'bl-letter-swap-tw';
+const CSS = `
+/* theme tokens */
+.bl-swap { --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-swap, .bl-swap:where(.light, [data-theme="light"]) { --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-swap, :where(.light, [data-theme="light"]) .bl-swap:where(.dark, [data-theme="dark"]) { --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-swap, .bl-swap:where([data-theme="system"]) { --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
 }
 
 // Delay order for each letter: from the start, the end, the center out, or shuffled.
@@ -50,12 +61,12 @@ export default function LetterSwap({
   duration = 500,
   active,
   altColor = 'currentColor',
-  accentColor = '#73eff7',
+  accentColor,
   className = '',
   style,
   ...rest
 }: LetterSwapProps) {
-  
+  useStyles();
   const front = [...text];
   const back = [...(swapText ?? text)];
   const count = Math.max(front.length, back.length);
@@ -64,7 +75,7 @@ export default function LetterSwap({
 
   return (
     <Tag
-      className={`group/swap relative inline-flex cursor-pointer flex-wrap border-0 bg-none p-0 [font:inherit] text-inherit no-underline perspective-[600px] focus-visible:rounded-[4px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--bl-accent) ${className}`}
+      className={`bl-swap group/swap relative inline-flex cursor-pointer flex-wrap border-0 bg-none p-0 [font:inherit] text-inherit no-underline perspective-[600px] focus-visible:rounded-[4px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--bl-accent) ${className}`}
       href={href}
       data-active={active || undefined}
       style={{ '--bl-stagger': `${stagger}ms`, '--bl-dur': `${duration}ms`, '--bl-alt': altColor, '--bl-accent': accentColor, ...style } as CSSVars}

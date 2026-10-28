@@ -1,15 +1,25 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useInsertionEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// A moving wall of logos or cards, in lanes. Each lane loops on its own, neighbours run in
-// opposite directions at slightly different speeds, and lanes can run across or up and down.
-// Hover an item and its lane slows to a crawl while the item steps forward and the rest of
-// the lane dims, so the thing you're looking at holds still enough to read. A pause button
-// stops everything; screen readers get each item once; reduced motion shows the lanes still.
+const STYLE_ID = 'bl-marquee-wall-tw';
+const CSS = `
+/* theme tokens */
+.bl-mwall { --bl-ink: #f4f4f4; --bl-accent: #73eff7; --bl-chip: rgba(255,255,255,0.08); }
+:where(.light, [data-theme="light"]) .bl-mwall, .bl-mwall:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-accent: #167f8f; --bl-chip: rgba(26,28,44,0.08); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-mwall, :where(.light, [data-theme="light"]) .bl-mwall:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-accent: #73eff7; --bl-chip: rgba(255,255,255,0.08); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-mwall, .bl-mwall:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-accent: #167f8f; --bl-chip: rgba(26,28,44,0.08); } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 function Lane({ items, index, vertical, speed, variance, alternate, slow, paused }: LaneProps) {
   const laneRef = useRef<HTMLDivElement>(null);
@@ -164,14 +174,14 @@ export default function Marquee({
   height = 420,
   showPause = true,
   label = 'Featured',
-  textColor = '#f4f4f4',
-  accentColor = '#73eff7',
-  chipColor = 'rgba(255,255,255,0.08)',
+  textColor,
+  accentColor,
+  chipColor,
   fontFamily = 'inherit',
   className = '',
   style
 }: MarqueeProps) {
-  
+  useStyles();
   const [paused, setPaused] = useState(false);
   // Deal the items round-robin into lanes, so each lane gets a mix.
   const count = Math.max(1, Math.min(lanes, items.length || 1));
@@ -179,7 +189,7 @@ export default function Marquee({
 
   return (
     <div
-      className={`group/mw relative grid gap-2.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-mwall group/mw relative grid gap-2.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       data-vertical={vertical || undefined}
       style={{ '--bl-gap': `${gap}px`, '--bl-fade': `${fade}px`, '--bl-h': `${height}px`, '--bl-dim': dim, '--bl-ink': textColor, '--bl-accent': accentColor, '--bl-chip': chipColor, '--bl-font': fontFamily, ...style } as CSSVars}
     >

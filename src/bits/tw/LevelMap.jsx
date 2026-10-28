@@ -9,6 +9,12 @@ import { useEffect, useId, useInsertionEffect, useMemo, useRef, useState } from 
 
 const STYLE_ID = 'bl-level-map-tw';
 const CSS = `
+/* theme tokens */
+.bl-lvl { --bl-text: #f4f4f4; }
+:where(.light, [data-theme="light"]) .bl-lvl, .bl-lvl:where(.light, [data-theme="light"]) { --bl-text: #1a1c2c; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-lvl, :where(.light, [data-theme="light"]) .bl-lvl:where(.dark, [data-theme="dark"]) { --bl-text: #f4f4f4; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-lvl, .bl-lvl:where([data-theme="system"]) { --bl-text: #1a1c2c; } }
+/* theme tokens end */
 @keyframes bl-lvl-draw { to { stroke-dashoffset: 0; } }
 @keyframes bl-lvl-pulse { 50% { box-shadow: 0 -4px 0 0 #f4f4f4, 0 4px 0 0 #f4f4f4, -4px 0 0 0 #f4f4f4, 4px 0 0 0 #f4f4f4, inset -4px -4px 0 0 rgba(0,0,0,0.25), inset 4px 4px 0 0 rgba(255,255,255,0.3); } }
 @keyframes bl-lvl-bounce { to { transform: translate(-50%, -8px); } }
@@ -86,7 +92,7 @@ export default function LevelMap({
   padding = 24,
   pathColor = '#566c86',
   clearedColor = '#a7f070',
-  textColor = '#f4f4f4',
+  textColor,
   marker,
   drawDuration = 1200,
   fontFamily,
@@ -121,7 +127,7 @@ export default function LevelMap({
   return (
     <div
       ref={rootRef}
-      className={`relative w-full [font-family:var(--bl-font,'Press_Start_2P',ui-monospace,monospace)] ${className}`}
+      className={`bl-lvl relative w-full [font-family:var(--bl-font,'Press_Start_2P',ui-monospace,monospace)] ${className}`}
       role="list"
       aria-label="Level map"
       style={{ height, '--bl-node': `${nodeSize}px`, '--bl-text': textColor, '--bl-draw': `${drawDuration}ms`, ...(fontFamily ? { '--bl-font': fontFamily } : null), ...style }}

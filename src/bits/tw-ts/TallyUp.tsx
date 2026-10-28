@@ -12,6 +12,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-tally-up-tw';
 const CSS = `
+/* theme tokens */
+.bl-tally { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #262b44; --bl-fill: #38b764; --bl-accent: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-tally, .bl-tally:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #ebe5d8; --bl-fill: #2b8a4a; --bl-accent: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tally, :where(.light, [data-theme="light"]) .bl-tally:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #262b44; --bl-fill: #38b764; --bl-accent: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tally, .bl-tally:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #ebe5d8; --bl-fill: #2b8a4a; --bl-accent: #a86a12; } }
+/* theme tokens end */
 @keyframes bl-tally-bump { 50% { transform: translateY(-3px); } }
 @keyframes bl-tally-flash { 33% { background: var(--bl-accent); } }
 @keyframes bl-tally-notch { 50% { transform: scaleY(1.6); } }
@@ -83,11 +89,11 @@ export default function TallyUp({
   fontSize = 48,
   barHeight = 14,
   gap = 3,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  trackColor = '#262b44',
-  fillColor = '#38b764',
-  accentColor = '#ffcd75',
+  textColor,
+  mutedColor,
+  trackColor,
+  fillColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style
@@ -167,7 +173,7 @@ export default function TallyUp({
   return (
     <div
       ref={rootRef}
-      className={`grid w-full max-w-(--bl-w) gap-2.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-tally grid w-full max-w-(--bl-w) gap-2.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       style={{ '--bl-w': `${width}px`, '--bl-size': `${fontSize}px`, '--bl-bar-h': `${barHeight}px`, '--bl-gap': `${gap}px`, '--bl-blocks': blocks, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-track': trackColor, '--bl-fill': fillColor, '--bl-accent': accentColor, '--bl-font': fontFamily, ...style } as CSSVars}
     >
       <div className="flex items-baseline justify-between gap-3" aria-hidden="true">

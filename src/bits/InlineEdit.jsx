@@ -8,6 +8,12 @@ import { useEffect, useId, useInsertionEffect, useLayoutEffect, useRef, useState
 
 const STYLE_ID = 'bl-inline-edit';
 const CSS = `
+/* theme tokens */
+.bl-ie { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-hover: rgba(255,255,255,0.07); --bl-field: #0b0b14; --bl-chip: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-error: #ef7d57; }
+:where(.light, [data-theme="light"]) .bl-ie, .bl-ie:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-hover: rgba(26,28,44,0.07); --bl-field: #e2dacb; --bl-chip: #ddd4c0; --bl-accent: #167f8f; --bl-error: #c4502a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ie, :where(.light, [data-theme="light"]) .bl-ie:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-hover: rgba(255,255,255,0.07); --bl-field: #0b0b14; --bl-chip: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-error: #ef7d57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ie, .bl-ie:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-hover: rgba(26,28,44,0.07); --bl-field: #e2dacb; --bl-chip: #ddd4c0; --bl-accent: #167f8f; --bl-error: #c4502a; } }
+/* theme tokens end */
 .bl-ie { position: relative; display: inline-flex; align-items: center; gap: 6px; max-width: 100%; font-family: var(--bl-font); font-size: var(--bl-size); color: var(--bl-ink); vertical-align: middle; }
 .bl-ie__box { position: relative; box-sizing: border-box; width: var(--bl-box-w); max-width: 100%; min-width: var(--bl-min-w); transition: width 200ms cubic-bezier(.3,1.2,.5,1); }
 .bl-ie__display { display: flex; align-items: center; gap: 8px; box-sizing: border-box; width: 100%; padding: 6px 10px; border: 0; border-radius: var(--bl-radius); background: transparent; color: inherit; font: inherit; text-align: left; cursor: text; transition: background-color 150ms; }
@@ -56,14 +62,14 @@ export default function InlineEdit({
   minWidth = 60,
   fontSize = 16,
   radius = 8,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  hoverColor = 'rgba(255,255,255,0.07)',
-  fieldColor = '#0b0b14',
-  chipColor = '#333c57',
-  accentColor = '#73eff7',
-  onAccentColor = '#0b0b14',
-  errorColor = '#ef7d57',
+  textColor,
+  mutedColor,
+  hoverColor,
+  fieldColor,
+  chipColor,
+  accentColor,
+  onAccentColor,
+  errorColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

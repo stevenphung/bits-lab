@@ -31,6 +31,12 @@ export interface PinCardProps {
 
 const STYLE_ID = 'bl-pin-card-tw';
 const CSS = `
+/* theme tokens */
+.bl-pin { --bl-bg: #1a1c2c; --bl-label-bg: #0b0b14; --bl-ink: #f4f4f4; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-pin, .bl-pin:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-pin, :where(.light, [data-theme="light"]) .bl-pin:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-label-bg: #0b0b14; --bl-ink: #f4f4f4; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-pin, .bl-pin:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-pin-pulse { from { transform: scale(0.2); opacity: 1; } to { transform: scale(1); opacity: 0; } }
 `;
 
@@ -50,11 +56,11 @@ export default function PinCard({
   target,
   width = 300,
   radius = 16,
-  backgroundColor = '#1a1c2c',
-  labelColor = '#0b0b14',
-  textColor = '#f4f4f4',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  labelColor,
+  textColor,
+  lineColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
@@ -63,7 +69,7 @@ export default function PinCard({
   const Tag = (href ? 'a' : 'div') as 'a';
   return (
     <Tag
-      className={`group/pin relative grid w-(--bl-w) max-w-full justify-items-center pt-14 perspective-[1000px] font-(family-name:--bl-font) text-(--bl-ink) no-underline outline-none ${className}`}
+      className={`bl-pin group/pin relative grid w-(--bl-w) max-w-full justify-items-center pt-14 perspective-[1000px] font-(family-name:--bl-font) text-(--bl-ink) no-underline outline-none ${className}`}
       href={href}
       target={target}
       rel={target === '_blank' ? 'noopener noreferrer' : undefined}

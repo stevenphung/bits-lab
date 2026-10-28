@@ -49,6 +49,12 @@ export interface BarRaceProps {
 
 const STYLE_ID = 'bl-bar-race';
 const CSS = `
+/* theme tokens */
+.bl-race { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-grid: rgba(148,176,194,0.14); --bl-period: rgba(148,176,194,0.28); --bl-accent: #73eff7; --bl-on-accent: #0b0b14; }
+:where(.light, [data-theme="light"]) .bl-race, .bl-race:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-grid: rgba(86,108,134,0.14); --bl-period: rgba(86,108,134,0.28); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-race, :where(.light, [data-theme="light"]) .bl-race:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-grid: rgba(148,176,194,0.14); --bl-period: rgba(148,176,194,0.28); --bl-accent: #73eff7; --bl-on-accent: #0b0b14; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-race, .bl-race:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-grid: rgba(86,108,134,0.14); --bl-period: rgba(86,108,134,0.28); --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-race { position: relative; width: 100%; max-width: var(--bl-w); color: var(--bl-ink); font-family: var(--bl-font); }
 .bl-race__title { margin: 0 0 4px; font-size: 15px; font-weight: 700; }
 .bl-race__sub { margin: 0 0 12px; color: var(--bl-muted); font-size: 13px; }
@@ -107,13 +113,13 @@ export default function BarRace({
   nameWidth = 110,
   colors = RACE_COLORS,
   width = 720,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  dimColor = '#566c86',
-  gridColor = 'rgba(148,176,194,0.14)',
-  periodColor = 'rgba(148,176,194,0.28)',
-  accentColor = '#73eff7',
-  onAccentColor = '#0b0b14',
+  textColor,
+  mutedColor,
+  dimColor,
+  gridColor,
+  periodColor,
+  accentColor,
+  onAccentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   label = 'Bar chart race',
   className = '',

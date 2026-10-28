@@ -9,6 +9,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-tally-up';
 const CSS = `
+/* theme tokens */
+.bl-tally { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #262b44; --bl-fill: #38b764; --bl-accent: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-tally, .bl-tally:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #ebe5d8; --bl-fill: #2b8a4a; --bl-accent: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tally, :where(.light, [data-theme="light"]) .bl-tally:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #262b44; --bl-fill: #38b764; --bl-accent: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tally, .bl-tally:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #ebe5d8; --bl-fill: #2b8a4a; --bl-accent: #a86a12; } }
+/* theme tokens end */
 .bl-tally { display: grid; gap: 10px; width: 100%; max-width: var(--bl-w); font-family: var(--bl-font); color: var(--bl-ink); }
 .bl-tally__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .bl-tally__caption { color: var(--bl-muted); font-size: 14px; }
@@ -95,11 +101,11 @@ export default function TallyUp({
   fontSize = 48,
   barHeight = 14,
   gap = 3,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  trackColor = '#262b44',
-  fillColor = '#38b764',
-  accentColor = '#ffcd75',
+  textColor,
+  mutedColor,
+  trackColor,
+  fillColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style

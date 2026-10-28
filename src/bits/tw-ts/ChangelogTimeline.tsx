@@ -1,14 +1,6 @@
-import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';
+import { useEffect, useId, useInsertionEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
-
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// A changelog as a vertical timeline. A beam fills down the line as you scroll, each entry's
-// dot lights up and the entry slides in when the beam reaches it, and dates stick beside
-// their entry while you read it. Entries can carry a version tag, rich body and media.
-// Under ~600px the date moves above the entry. Works inside any scroller.
 
 export interface ChangelogEntry {
   id?: string;
@@ -45,6 +37,25 @@ export interface ChangelogTimelineProps {
   style?: CSSProperties;
 }
 
+const STYLE_ID = 'bl-changelog-tw';
+const CSS = `
+/* theme tokens */
+.bl-log { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-log, .bl-log:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-log, :where(.light, [data-theme="light"]) .bl-log:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-log, .bl-log:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
+
 export default function ChangelogTimeline({
   entries = [],
   scrollRoot,
@@ -52,18 +63,18 @@ export default function ChangelogTimeline({
   dateColumn = 140,
   stickyTop = 24,
   width = 760,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  trackColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  trackColor,
+  accentColor,
   mediaRadius = 12,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   label = 'Changelog',
   className = '',
   style
 }: ChangelogTimelineProps) {
-  
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const listRef = useRef<HTMLOListElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
@@ -108,7 +119,7 @@ export default function ChangelogTimeline({
 
   return (
     <section
-      className={`@container relative mx-auto w-full max-w-(--bl-w) font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-log @container relative mx-auto w-full max-w-(--bl-w) font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       aria-label={label}
       style={{
         '--bl-w': `${width}px`,

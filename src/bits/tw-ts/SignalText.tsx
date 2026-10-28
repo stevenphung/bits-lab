@@ -13,6 +13,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-signal-text-tw';
 const CSS = `
+/* theme tokens */
+.bl-signal { --bl-noise: #73eff7; --bl-cell: #333c57; }
+:where(.light, [data-theme="light"]) .bl-signal, .bl-signal:where(.light, [data-theme="light"]) { --bl-noise: #167f8f; --bl-cell: #ddd4c0; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-signal, :where(.light, [data-theme="light"]) .bl-signal:where(.dark, [data-theme="dark"]) { --bl-noise: #73eff7; --bl-cell: #333c57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-signal, .bl-signal:where([data-theme="system"]) { --bl-noise: #167f8f; --bl-cell: #ddd4c0; } }
+/* theme tokens end */
 @keyframes bl-signal-flap { 0% { transform: scaleY(1); } 50% { transform: scaleY(0.1); filter: brightness(1.4); } 100% { transform: scaleY(1); } }
 @keyframes bl-signal-tear-a { 0% { clip-path: inset(10% 0 70% 0); transform: translate(-0.06em, 0); } 33% { clip-path: inset(55% 0 20% 0); transform: translate(0.08em, 0); } 66% { clip-path: inset(30% 0 45% 0); transform: translate(-0.04em, 0); } 100% { clip-path: inset(80% 0 5% 0); transform: translate(0.05em, 0); } }
 @keyframes bl-signal-tear-b { 0% { clip-path: inset(60% 0 15% 0); transform: translate(0.06em, 0); } 33% { clip-path: inset(5% 0 75% 0); transform: translate(-0.07em, 0); } 66% { clip-path: inset(40% 0 35% 0); transform: translate(0.05em, 0); } 100% { clip-path: inset(20% 0 60% 0); transform: translate(-0.03em, 0); } }
@@ -71,9 +77,9 @@ export default function SignalText({
   interval = 3200,
   trigger = 'view',
   textColor = 'inherit',
-  noiseColor = '#73eff7',
+  noiseColor,
   splitColors = ['#ef7d57', '#41a6f6'],
-  cellColor = '#333c57',
+  cellColor,
   cellGap = 4,
   onSettled,
   className = '',
@@ -196,7 +202,7 @@ export default function SignalText({
   return (
     <Tag
       ref={rootRef}
-      className={`group/sig relative m-0 text-(--bl-ink) ${className}`}
+      className={`bl-signal group/sig relative m-0 text-(--bl-ink) ${className}`}
       data-mode={mode}
       data-burst={burst || undefined}
       onPointerEnter={onPointerEnter}

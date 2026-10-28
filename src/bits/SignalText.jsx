@@ -8,6 +8,12 @@ import { useEffect, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-signal-text';
 const CSS = `
+/* theme tokens */
+.bl-signal { --bl-noise: #73eff7; --bl-cell: #333c57; }
+:where(.light, [data-theme="light"]) .bl-signal, .bl-signal:where(.light, [data-theme="light"]) { --bl-noise: #167f8f; --bl-cell: #ddd4c0; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-signal, :where(.light, [data-theme="light"]) .bl-signal:where(.dark, [data-theme="dark"]) { --bl-noise: #73eff7; --bl-cell: #333c57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-signal, .bl-signal:where([data-theme="system"]) { --bl-noise: #167f8f; --bl-cell: #ddd4c0; } }
+/* theme tokens end */
 .bl-signal { position: relative; margin: 0; color: var(--bl-ink); }
 .bl-signal__glyphs { display: inline; }
 .bl-signal__ch { white-space: pre-wrap; }
@@ -57,9 +63,9 @@ export default function SignalText({
   interval = 3200,
   trigger = 'view',
   textColor = 'inherit',
-  noiseColor = '#73eff7',
+  noiseColor,
   splitColors = ['#ef7d57', '#41a6f6'],
-  cellColor = '#333c57',
+  cellColor,
   cellGap = 4,
   onSettled,
   className = '',

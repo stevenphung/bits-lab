@@ -9,6 +9,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-inventory';
 const CSS = `
+/* theme tokens */
+.bl-inv { --bl-panel: #333c57; --bl-slot-bg: #1a1c2c; --bl-hover: #29366f; --bl-accent: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-inv, .bl-inv:where(.light, [data-theme="light"]) { --bl-panel: #ddd4c0; --bl-slot-bg: #f4f1e8; --bl-hover: #d6dcef; --bl-accent: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-inv, :where(.light, [data-theme="light"]) .bl-inv:where(.dark, [data-theme="dark"]) { --bl-panel: #333c57; --bl-slot-bg: #1a1c2c; --bl-hover: #29366f; --bl-accent: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-inv, .bl-inv:where([data-theme="system"]) { --bl-panel: #ddd4c0; --bl-slot-bg: #f4f1e8; --bl-hover: #d6dcef; --bl-accent: #a86a12; } }
+/* theme tokens end */
 .bl-inv { position: relative; display: inline-grid; max-width: 100%; gap: 6px; padding: 12px; background: var(--bl-panel); font-family: var(--bl-font, "Press Start 2P", ui-monospace, monospace);
   grid-template-columns: repeat(var(--bl-cols), var(--bl-fit)); touch-action: none;
   box-shadow: 0 -4px 0 0 #0b0b14, 0 4px 0 0 #0b0b14, -4px 0 0 0 #0b0b14, 4px 0 0 0 #0b0b14, 8px 8px 0 4px rgba(11,11,20,0.4); }
@@ -117,10 +123,10 @@ export default function InventoryGrid({
   columns = 6,
   slotSize = 64,
   maxStack = 64,
-  panelColor = '#333c57',
-  slotColor = '#1a1c2c',
-  hoverColor = '#29366f',
-  accentColor = '#ffcd75',
+  panelColor,
+  slotColor,
+  hoverColor,
+  accentColor,
   label = 'Inventory',
   fontFamily,
   onChange,

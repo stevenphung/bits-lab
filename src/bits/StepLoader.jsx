@@ -8,6 +8,12 @@ import { useEffect, useId, useInsertionEffect, useRef } from 'react';
 
 const STYLE_ID = 'bl-step-loader';
 const CSS = `
+/* theme tokens */
+.bl-steps { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #38b764; --bl-on-accent: #0b0b14; --bl-error: #b13e53; }
+:where(.light, [data-theme="light"]) .bl-steps, .bl-steps:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #2b8a4a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-steps, :where(.light, [data-theme="light"]) .bl-steps:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #38b764; --bl-on-accent: #0b0b14; --bl-error: #b13e53; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-steps, .bl-steps:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #2b8a4a; } }
+/* theme tokens end */
 .bl-steps { position: relative; width: 100%; max-width: var(--bl-w); box-sizing: border-box; padding: 22px; border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); box-shadow: 0 0 0 1px var(--bl-line), 0 30px 60px -30px rgba(0,0,0,0.85); }
 .bl-steps-overlay { position: fixed; inset: 0; z-index: 1900; display: grid; place-items: center; padding: 16px; background: var(--bl-backdrop); animation: bl-steps-fade 200ms both; }
 .bl-steps-overlay > .bl-steps { animation: bl-steps-pop 360ms cubic-bezier(.3,1.35,.5,1) both; }
@@ -88,14 +94,14 @@ export default function StepLoader({
   errorMessage = 'Something went wrong.',
   width = 440,
   maxListHeight = 320,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  trackColor = '#333c57',
-  lineColor = '#333c57',
-  accentColor = '#38b764',
-  onAccentColor = '#0b0b14',
-  errorColor = '#b13e53',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  trackColor,
+  lineColor,
+  accentColor,
+  onAccentColor,
+  errorColor,
   backdropColor = 'rgba(8,8,16,0.65)',
   radius = 16,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',

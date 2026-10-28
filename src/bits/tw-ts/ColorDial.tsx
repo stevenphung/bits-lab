@@ -1,14 +1,6 @@
-import { useEffect, useId, useRef, useState, type CSSProperties, type PointerEvent, type KeyboardEvent } from 'react';
+import { useEffect, useId, useInsertionEffect, useRef, useState, type CSSProperties, type PointerEvent, type KeyboardEvent } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
-
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// A color picker built around a hue ring with a saturation/brightness square inside it.
-// Drag either one (or use the keyboard: each is a slider, the square moves on both axes),
-// type a hex code, pick a swatch, or sample from the screen with the eyedropper where the
-// browser supports it. Hue is kept while you drag through greys, so it never jumps to red.
 
 declare global {
   interface Window {
@@ -45,6 +37,25 @@ export interface ColorDialProps {
   fontFamily?: string;
   className?: string;
   style?: CSSProperties;
+}
+
+const STYLE_ID = 'bl-color-dial-tw';
+const CSS = `
+/* theme tokens */
+.bl-dial { --bl-bg: #1a1c2c; --bl-field: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; --bl-error: #ef7d57; }
+:where(.light, [data-theme="light"]) .bl-dial, .bl-dial:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-field: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-error: #c4502a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-dial, :where(.light, [data-theme="light"]) .bl-dial:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-field: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; --bl-error: #ef7d57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-dial, .bl-dial:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-field: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-error: #c4502a; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
 }
 
 export function parseHex(text: string): RGB | null {
@@ -85,18 +96,18 @@ export default function ColorDial({
   ringWidth = 22,
   eyedropper = true,
   label = 'Color',
-  backgroundColor = '#1a1c2c',
-  fieldColor = '#0b0b14',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  errorColor = '#ef7d57',
+  backgroundColor,
+  fieldColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
+  errorColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }: ColorDialProps) {
-  
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const [inner, setInner] = useState(defaultValue);
   const hex = (value ?? inner).toLowerCase();
@@ -212,7 +223,7 @@ export default function ColorDial({
 
   return (
     <div
-      className={`group/dial grid w-[min(var(--bl-size),100%)] justify-items-center gap-3.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-dial group/dial grid w-[min(var(--bl-size),100%)] justify-items-center gap-3.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       role="group"
       aria-label={label}
       data-dragging={dragging || undefined}

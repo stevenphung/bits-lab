@@ -6,6 +6,12 @@ import { useInsertionEffect, useLayoutEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-toggle-group';
 const CSS = `
+/* theme tokens */
+.bl-tg { --bl-track: rgba(255,255,255,0.06); --bl-line: rgba(255,255,255,0.1); --bl-thumb: #f4f4f4; --bl-thumb-ink: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-tg, .bl-tg:where(.light, [data-theme="light"]) { --bl-track: rgba(26,28,44,0.06); --bl-line: rgba(26,28,44,0.1); --bl-thumb: #1a1c2c; --bl-thumb-ink: #f4f4f4; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tg, :where(.light, [data-theme="light"]) .bl-tg:where(.dark, [data-theme="dark"]) { --bl-track: rgba(255,255,255,0.06); --bl-line: rgba(255,255,255,0.1); --bl-thumb: #f4f4f4; --bl-thumb-ink: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tg, .bl-tg:where([data-theme="system"]) { --bl-track: rgba(26,28,44,0.06); --bl-line: rgba(26,28,44,0.1); --bl-thumb: #1a1c2c; --bl-thumb-ink: #f4f4f4; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-tg { position: relative; display: inline-flex; max-width: 100%; overflow-x: auto; scrollbar-width: none; padding: var(--bl-pad); gap: var(--bl-gap); border-radius: var(--bl-radius); background: var(--bl-track); box-shadow: inset 0 0 0 1px var(--bl-line); font-family: var(--bl-font); isolation: isolate; }
 .bl-tg[data-full] { display: flex; width: 100%; }
 .bl-tg[data-full] .bl-tg__item { flex: 1 0 auto; }
@@ -46,13 +52,13 @@ export default function ToggleGroup({
   radius = 12,
   gap = 2,
   padding = 4,
-  trackColor = 'rgba(255,255,255,0.06)',
-  lineColor = 'rgba(255,255,255,0.1)',
-  thumbColor = '#f4f4f4',
-  thumbTextColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
+  trackColor,
+  lineColor,
+  thumbColor,
+  thumbTextColor,
+  textColor,
+  mutedColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

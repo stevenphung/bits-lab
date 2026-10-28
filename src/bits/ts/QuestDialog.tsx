@@ -8,6 +8,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-quest-dialog';
 const CSS = `
+/* theme tokens */
+.bl-quest { --bl-box: #1a1c2c; --bl-border: #f4f4f4; --bl-text: #f4f4f4; --bl-name: #0b0b14; --bl-accent: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-quest, .bl-quest:where(.light, [data-theme="light"]) { --bl-box: #f4f1e8; --bl-border: #1a1c2c; --bl-text: #1a1c2c; --bl-accent: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-quest, :where(.light, [data-theme="light"]) .bl-quest:where(.dark, [data-theme="dark"]) { --bl-box: #1a1c2c; --bl-border: #f4f4f4; --bl-text: #f4f4f4; --bl-name: #0b0b14; --bl-accent: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-quest, .bl-quest:where([data-theme="system"]) { --bl-box: #f4f1e8; --bl-border: #1a1c2c; --bl-text: #1a1c2c; --bl-accent: #a86a12; } }
+/* theme tokens end */
 .bl-quest { position: relative; width: min(var(--bl-width), 100%); margin: 4px; padding: 22px 22px 20px; background: var(--bl-box); color: var(--bl-text); cursor: pointer; user-select: none;
   box-shadow: 0 -4px 0 0 var(--bl-border), 0 4px 0 0 var(--bl-border), -4px 0 0 0 var(--bl-border), 4px 0 0 0 var(--bl-border), inset 0 0 0 4px #0b0b14, 8px 8px 0 4px rgba(11,11,20,0.45); }
 .bl-quest:focus-visible { outline: 4px solid #41a6f6; outline-offset: 8px; }
@@ -116,12 +122,12 @@ export default function QuestDialog({
   fontSize = 13,
   minLines = 3,
   portraitSize = 72,
-  boxColor = '#1a1c2c',
-  borderColor = '#f4f4f4',
-  textColor = '#f4f4f4',
-  nameColor = '#0b0b14',
+  boxColor,
+  borderColor,
+  textColor,
+  nameColor,
   nameBackground = '#ffcd75',
-  accentColor = '#ffcd75',
+  accentColor,
   fontFamily,
   bodyFont,
   loop = false,

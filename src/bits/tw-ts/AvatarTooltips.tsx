@@ -1,14 +1,6 @@
-import { useId, useState, type CSSProperties, type ReactNode, type PointerEvent } from 'react';
+import { useId, useInsertionEffect, useState, type CSSProperties, type ReactNode, type PointerEvent } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
-
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// An overlapping avatar stack. Hovering or focusing the stack fans it out; the avatar under
-// the pointer lifts and springs up a name tag that sways with the pointer. Extra people
-// collapse into a "+N" chip whose tag lists them. Each avatar is a focusable item with its
-// name, so keyboard and screen reader users get the same information.
 
 export interface StackPerson {
   id?: string;
@@ -42,6 +34,25 @@ export interface AvatarTooltipsProps {
   style?: CSSProperties;
 }
 
+const STYLE_ID = 'bl-avatar-tooltips-tw';
+const CSS = `
+/* theme tokens */
+.bl-avs { --bl-bg: #1a1c2c; --bl-chip: #333c57; --bl-ink: #f4f4f4; --bl-tip: #f4f4f4; --bl-tip-ink: #1a1c2c; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-avs, .bl-avs:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ddd4c0; --bl-ink: #1a1c2c; --bl-tip: #1a1c2c; --bl-tip-ink: #f4f4f4; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-avs, :where(.light, [data-theme="light"]) .bl-avs:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #333c57; --bl-ink: #f4f4f4; --bl-tip: #f4f4f4; --bl-tip-ink: #1a1c2c; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-avs, .bl-avs:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ddd4c0; --bl-ink: #1a1c2c; --bl-tip: #1a1c2c; --bl-tip-ink: #f4f4f4; --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
+
 const initials = (name: string) =>
   String(name)
     .split(/\s+/)
@@ -59,17 +70,17 @@ export default function AvatarTooltips({
   ring = 3,
   sway = 12,
   label = 'Team',
-  backgroundColor = '#1a1c2c',
-  chipColor = '#333c57',
-  textColor = '#f4f4f4',
-  tooltipColor = '#f4f4f4',
-  tooltipTextColor = '#1a1c2c',
-  accentColor = '#73eff7',
+  backgroundColor,
+  chipColor,
+  textColor,
+  tooltipColor,
+  tooltipTextColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }: AvatarTooltipsProps) {
-  
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const [swayBy, setSwayBy] = useState<Record<string, number>>({});
   const shown = people.length > max ? people.slice(0, max - 1) : people;
@@ -95,7 +106,7 @@ export default function AvatarTooltips({
 
   return (
     <ul
-      className={`group/avs m-0 inline-flex list-none items-center px-0 pt-(--bl-pad) pb-0 font-(family-name:--bl-font) ${className}`}
+      className={`bl-avs group/avs m-0 inline-flex list-none items-center px-0 pt-(--bl-pad) pb-0 font-(family-name:--bl-font) ${className}`}
       aria-label={`${label}: ${people.length} ${people.length === 1 ? 'person' : 'people'}`}
       style={{
         '--bl-size': `${size}px`,

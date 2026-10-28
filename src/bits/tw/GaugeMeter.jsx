@@ -1,4 +1,23 @@
-import { useId, useLayoutEffect, useRef } from 'react';
+import { useId, useInsertionEffect, useLayoutEffect, useRef } from 'react';
+
+const STYLE_ID = 'bl-gauge-meter-tw';
+const CSS = `
+/* theme tokens */
+.bl-gauge { --bl-tick: #566c86; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; }
+:where(.light, [data-theme="light"]) .bl-gauge, .bl-gauge:where(.light, [data-theme="light"]) { --bl-tick: #8a96a3; --bl-ink: #1a1c2c; --bl-muted: #566c86; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-gauge, :where(.light, [data-theme="light"]) .bl-gauge:where(.dark, [data-theme="dark"]) { --bl-tick: #566c86; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-gauge, .bl-gauge:where([data-theme="system"]) { --bl-tick: #8a96a3; --bl-ink: #1a1c2c; --bl-muted: #566c86; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -40,14 +59,15 @@ export default function GaugeMeter({
   size = 260,
   thickness = 12,
   trackColor = '#262b44',
-  tickColor = '#566c86',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
+  tickColor,
+  textColor,
+  mutedColor,
   needleColor = '#f4f4f4',
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }) {
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const needleRef = useRef(null);
   const fillRef = useRef(null);
@@ -140,7 +160,7 @@ export default function GaugeMeter({
 
   return (
     <div
-      className={`relative grid w-[min(var(--bl-size),100%)] justify-items-center font-(family-name:--bl-font) text-(--bl-ink) [&_svg]:block [&_svg]:h-auto [&_svg]:w-full [&_svg]:overflow-visible ${className}`}
+      className={`bl-gauge relative grid w-[min(var(--bl-size),100%)] justify-items-center font-(family-name:--bl-font) text-(--bl-ink) [&_svg]:block [&_svg]:h-auto [&_svg]:w-full [&_svg]:overflow-visible ${className}`}
       role="meter"
       aria-valuemin={min}
       aria-valuemax={max}

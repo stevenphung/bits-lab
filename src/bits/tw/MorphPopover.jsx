@@ -1,4 +1,23 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useId, useInsertionEffect, useLayoutEffect, useRef, useState } from 'react';
+
+const STYLE_ID = 'bl-morph-popover-tw';
+const CSS = `
+/* theme tokens */
+.bl-mp { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-line: rgba(255,255,255,0.14); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-mp, .bl-mp:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-line: rgba(26,28,44,0.14); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-mp, :where(.light, [data-theme="light"]) .bl-mp:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-line: rgba(255,255,255,0.14); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-mp, .bl-mp:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-line: rgba(26,28,44,0.14); --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -20,14 +39,15 @@ export default function MorphPopover({
   duration = 380,
   open: controlledOpen,
   onOpenChange,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  lineColor = 'rgba(255,255,255,0.14)',
-  accentColor = '#73eff7',
+  backgroundColor,
+  textColor,
+  lineColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }) {
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const rootRef = useRef(null);
   const buttonRef = useRef(null);
@@ -108,7 +128,7 @@ export default function MorphPopover({
   return (
     <div
       ref={rootRef}
-      className={`group/mp relative inline-block align-top font-(family-name:--bl-font) ${className}`}
+      className={`bl-mp group/mp relative inline-block align-top font-(family-name:--bl-font) ${className}`}
       data-align={align}
       data-side={side}
       style={{

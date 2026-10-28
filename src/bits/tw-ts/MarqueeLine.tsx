@@ -1,15 +1,25 @@
-import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react';
+import { Fragment, useEffect, useInsertionEffect, useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// An endless banner. The items scroll past at a steady speed; scroll the page and the line
-// surges with your scroll (and leans into it), flipping direction when you scroll back up, then
-// eases back to cruising. Drag it to scrub. Hovering pauses it, and there's a pause button,
-// since motion that keeps going needs one. Screen readers get the items once as a list; reduced
-// motion shows the line still.
+const STYLE_ID = 'bl-marquee-line-tw';
+const CSS = `
+/* theme tokens */
+.bl-marquee { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-accent: #ffcd75; --bl-chip: rgba(255,255,255,0.08); }
+:where(.light, [data-theme="light"]) .bl-marquee, .bl-marquee:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-accent: #a86a12; --bl-chip: rgba(26,28,44,0.08); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-marquee, :where(.light, [data-theme="light"]) .bl-marquee:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-accent: #ffcd75; --bl-chip: rgba(255,255,255,0.08); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-marquee, .bl-marquee:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-accent: #a86a12; --bl-chip: rgba(26,28,44,0.08); } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 export interface MarqueeLineProps {
   /** What scrolls past. */
@@ -58,15 +68,15 @@ export default function MarqueeLine({
   fade = 48,
   padding = 14,
   fontSize = 22,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  accentColor = '#ffcd75',
-  chipColor = 'rgba(255,255,255,0.08)',
+  backgroundColor,
+  textColor,
+  accentColor,
+  chipColor,
   fontFamily = 'inherit',
   className = '',
   style
 }: MarqueeLineProps) {
-  
+  useStyles();
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const setRef = useRef<HTMLDivElement>(null);
@@ -193,7 +203,7 @@ export default function MarqueeLine({
 
   return (
     <div
-      className={`relative flex items-center gap-2 overflow-hidden bg-(--bl-bg) px-0 py-(--bl-pad) font-(family-name:--bl-font) text-(length:--bl-size) text-(--bl-ink) ${className}`}
+      className={`bl-marquee relative flex items-center gap-2 overflow-hidden bg-(--bl-bg) px-0 py-(--bl-pad) font-(family-name:--bl-font) text-(length:--bl-size) text-(--bl-ink) ${className}`}
       style={{ '--bl-gap': `${gap}px`, '--bl-fade': `${fade}px`, '--bl-pad': `${padding}px`, '--bl-size': `${fontSize}px`, '--bl-bg': backgroundColor, '--bl-ink': textColor, '--bl-accent': accentColor, '--bl-chip': chipColor, '--bl-font': fontFamily, ...style } as CSSVars}
     >
       <ul className="sr-only" aria-label={label}>

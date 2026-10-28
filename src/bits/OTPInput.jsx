@@ -7,6 +7,12 @@ import { useEffect, useId, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-otp';
 const CSS = `
+/* theme tokens */
+.bl-otp { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.14); --bl-line-filled: rgba(255,255,255,0.32); --bl-error: #ef7d57; --bl-success: #38b764; --bl-success-ink: #0b0b14; }
+:where(.light, [data-theme="light"]) .bl-otp, .bl-otp:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.14); --bl-line-filled: rgba(26,28,44,0.32); --bl-error: #c4502a; --bl-success: #2b8a4a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-otp, :where(.light, [data-theme="light"]) .bl-otp:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.14); --bl-line-filled: rgba(255,255,255,0.32); --bl-error: #ef7d57; --bl-success: #38b764; --bl-success-ink: #0b0b14; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-otp, .bl-otp:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.14); --bl-line-filled: rgba(26,28,44,0.32); --bl-error: #c4502a; --bl-success: #2b8a4a; } }
+/* theme tokens end */
 .bl-otp { position: relative; display: inline-flex; max-width: 100%; flex-direction: column; align-items: center; gap: 10px; font-family: var(--bl-font); }
 .bl-otp__cells { position: relative; display: flex; max-width: 100%; align-items: center; gap: var(--bl-gap); transition: gap 320ms cubic-bezier(.2,.9,.25,1); }
 .bl-otp__cell { position: relative; display: grid; place-items: center; flex: 0 1 var(--bl-w); width: var(--bl-w); min-width: 22px; height: var(--bl-h); border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); font-size: calc(var(--bl-h) * 0.42); font-weight: 700; font-variant-numeric: tabular-nums; box-shadow: inset 0 0 0 var(--bl-border) var(--bl-line); transition: box-shadow 160ms, background-color 200ms, border-radius 320ms cubic-bezier(.2,.9,.25,1), transform 160ms; }
@@ -69,15 +75,15 @@ export default function OTPInput({
   gap = 8,
   radius = 12,
   borderWidth = 1.5,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = 'rgba(255,255,255,0.14)',
-  filledLineColor = 'rgba(255,255,255,0.32)',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  filledLineColor,
   accentColor = '#73eff7',
-  errorColor = '#ef7d57',
-  successColor = '#38b764',
-  successTextColor = '#0b0b14',
+  errorColor,
+  successColor,
+  successTextColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

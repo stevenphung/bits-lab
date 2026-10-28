@@ -8,6 +8,12 @@ import { useEffect, useId, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-stepper-form';
 const CSS = `
+/* theme tokens */
+.bl-stepper { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-error: #ef7d57; }
+:where(.light, [data-theme="light"]) .bl-stepper, .bl-stepper:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-error: #c4502a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-stepper, :where(.light, [data-theme="light"]) .bl-stepper:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-error: #ef7d57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-stepper, .bl-stepper:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-error: #c4502a; } }
+/* theme tokens end */
 .bl-stepper { width: 100%; max-width: var(--bl-w); box-sizing: border-box; padding: 20px; border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); box-shadow: 0 0 0 1px var(--bl-line), 0 24px 50px -28px rgba(0,0,0,0.85); }
 .bl-stepper__rail { position: relative; display: flex; justify-content: space-between; margin: 0 0 22px; padding: 0; list-style: none; }
 .bl-stepper__rail::before, .bl-stepper__rail::after { content: ""; position: absolute; left: 14px; right: 14px; top: 13px; height: 3px; border-radius: 3px; background: var(--bl-track); }
@@ -59,14 +65,14 @@ export default function StepperForm({
   checkingLabel = 'Checking…',
   label = 'Form',
   width = 520,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  trackColor = '#333c57',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  onAccentColor = '#0b0b14',
-  errorColor = '#ef7d57',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  trackColor,
+  lineColor,
+  accentColor,
+  onAccentColor,
+  errorColor,
   radius = 16,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',

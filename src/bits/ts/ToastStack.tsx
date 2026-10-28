@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-toast-stack';
 const CSS = `
+/* theme tokens */
+.bl-toaster { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.12); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-toaster, .bl-toaster:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.12); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-toaster, :where(.light, [data-theme="light"]) .bl-toaster:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.12); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-toaster, .bl-toaster:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.12); --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-toaster { position: fixed; z-index: 1100; width: var(--bl-w); max-width: calc(100% - 32px); margin: 0; padding: 0; list-style: none; font-family: var(--bl-font); pointer-events: none; }
 .bl-toaster[data-contained] { position: absolute; }
 .bl-toaster[data-y="bottom"] { bottom: var(--bl-offset); }
@@ -316,11 +322,11 @@ export default function Toaster({
   offset = 24,
   contained = false,
   radius = 12,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = 'rgba(255,255,255,0.12)',
-  accentColor = '#73eff7',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
   successColor = '#38b764',
   errorColor = '#b13e53',
   infoColor = '#41a6f6',

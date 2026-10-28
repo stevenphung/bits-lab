@@ -8,6 +8,12 @@ import { useEffect, useId, useInsertionEffect, useLayoutEffect, useRef, useState
 
 const STYLE_ID = 'bl-date-range';
 const CSS = `
+/* theme tokens */
+.bl-dr { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-hover: rgba(255,255,255,0.07); --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-band: rgba(115,239,247,0.16); }
+:where(.light, [data-theme="light"]) .bl-dr, .bl-dr:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-hover: rgba(26,28,44,0.07); --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-band: rgba(22,127,143,0.16); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-dr, :where(.light, [data-theme="light"]) .bl-dr:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-hover: rgba(255,255,255,0.07); --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-band: rgba(115,239,247,0.16); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-dr, .bl-dr:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-hover: rgba(26,28,44,0.07); --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-band: rgba(22,127,143,0.16); } }
+/* theme tokens end */
 .bl-dr { display: flex; gap: 18px; width: fit-content; max-width: 100%; box-sizing: border-box; padding: 16px; border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); box-shadow: 0 0 0 1px var(--bl-line), 0 24px 50px -28px rgba(0,0,0,0.85); }
 .bl-dr[data-narrow] { flex-direction: column; }
 .bl-dr__presets { display: flex; flex-direction: column; gap: 2px; min-width: 130px; padding-right: 16px; box-shadow: 1px 0 0 var(--bl-line); }
@@ -99,15 +105,15 @@ export default function DateRange({
   label = 'Choose dates',
   cellSize = 38,
   narrowAt = 620,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  dimColor = '#566c86',
-  hoverColor = 'rgba(255,255,255,0.07)',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  onAccentColor = '#0b0b14',
-  bandColor = 'rgba(115,239,247,0.16)',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  dimColor,
+  hoverColor,
+  lineColor,
+  accentColor,
+  onAccentColor,
+  bandColor,
   radius = 16,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',

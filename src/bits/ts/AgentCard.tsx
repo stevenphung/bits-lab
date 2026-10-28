@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-agent-card';
 const CSS = `
+/* theme tokens */
+.bl-agent { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-code: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-line: #333c57; --bl-accent: #73eff7; --bl-ok: #38b764; --bl-error: #ef7d57; }
+:where(.light, [data-theme="light"]) .bl-agent, .bl-agent:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-code: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-ok: #2b8a4a; --bl-error: #c4502a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-agent, :where(.light, [data-theme="light"]) .bl-agent:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-code: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-line: #333c57; --bl-accent: #73eff7; --bl-ok: #38b764; --bl-error: #ef7d57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-agent, .bl-agent:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-code: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-ok: #2b8a4a; --bl-error: #c4502a; } }
+/* theme tokens end */
 .bl-agent { width: 100%; max-width: var(--bl-w); overflow: hidden; border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); box-shadow: 0 0 0 1px var(--bl-line); transition: box-shadow 300ms; }
 .bl-agent[data-status="running"] { box-shadow: 0 0 0 1px var(--bl-accent), 0 0 24px -8px var(--bl-accent); }
 .bl-agent[data-status="error"] { box-shadow: 0 0 0 1px var(--bl-error); }
@@ -122,16 +128,16 @@ export default function AgentCard({
   onOpenChange,
   width = 520,
   logHeight = 160,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  codeColor = '#0b0b14',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  dimColor = '#566c86',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  okColor = '#38b764',
-  errorColor = '#ef7d57',
+  backgroundColor,
+  chipColor,
+  codeColor,
+  textColor,
+  mutedColor,
+  dimColor,
+  lineColor,
+  accentColor,
+  okColor,
+  errorColor,
   radius = 14,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   monoFamily = 'ui-monospace, SFMono-Regular, Menlo, monospace',

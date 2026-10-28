@@ -1,16 +1,25 @@
-import { useEffect, useRef, type CSSProperties, type ElementType } from 'react';
+import { useEffect, useInsertionEffect, useRef, type CSSProperties, type ElementType } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// A headline whose letters breathe. Each letter's weight (and width, if the font has that
-// axis) swells and relaxes in a wave that rolls along the line. Three drivers: "breathe"
-// loops on its own, "beat" sends a pulse down the line on every beat of a tempo, and
-// "scroll" sweeps a bold spotlight across the letters as the headline passes through the
-// viewport. Screen readers get the plain text once; it pauses off-screen, and reduced
-// motion shows the text at a steady middle weight.
+const STYLE_ID = 'bl-kinetic-headline-tw';
+const CSS = `
+/* theme tokens */
+.bl-kinetic { --bl-ink: #f4f4f4; --bl-accent: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-kinetic, .bl-kinetic:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-accent: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-kinetic, :where(.light, [data-theme="light"]) .bl-kinetic:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-accent: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-kinetic, .bl-kinetic:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-accent: #a86a12; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 export interface KineticHeadlineProps {
   /** The headline; screen readers get it once as plain text. */
@@ -55,13 +64,13 @@ export default function KineticHeadline({
   maxWidth = 100,
   tint = 0,
   fontSize = 72,
-  textColor = '#f4f4f4',
-  accentColor = '#ffcd75',
+  textColor,
+  accentColor,
   fontFamily = '"Roboto Flex", ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }: KineticHeadlineProps) {
-  
+  useStyles();
   const rootRef = useRef<HTMLElement>(null);
   const words = text.split(/(\s+)/).filter(Boolean);
 
@@ -146,7 +155,7 @@ export default function KineticHeadline({
   return (
     <Tag
       ref={rootRef}
-      className={`m-0 font-(family-name:--bl-font) text-(length:--bl-size) leading-[1.05] tracking-[-0.01em] text-(--bl-ink) ${className}`}
+      className={`bl-kinetic m-0 font-(family-name:--bl-font) text-(length:--bl-size) leading-[1.05] tracking-[-0.01em] text-(--bl-ink) ${className}`}
       style={{ '--bl-size': typeof fontSize === 'number' ? `${fontSize}px` : fontSize, '--bl-wmin': minWeight, '--bl-wmax': maxWeight, '--bl-dmin': `${minWidth}%`, '--bl-dmax': `${maxWidth}%`, '--bl-tint': `${tint * 100}%`, '--bl-ink': textColor, '--bl-accent': accentColor, '--bl-font': fontFamily, ...style } as CSSVars}
     >
       <span className="sr-only">{text}</span>

@@ -7,6 +7,12 @@ import { useId, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-quest-log';
 const CSS = `
+/* theme tokens */
+.bl-ql { --bl-bg: #1a1c2c; --bl-row: #262b44; --bl-hover: #2e3552; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-track: #0b0b14; --bl-accent: #ffcd75; --bl-done: #38b764; }
+:where(.light, [data-theme="light"]) .bl-ql, .bl-ql:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-row: #ebe5d8; --bl-hover: #e0d8c6; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-track: #e2dacb; --bl-accent: #a86a12; --bl-done: #2b8a4a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ql, :where(.light, [data-theme="light"]) .bl-ql:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-row: #262b44; --bl-hover: #2e3552; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-track: #0b0b14; --bl-accent: #ffcd75; --bl-done: #38b764; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ql, .bl-ql:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-row: #ebe5d8; --bl-hover: #e0d8c6; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-track: #e2dacb; --bl-accent: #a86a12; --bl-done: #2b8a4a; } }
+/* theme tokens end */
 .bl-ql { position: relative; width: 100%; max-width: var(--bl-w); padding: 18px; box-sizing: border-box; background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); box-shadow: 0 0 0 3px var(--bl-line), 6px 6px 0 3px rgba(0,0,0,0.45); }
 .bl-ql__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 10px; }
 .bl-ql__title { margin: 0; font-family: var(--bl-title-font); font-size: 13px; font-weight: 400; color: var(--bl-accent); letter-spacing: 0.04em; }
@@ -72,15 +78,15 @@ export default function QuestLog({
   title = 'Quest log',
   finishedMessage = 'All quests complete!',
   width = 520,
-  backgroundColor = '#1a1c2c',
-  rowColor = '#262b44',
-  hoverColor = '#2e3552',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  trackColor = '#0b0b14',
-  accentColor = '#ffcd75',
-  doneColor = '#38b764',
+  backgroundColor,
+  rowColor,
+  hoverColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  trackColor,
+  accentColor,
+  doneColor,
   fontFamily = '"Pixelify Sans", ui-sans-serif, system-ui, sans-serif',
   titleFontFamily = '"Press Start 2P", ui-monospace, monospace',
   className = '',

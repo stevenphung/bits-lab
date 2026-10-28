@@ -8,6 +8,12 @@ import { useEffect, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-trading-card';
 const CSS = `
+/* theme tokens */
+.bl-tcard { --bl-card: #262b44; --bl-back: #29366f; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-tcard, .bl-tcard:where(.light, [data-theme="light"]) { --bl-card: #ebe5d8; --bl-back: #dfe3f0; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tcard, :where(.light, [data-theme="light"]) .bl-tcard:where(.dark, [data-theme="dark"]) { --bl-card: #262b44; --bl-back: #29366f; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tcard, .bl-tcard:where([data-theme="system"]) { --bl-card: #ebe5d8; --bl-back: #dfe3f0; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-tcard { --rx: 0deg; --ry: 0deg; --gx: 50%; --gy: 50%; --shift: 0.5; display: inline-block; width: var(--bl-w); perspective: 900px; font-family: var(--bl-font); color: var(--bl-ink); }
 .bl-tcard__flip { position: relative; display: block; width: 100%; aspect-ratio: 5 / 7; margin: 0; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; transform: rotateX(var(--rx)) rotateY(calc(var(--ry) + var(--turn))); transform-style: preserve-3d; transition: transform 500ms cubic-bezier(.3,1.2,.4,1); cursor: default; }
 .bl-tcard[data-flippable] .bl-tcard__flip { cursor: pointer; }
@@ -58,11 +64,11 @@ export default function TradingCard({
   tilt = 14,
   width = 240,
   radius = 14,
-  cardColor = '#262b44',
-  backColor = '#29366f',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
+  cardColor,
+  backColor,
+  textColor,
+  mutedColor,
+  accentColor,
   frameColor,
   fontFamily = 'inherit',
   className = '',

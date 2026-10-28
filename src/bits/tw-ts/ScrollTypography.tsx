@@ -1,15 +1,25 @@
-import { useEffect, useRef, type CSSProperties, type ElementType } from 'react';
+import { useEffect, useInsertionEffect, useRef, type CSSProperties, type ElementType } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// Type that reacts to how fast you scroll. Words get heavier, stretch taller, lean with the
-// scroll direction and shift toward the accent colour as the speed rises, then relax when
-// you stop. Each word answers a moment after the one before it, so a flick sends a ripple
-// through the line. Made for variable fonts (weight, and width if the font has it); works
-// with the window or any scroll box. The text stays plain text; reduced motion keeps it still.
+const STYLE_ID = 'bl-scroll-typography-tw';
+const CSS = `
+/* theme tokens */
+.bl-stype { --bl-ink: #f4f4f4; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-stype, .bl-stype:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-stype, :where(.light, [data-theme="light"]) .bl-stype:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-stype, .bl-stype:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // The element that actually scrolls this one: the nearest scrollable ancestor, or the page.
 function scrollerOf(node: HTMLElement): HTMLElement | Window {
@@ -56,13 +66,13 @@ export default function ScrollTypography({
   skew = 10,
   stagger = 35,
   fontSize = 56,
-  textColor = '#f4f4f4',
-  accentColor = '#73eff7',
+  textColor,
+  accentColor,
   fontFamily = '"Roboto Flex", ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }: ScrollTypographyProps) {
-  
+  useStyles();
   const rootRef = useRef<HTMLElement>(null);
   const words = text.split(/\s+/).filter(Boolean);
 
@@ -139,7 +149,7 @@ export default function ScrollTypography({
   return (
     <Tag
       ref={rootRef}
-      className={`m-0 font-(family-name:--bl-font) text-(length:--bl-size) leading-[1.15] text-balance text-(--bl-ink) ${className}`}
+      className={`bl-stype m-0 font-(family-name:--bl-font) text-(length:--bl-size) leading-[1.15] text-balance text-(--bl-ink) ${className}`}
       style={{ '--bl-size': typeof fontSize === 'number' ? `${fontSize}px` : fontSize, '--bl-wmin': minWeight, '--bl-wmax': maxWeight, '--bl-stretch': stretch, '--bl-wdth': `${widthRange}%`, '--bl-skew': `${-skew}deg`, '--bl-ink': textColor, '--bl-accent': accentColor, '--bl-font': fontFamily, ...style } as CSSVars}
     >
       {words.map((word, i) => (

@@ -9,6 +9,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-scrub-number';
 const CSS = `
+/* theme tokens */
+.bl-scrub { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-scrub, .bl-scrub:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-scrub, :where(.light, [data-theme="light"]) .bl-scrub:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-scrub, .bl-scrub:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-scrub { position: relative; display: inline-flex; align-items: stretch; overflow: hidden; border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); font-size: 14px; box-shadow: inset 0 0 0 1px var(--bl-line); }
 .bl-scrub:focus-within { box-shadow: inset 0 0 0 2px var(--bl-accent); }
 .bl-scrub__handle { position: relative; display: grid; place-items: center; min-width: 30px; padding: 0 10px; background: var(--bl-chip); color: var(--bl-muted); font-weight: 700; cursor: ew-resize; user-select: none; touch-action: none; }
@@ -71,12 +77,12 @@ export default function ScrubNumber({
   unit = '',
   width = 64,
   radius = 8,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  chipColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style

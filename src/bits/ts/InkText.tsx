@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-ink-text';
 const CSS = `
+/* theme tokens */
+.bl-ink { --bl-base: #94b0c2; --bl-glint: #f4f4f4; }
+:where(.light, [data-theme="light"]) .bl-ink, .bl-ink:where(.light, [data-theme="light"]) { --bl-base: #566c86; --bl-glint: #ffffff; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ink, :where(.light, [data-theme="light"]) .bl-ink:where(.dark, [data-theme="dark"]) { --bl-base: #94b0c2; --bl-glint: #f4f4f4; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ink, .bl-ink:where([data-theme="system"]) { --bl-base: #566c86; --bl-glint: #ffffff; } }
+/* theme tokens end */
 @property --bl-ink-level { syntax: "<percentage>"; inherits: true; initial-value: 0%; }
 .bl-ink { margin: 0; color: transparent; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-repeat: no-repeat; }
 .bl-ink[data-fill="shimmer"] { background-image: linear-gradient(100deg, var(--bl-base) 0 40%, var(--bl-glint) 50%, var(--bl-base) 60% 100%); background-size: 250% 100%; animation: bl-ink-sweep var(--bl-speed) linear infinite; }
@@ -75,8 +81,8 @@ export default function InkText({
   fill = 'shimmer',
   colors = ['#ef7d57', '#ffcd75', '#a7f070', '#73eff7', '#41a6f6', '#b13e53'],
   stepped = true,
-  baseColor = '#94b0c2',
-  glintColor = '#f4f4f4',
+  baseColor,
+  glintColor,
   image,
   pixelated = true,
   strokeWidth = 1.5,

@@ -9,6 +9,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-level-up-stats';
 const CSS = `
+/* theme tokens */
+.bl-lvlup { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-good: #a7f070; --bl-bad: #ef7d57; --bl-gold: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-lvlup, .bl-lvlup:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-good: #2f7d22; --bl-bad: #c4502a; --bl-gold: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-lvlup, :where(.light, [data-theme="light"]) .bl-lvlup:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-good: #a7f070; --bl-bad: #ef7d57; --bl-gold: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-lvlup, .bl-lvlup:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-good: #2f7d22; --bl-bad: #c4502a; --bl-gold: #a86a12; } }
+/* theme tokens end */
 .bl-lvlup { display: grid; gap: 10px; width: min(var(--bl-w), 100%); padding: 16px; box-sizing: border-box; background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); font-size: 14px; box-shadow: inset 0 0 0 3px var(--bl-line), 6px 6px 0 rgba(0,0,0,0.45); }
 .bl-lvlup__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px; }
 .bl-lvlup__title { margin: 0; font-size: 15px; font-weight: 800; }
@@ -90,14 +96,14 @@ export default function LevelUpStats({
   locale,
   currency = 'USD',
   width = 380,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  goodColor = '#a7f070',
-  badColor = '#ef7d57',
-  goldColor = '#ffcd75',
+  backgroundColor,
+  chipColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  goodColor,
+  badColor,
+  goldColor,
   fontFamily = 'inherit',
   className = '',
   style

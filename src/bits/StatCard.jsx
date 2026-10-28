@@ -8,6 +8,12 @@ import { useEffect, useId, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-stat-card';
 const CSS = `
+/* theme tokens */
+.bl-stat { --bl-muted: #94b0c2; --bl-ink: #f4f4f4; --bl-bg: #1a1c2c; --bl-line: #333c57; --bl-trend: #566c86; }
+:where(.light, [data-theme="light"]) .bl-stat, .bl-stat:where(.light, [data-theme="light"]) { --bl-muted: #566c86; --bl-ink: #1a1c2c; --bl-bg: #f4f1e8; --bl-line: #cfc4ad; --bl-trend: #8a96a3; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-stat, :where(.light, [data-theme="light"]) .bl-stat:where(.dark, [data-theme="dark"]) { --bl-muted: #94b0c2; --bl-ink: #f4f4f4; --bl-bg: #1a1c2c; --bl-line: #333c57; --bl-trend: #566c86; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-stat, .bl-stat:where([data-theme="system"]) { --bl-muted: #566c86; --bl-ink: #1a1c2c; --bl-bg: #f4f1e8; --bl-line: #cfc4ad; --bl-trend: #8a96a3; } }
+/* theme tokens end */
 .bl-stat { position: relative; display: grid; gap: 6px; width: 100%; max-width: var(--bl-w); box-sizing: border-box; padding: 16px 18px 14px; border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); box-shadow: 0 0 0 1px var(--bl-line); }
 .bl-stat__top { display: flex; align-items: center; gap: 8px; color: var(--bl-muted); font-size: 13px; font-weight: 600; }
 .bl-stat__icon { display: grid; place-items: center; width: 22px; height: 22px; }
@@ -65,11 +71,11 @@ export default function StatCard({
   width = 300,
   valueSize = 34,
   sparkHeight = 44,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  trendColor = '#566c86',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  trendColor,
   accentColor = '#3987e5',
   goodColor = '#0ca30c',
   badColor = '#e66767',
@@ -112,7 +118,7 @@ export default function StatCard({
   const change = delta ?? (previous != null && previous !== 0 ? (value - previous) / Math.abs(previous) : null);
   const direction = change == null || change === 0 ? 'flat' : change > 0 ? 'up' : 'down';
   const good = goodDirection === 'neutral' || direction === 'flat' ? null : direction === goodDirection;
-  const deltaColor = good == null ? mutedColor : good ? goodColor : badColor;
+  const deltaColor = good == null ? (mutedColor ?? 'var(--bl-muted)') : good ? goodColor : badColor;
   const deltaText = change == null ? '' : `${change > 0 ? '+' : change < 0 ? '−' : ''}${new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 1 }).format(Math.abs(change))}`;
 
   // Sparkline geometry in a 100 × 40 box.
@@ -184,7 +190,7 @@ export default function StatCard({
             <path className="bl-stat__line" d={line} />
             {hover != null && <line className="bl-stat__cross" x1={pts[hover][0]} x2={pts[hover][0]} y1={0} y2={40} />}
           </svg>
-          <span className="bl-stat__dot" style={{ left: `${pts[at][0]}%`, top: `${(pts[at][1] / 40) * 100}%`, background: at === n - 1 ? accentColor : textColor }} />
+          <span className="bl-stat__dot" style={{ left: `${pts[at][0]}%`, top: `${(pts[at][1] / 40) * 100}%`, background: at === n - 1 ? accentColor : (textColor ?? 'var(--bl-ink)') }} />
           {hover != null && (
             <span className="bl-stat__tip" style={{ left: `${Math.max(12, Math.min(88, pts[hover][0]))}%` }}>
               <b>{fmt(trend[hover])}</b>

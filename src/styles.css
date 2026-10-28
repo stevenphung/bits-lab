@@ -506,6 +506,31 @@ h1 {
   pointer-events: none;
 }
 
+.lab-stage[data-theme='light'] {
+  background: #f4f1e8;
+  color: #1a1c2c;
+  color-scheme: light;
+}
+
+.stage-theme {
+  position: absolute;
+  z-index: 3;
+  top: 16px;
+  right: 16px;
+  padding: 8px 10px;
+  border: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 700 11px/1 var(--label);
+  text-transform: uppercase;
+  box-shadow: var(--notch), var(--bevel);
+}
+
+.stage-theme:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 3px;
+}
+
 .replay {
   right: 16px;
   bottom: 16px;

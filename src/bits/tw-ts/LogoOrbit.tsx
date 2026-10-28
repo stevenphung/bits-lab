@@ -49,6 +49,12 @@ export interface LogoOrbitProps {
 
 const STYLE_ID = 'bl-logo-orbit-tw';
 const CSS = `
+/* theme tokens */
+.bl-orbit { --bl-bg: #1a1c2c; --bl-item-bg: #262b44; --bl-center-bg: #333c57; --bl-line: rgba(148,176,194,0.25); --bl-accent: #73eff7; --bl-ink: #f4f4f4; }
+:where(.light, [data-theme="light"]) .bl-orbit, .bl-orbit:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-item-bg: #ebe5d8; --bl-center-bg: #ddd4c0; --bl-line: rgba(86,108,134,0.25); --bl-accent: #167f8f; --bl-ink: #1a1c2c; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-orbit, :where(.light, [data-theme="light"]) .bl-orbit:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-item-bg: #262b44; --bl-center-bg: #333c57; --bl-line: rgba(148,176,194,0.25); --bl-accent: #73eff7; --bl-ink: #f4f4f4; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-orbit, .bl-orbit:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-item-bg: #ebe5d8; --bl-center-bg: #ddd4c0; --bl-line: rgba(86,108,134,0.25); --bl-accent: #167f8f; --bl-ink: #1a1c2c; } }
+/* theme tokens end */
 @keyframes bl-orbit-spin { to { rotate: 360deg; } }
 `;
 
@@ -83,12 +89,12 @@ export default function LogoOrbit({
   pauseOnHover = true,
   showTracks = true,
   label = 'Integrations',
-  backgroundColor = '#1a1c2c',
-  itemColor = '#262b44',
-  centerColor = '#333c57',
-  lineColor = 'rgba(148,176,194,0.25)',
-  accentColor = '#73eff7',
-  textColor = '#f4f4f4',
+  backgroundColor,
+  itemColor,
+  centerColor,
+  lineColor,
+  accentColor,
+  textColor,
   itemRadius = 14,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
@@ -117,7 +123,7 @@ export default function LogoOrbit({
   return (
     <div
       ref={rootRef}
-      className={`group/orbit @container relative mx-auto aspect-square w-[min(var(--bl-size),100%)] font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-orbit group/orbit @container relative mx-auto aspect-square w-[min(var(--bl-size),100%)] font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       role="group"
       aria-label={label}
       data-pausable={pauseOnHover || undefined}

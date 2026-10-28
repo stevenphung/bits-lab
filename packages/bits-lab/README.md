@@ -49,6 +49,7 @@ import Toaster, { toast } from "bits-lab/ToastStack";
 import { Switch, Checkbox } from "bits-lab/ToggleKit";
 ```
 
+- **Light mode:** add `data-theme="light"` (or the `light` class) to `<html>` or any wrapper; `data-theme="system"` follows the OS. Colour props still override.
 - **TypeScript:** types are included.
 - **Next.js:** every file starts with `"use client"`, so components work in the App Router without a wrapper.
 - **Accessibility:** components follow WAI-ARIA patterns, work with the keyboard and respect reduced motion.

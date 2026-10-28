@@ -10,6 +10,12 @@ import { useCallback, useEffect, useInsertionEffect, useRef, useState } from 're
 
 const STYLE_ID = 'bl-inventory-tw';
 const CSS = `
+/* theme tokens */
+.bl-inv { --bl-panel: #333c57; --bl-slot-bg: #1a1c2c; --bl-hover: #29366f; --bl-accent: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-inv, .bl-inv:where(.light, [data-theme="light"]) { --bl-panel: #ddd4c0; --bl-slot-bg: #f4f1e8; --bl-hover: #d6dcef; --bl-accent: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-inv, :where(.light, [data-theme="light"]) .bl-inv:where(.dark, [data-theme="dark"]) { --bl-panel: #333c57; --bl-slot-bg: #1a1c2c; --bl-hover: #29366f; --bl-accent: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-inv, .bl-inv:where([data-theme="system"]) { --bl-panel: #ddd4c0; --bl-slot-bg: #f4f1e8; --bl-hover: #d6dcef; --bl-accent: #a86a12; } }
+/* theme tokens end */
 @keyframes bl-inv-pop { 0% { transform: scale(0.6); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
 @keyframes bl-inv-held { 50% { box-shadow: inset 0 0 0 3px transparent; } }
 @keyframes bl-inv-shine { from { background-position: 150% 0; } to { background-position: -150% 0; } }
@@ -55,10 +61,10 @@ export default function InventoryGrid({
   columns = 6,
   slotSize = 64,
   maxStack = 64,
-  panelColor = '#333c57',
-  slotColor = '#1a1c2c',
-  hoverColor = '#29366f',
-  accentColor = '#ffcd75',
+  panelColor,
+  slotColor,
+  hoverColor,
+  accentColor,
   label = 'Inventory',
   fontFamily,
   onChange,
@@ -189,7 +195,7 @@ export default function InventoryGrid({
       ref={gridRef}
       role="grid"
       aria-label={label}
-      className={`relative inline-grid max-w-full touch-none grid-cols-[repeat(var(--bl-cols),var(--bl-fit))] gap-1.5 bg-(--bl-panel) p-3 [font-family:var(--bl-font,'Press_Start_2P',ui-monospace,monospace)] shadow-[0_-4px_0_0_#0b0b14,0_4px_0_0_#0b0b14,-4px_0_0_0_#0b0b14,4px_0_0_0_#0b0b14,8px_8px_0_4px_rgba(11,11,20,0.4)] ${className}`}
+      className={`bl-inv relative inline-grid max-w-full touch-none grid-cols-[repeat(var(--bl-cols),var(--bl-fit))] gap-1.5 bg-(--bl-panel) p-3 [font-family:var(--bl-font,'Press_Start_2P',ui-monospace,monospace)] shadow-[0_-4px_0_0_#0b0b14,0_4px_0_0_#0b0b14,-4px_0_0_0_#0b0b14,4px_0_0_0_#0b0b14,8px_8px_0_4px_rgba(11,11,20,0.4)] ${className}`}
       style={{
         '--bl-cols': columns,
         '--bl-fit': `${fit}px`,

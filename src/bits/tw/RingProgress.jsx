@@ -1,4 +1,23 @@
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useInsertionEffect, useState } from 'react';
+
+const STYLE_ID = 'bl-ring-progress-tw';
+const CSS = `
+/* theme tokens */
+.bl-ring { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-hover: rgba(255,255,255,0.06); --bl-focus: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-ring, .bl-ring:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-hover: rgba(26,28,44,0.06); --bl-focus: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ring, :where(.light, [data-theme="light"]) .bl-ring:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-hover: rgba(255,255,255,0.06); --bl-focus: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ring, .bl-ring:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-hover: rgba(26,28,44,0.06); --bl-focus: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -28,14 +47,15 @@ export default function RingProgress({
   formatValue = defaultFormat,
   colors = DEFAULT_COLORS,
   trackOpacity = 0.18,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  hoverColor = 'rgba(255,255,255,0.06)',
-  focusColor = '#73eff7',
+  textColor,
+  mutedColor,
+  hoverColor,
+  focusColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }) {
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const [drawn, setDrawn] = useState(false);
   const [focus, setFocus] = useState(null);
@@ -61,7 +81,7 @@ export default function RingProgress({
 
   return (
     <div
-      className={`group/ring relative inline-flex max-w-full flex-wrap items-center justify-center gap-[22px] font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-ring group/ring relative inline-flex max-w-full flex-wrap items-center justify-center gap-[22px] font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       data-focus={focus !== null || undefined}
       style={{
         '--bl-size': `${size}px`,

@@ -6,6 +6,12 @@ import { useEffect, useId, useInsertionEffect, useMemo, useRef, useState } from 
 
 const STYLE_ID = 'bl-level-map';
 const CSS = `
+/* theme tokens */
+.bl-lvl { --bl-text: #f4f4f4; }
+:where(.light, [data-theme="light"]) .bl-lvl, .bl-lvl:where(.light, [data-theme="light"]) { --bl-text: #1a1c2c; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-lvl, :where(.light, [data-theme="light"]) .bl-lvl:where(.dark, [data-theme="dark"]) { --bl-text: #f4f4f4; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-lvl, .bl-lvl:where([data-theme="system"]) { --bl-text: #1a1c2c; } }
+/* theme tokens end */
 .bl-lvl { position: relative; width: 100%; font-family: var(--bl-font, "Press Start 2P", ui-monospace, monospace); }
 .bl-lvl__svg { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
 .bl-lvl__reveal { stroke-dasharray: 1; stroke-dashoffset: 1; animation: bl-lvl-draw var(--bl-draw) steps(24) 200ms forwards; }
@@ -100,7 +106,7 @@ export default function LevelMap({
   padding = 24,
   pathColor = '#566c86',
   clearedColor = '#a7f070',
-  textColor = '#f4f4f4',
+  textColor,
   marker,
   drawDuration = 1200,
   fontFamily,

@@ -57,6 +57,12 @@ interface XpPop {
 
 const STYLE_ID = 'bl-quest-log-tw';
 const CSS = `
+/* theme tokens */
+.bl-ql { --bl-bg: #1a1c2c; --bl-row: #262b44; --bl-hover: #2e3552; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-track: #0b0b14; --bl-accent: #ffcd75; --bl-done: #38b764; }
+:where(.light, [data-theme="light"]) .bl-ql, .bl-ql:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-row: #ebe5d8; --bl-hover: #e0d8c6; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-track: #e2dacb; --bl-accent: #a86a12; --bl-done: #2b8a4a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ql, :where(.light, [data-theme="light"]) .bl-ql:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-row: #262b44; --bl-hover: #2e3552; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-track: #0b0b14; --bl-accent: #ffcd75; --bl-done: #38b764; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ql, .bl-ql:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-row: #ebe5d8; --bl-hover: #e0d8c6; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-track: #e2dacb; --bl-accent: #a86a12; --bl-done: #2b8a4a; } }
+/* theme tokens end */
 @keyframes bl-ql-flash { 25%, 75% { background: color-mix(in srgb, var(--bl-done) 35%, var(--bl-row)); } }
 @keyframes bl-ql-bob { 50% { transform: translateY(-3px); } }
 @keyframes bl-ql-pop { from { transform: translateY(6px); opacity: 0; } 15% { opacity: 1; } to { transform: translateY(-26px); opacity: 0; } }
@@ -90,15 +96,15 @@ export default function QuestLog({
   title = 'Quest log',
   finishedMessage = 'All quests complete!',
   width = 520,
-  backgroundColor = '#1a1c2c',
-  rowColor = '#262b44',
-  hoverColor = '#2e3552',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  trackColor = '#0b0b14',
-  accentColor = '#ffcd75',
-  doneColor = '#38b764',
+  backgroundColor,
+  rowColor,
+  hoverColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  trackColor,
+  accentColor,
+  doneColor,
   fontFamily = '"Pixelify Sans", ui-sans-serif, system-ui, sans-serif',
   titleFontFamily = '"Press Start 2P", ui-monospace, monospace',
   className = '',
@@ -156,7 +162,7 @@ export default function QuestLog({
 
   return (
     <section
-      className={`relative box-border w-full max-w-(--bl-w) bg-(--bl-bg) p-[18px] font-(family-name:--bl-font) text-(--bl-ink) shadow-[0_0_0_3px_var(--bl-line),6px_6px_0_3px_rgba(0,0,0,0.45)] ${className}`}
+      className={`bl-ql relative box-border w-full max-w-(--bl-w) bg-(--bl-bg) p-[18px] font-(family-name:--bl-font) text-(--bl-ink) shadow-[0_0_0_3px_var(--bl-line),6px_6px_0_3px_rgba(0,0,0,0.45)] ${className}`}
       aria-labelledby={`${uid}-title`}
       style={{
         '--bl-w': `${width}px`,

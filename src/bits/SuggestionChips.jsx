@@ -6,6 +6,12 @@ import { useInsertionEffect, useState } from 'react';
 
 const STYLE_ID = 'bl-suggestion-chips';
 const CSS = `
+/* theme tokens */
+.bl-chips { --bl-chip: #262b44; --bl-hover: #2e3552; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-chips, .bl-chips:where(.light, [data-theme="light"]) { --bl-chip: #ebe5d8; --bl-hover: #e0d8c6; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-chips, :where(.light, [data-theme="light"]) .bl-chips:where(.dark, [data-theme="dark"]) { --bl-chip: #262b44; --bl-hover: #2e3552; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-chips, .bl-chips:where([data-theme="system"]) { --bl-chip: #ebe5d8; --bl-hover: #e0d8c6; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-chips { display: grid; justify-items: var(--bl-align); gap: 12px; width: 100%; font-family: var(--bl-font); }
 .bl-chips__list { display: flex; flex-wrap: wrap; justify-content: var(--bl-justify); gap: 8px; margin: 0; padding: 0; list-style: none; }
 .bl-chips__chip { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; padding: 9px 14px; border: 0; border-radius: var(--bl-radius); background: var(--bl-chip); color: var(--bl-ink); font: inherit; font-size: 14px; line-height: 1.35; text-align: left; cursor: pointer; box-shadow: 0 0 0 1px var(--bl-line); animation: bl-chips-in 420ms cubic-bezier(.3,1.4,.5,1) both; animation-delay: calc(var(--i) * var(--bl-stagger)); transition: background-color 150ms, box-shadow 150ms, transform 150ms; }
@@ -55,12 +61,12 @@ export default function SuggestionChips({
   align = 'center',
   stagger = 60,
   label = 'Suggestions',
-  chipColor = '#262b44',
-  hoverColor = '#2e3552',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  chipColor,
+  hoverColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
   radius = 999,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',

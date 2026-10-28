@@ -49,6 +49,12 @@ export interface PasswordMeterProps {
 
 const STYLE_ID = 'bl-password-meter-tw';
 const CSS = `
+/* theme tokens */
+.bl-pw { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-track: #333c57; --bl-accent: #73eff7; --bl-ok: #38b764; --bl-on-ok: #0b0b14; }
+:where(.light, [data-theme="light"]) .bl-pw, .bl-pw:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-track: #cfc4ad; --bl-accent: #167f8f; --bl-ok: #2b8a4a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-pw, :where(.light, [data-theme="light"]) .bl-pw:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-track: #333c57; --bl-accent: #73eff7; --bl-ok: #38b764; --bl-on-ok: #0b0b14; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-pw, .bl-pw:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-track: #cfc4ad; --bl-accent: #167f8f; --bl-ok: #2b8a4a; } }
+/* theme tokens end */
 @keyframes bl-pw-pop { 40% { transform: scale(1.3); } }
 `;
 
@@ -106,14 +112,14 @@ export default function PasswordMeter({
   autoComplete = 'new-password',
   showChecklist = true,
   width = 420,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  trackColor = '#333c57',
-  accentColor = '#73eff7',
-  okColor = '#38b764',
-  onOkColor = '#0b0b14',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  trackColor,
+  accentColor,
+  okColor,
+  onOkColor,
   radius = 12,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
@@ -138,7 +144,7 @@ export default function PasswordMeter({
 
   return (
     <div
-      className={`w-full max-w-(--bl-w) font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-pw w-full max-w-(--bl-w) font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       style={{
         '--bl-w': `${width}px`,
         '--bl-segments': levels.length,

@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-edge-fx';
 const CSS = `
+/* theme tokens */
+.bl-edge { --bl-a: #73eff7; --bl-bg: #1a1c2c; --bl-glare: rgba(244,244,244,0.22); }
+:where(.light, [data-theme="light"]) .bl-edge, .bl-edge:where(.light, [data-theme="light"]) { --bl-a: #167f8f; --bl-bg: #f4f1e8; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-edge, :where(.light, [data-theme="light"]) .bl-edge:where(.dark, [data-theme="dark"]) { --bl-a: #73eff7; --bl-bg: #1a1c2c; --bl-glare: rgba(244,244,244,0.22); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-edge, .bl-edge:where([data-theme="system"]) { --bl-a: #167f8f; --bl-bg: #f4f1e8; } }
+/* theme tokens end */
 @property --bl-edge-turn { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 .bl-edge { --bl-on: 1; position: relative; display: block; box-sizing: border-box; padding: var(--bl-w); border-radius: var(--bl-radius); background: var(--bl-line); isolation: isolate; }
 .bl-edge__body { position: relative; z-index: 1; height: 100%; overflow: hidden; border-radius: calc(var(--bl-radius) - var(--bl-w)); background: var(--bl-bg); }
@@ -79,11 +85,11 @@ export default function EdgeFX({
   dash = 12,
   speed = 0.8,
   reach = 160,
-  color = '#73eff7',
+  color,
   secondColor = '#41a6f6',
   lineColor = '#333c57',
-  backgroundColor = '#1a1c2c',
-  glareColor = 'rgba(244,244,244,0.22)',
+  backgroundColor,
+  glareColor,
   className = '',
   style
 }: EdgeFXProps) {

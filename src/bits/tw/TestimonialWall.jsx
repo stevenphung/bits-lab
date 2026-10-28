@@ -11,6 +11,12 @@ import { useEffect, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-testimonial-wall-tw';
 const CSS = `
+/* theme tokens */
+.bl-wall { --bl-bg: #1a1c2c; --bl-card: #262b44; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-wall, .bl-wall:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-card: #ebe5d8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-wall, :where(.light, [data-theme="light"]) .bl-wall:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-card: #262b44; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-wall, .bl-wall:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-card: #ebe5d8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-wall-scroll { to { transform: translateX(-50%); } }
 `;
 
@@ -82,12 +88,12 @@ export default function TestimonialWall({
   pauseLabel = 'Pause',
   playLabel = 'Play',
   label = 'What people say',
-  backgroundColor = '#1a1c2c',
-  cardColor = '#262b44',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  cardColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
   radius = 14,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
@@ -104,7 +110,7 @@ export default function TestimonialWall({
 
   return (
     <section
-      className={`group/wall relative grid w-full gap-(--bl-gap) font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-wall group/wall relative grid w-full gap-(--bl-gap) font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       aria-label={label}
       data-paused={paused || undefined}
       style={{

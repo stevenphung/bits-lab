@@ -62,6 +62,12 @@ export interface SpringOptions {
 const STYLE_ID = 'bl-accordion-tw';
 // Named STYLES (not CSS) so the global CSS.supports() stays reachable below.
 const STYLES = `
+/* theme tokens */
+.bl-acc { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.1); --bl-hover: rgba(255,255,255,0.04); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-acc, .bl-acc:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.1); --bl-hover: rgba(26,28,44,0.04); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-acc, :where(.light, [data-theme="light"]) .bl-acc:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.1); --bl-hover: rgba(255,255,255,0.04); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-acc, .bl-acc:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.1); --bl-hover: rgba(26,28,44,0.04); --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-acc-in { from { opacity: 0; transform: translateY(8px); } }
 `;
 
@@ -112,12 +118,12 @@ export default function Accordion({
   stagger = 45,
   width = 640,
   radius = 14,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = 'rgba(255,255,255,0.1)',
-  hoverColor = 'rgba(255,255,255,0.04)',
-  accentColor = '#73eff7',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  hoverColor,
+  accentColor,
   headingLevel = 3,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
@@ -178,7 +184,7 @@ export default function Accordion({
 
   return (
     <div
-      className={`w-full max-w-(--bl-w) overflow-hidden rounded-(--bl-radius) bg-(--bl-bg) font-(family-name:--bl-font) text-(--bl-ink) shadow-[inset_0_0_0_1px_var(--bl-line)] ${className}`}
+      className={`bl-acc w-full max-w-(--bl-w) overflow-hidden rounded-(--bl-radius) bg-(--bl-bg) font-(family-name:--bl-font) text-(--bl-ink) shadow-[inset_0_0_0_1px_var(--bl-line)] ${className}`}
       style={{
         '--bl-w': `${width}px`,
         '--bl-radius': `${radius}px`,

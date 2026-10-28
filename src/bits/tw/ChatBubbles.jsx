@@ -11,6 +11,12 @@ import { useEffect, useInsertionEffect, useLayoutEffect, useRef, useState } from
 
 const STYLE_ID = 'bl-chat-tw';
 const CSS = `
+/* theme tokens */
+.bl-chat { --bl-bg: #11131c; --bl-me: #3987e5; --bl-me-ink: #ffffff; --bl-them: #29366f; --bl-them-ink: #f4f4f4; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-chip: rgba(255,255,255,0.1); --bl-picker: #1f2335; --bl-line: rgba(255,255,255,0.1); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-chat, .bl-chat:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-them: #e3dccd; --bl-them-ink: #1a1c2c; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-chip: rgba(26,28,44,0.1); --bl-picker: #ebe5d8; --bl-line: rgba(26,28,44,0.1); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-chat, :where(.light, [data-theme="light"]) .bl-chat:where(.dark, [data-theme="dark"]) { --bl-bg: #11131c; --bl-me: #3987e5; --bl-me-ink: #ffffff; --bl-them: #29366f; --bl-them-ink: #f4f4f4; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-chip: rgba(255,255,255,0.1); --bl-picker: #1f2335; --bl-line: rgba(255,255,255,0.1); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-chat, .bl-chat:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-them: #e3dccd; --bl-them-ink: #1a1c2c; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-chip: rgba(26,28,44,0.1); --bl-picker: #ebe5d8; --bl-line: rgba(26,28,44,0.1); --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-chat-in { from { opacity: 0; transform: scale(0.5) translateY(12px); } }
 @keyframes bl-chat-pop { from { opacity: 0; transform: scale(0.4); } }
 @keyframes bl-chat-dot { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-5px); opacity: 1; } }
@@ -37,17 +43,17 @@ export default function ChatBubbles({
   height = 420,
   radius = 18,
   label = 'Conversation',
-  backgroundColor = '#11131c',
-  meColor = '#3987e5',
-  meTextColor = '#ffffff',
-  themColor = '#29366f',
-  themTextColor = '#f4f4f4',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  chipColor = 'rgba(255,255,255,0.1)',
-  pickerColor = '#1f2335',
-  lineColor = 'rgba(255,255,255,0.1)',
-  accentColor = '#73eff7',
+  backgroundColor,
+  meColor,
+  meTextColor,
+  themColor,
+  themTextColor,
+  textColor,
+  mutedColor,
+  chipColor,
+  pickerColor,
+  lineColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
@@ -97,7 +103,7 @@ export default function ChatBubbles({
   return (
     <div
       ref={ref}
-      className={`flex h-(--bl-h) flex-col gap-0.5 overflow-y-auto overscroll-contain rounded-(--bl-radius) bg-(--bl-bg) px-3.5 py-4 font-(family-name:--bl-font) text-[15px] text-(--bl-ink) [scrollbar-width:thin] ${className}`}
+      className={`bl-chat flex h-(--bl-h) flex-col gap-0.5 overflow-y-auto overscroll-contain rounded-(--bl-radius) bg-(--bl-bg) px-3.5 py-4 font-(family-name:--bl-font) text-[15px] text-(--bl-ink) [scrollbar-width:thin] ${className}`}
       role="log"
       aria-live="polite"
       aria-label={label}

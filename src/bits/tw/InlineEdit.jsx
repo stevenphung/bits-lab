@@ -11,6 +11,12 @@ import { useEffect, useId, useInsertionEffect, useLayoutEffect, useRef, useState
 
 const STYLE_ID = 'bl-inline-edit-tw';
 const CSS = `
+/* theme tokens */
+.bl-ie { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-hover: rgba(255,255,255,0.07); --bl-field: #0b0b14; --bl-chip: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-error: #ef7d57; }
+:where(.light, [data-theme="light"]) .bl-ie, .bl-ie:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-hover: rgba(26,28,44,0.07); --bl-field: #e2dacb; --bl-chip: #ddd4c0; --bl-accent: #167f8f; --bl-error: #c4502a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ie, :where(.light, [data-theme="light"]) .bl-ie:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-hover: rgba(255,255,255,0.07); --bl-field: #0b0b14; --bl-chip: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-error: #ef7d57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ie, .bl-ie:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-hover: rgba(26,28,44,0.07); --bl-field: #e2dacb; --bl-chip: #ddd4c0; --bl-accent: #167f8f; --bl-error: #c4502a; } }
+/* theme tokens end */
 @keyframes bl-ie-pop { from { opacity: 0; transform: scale(0.4); } }
 @keyframes bl-ie-shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 `;
@@ -36,14 +42,14 @@ export default function InlineEdit({
   minWidth = 60,
   fontSize = 16,
   radius = 8,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  hoverColor = 'rgba(255,255,255,0.07)',
-  fieldColor = '#0b0b14',
-  chipColor = '#333c57',
-  accentColor = '#73eff7',
-  onAccentColor = '#0b0b14',
-  errorColor = '#ef7d57',
+  textColor,
+  mutedColor,
+  hoverColor,
+  fieldColor,
+  chipColor,
+  accentColor,
+  onAccentColor,
+  errorColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
@@ -137,7 +143,7 @@ export default function InlineEdit({
   return (
     <span
       ref={rootRef}
-      className={`group/ie relative inline-flex max-w-full items-center gap-1.5 align-middle font-(family-name:--bl-font) text-(length:--bl-size) text-(--bl-ink) ${className}`}
+      className={`bl-ie group/ie relative inline-flex max-w-full items-center gap-1.5 align-middle font-(family-name:--bl-font) text-(length:--bl-size) text-(--bl-ink) ${className}`}
       data-invalid={error || undefined}
       data-busy={busy || undefined}
       style={{ '--bl-size': `${fontSize}px`, '--bl-radius': `${radius}px`, '--bl-min-w': `${minWidth}px`, '--bl-box-w': boxWidth ? `${boxWidth}px` : 'auto', '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-hover': hoverColor, '--bl-field': fieldColor, '--bl-chip': chipColor, '--bl-accent': accentColor, '--bl-on-accent': onAccentColor, '--bl-error': errorColor, '--bl-font': fontFamily, ...style }}

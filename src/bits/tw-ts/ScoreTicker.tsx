@@ -49,6 +49,12 @@ interface Pop {
 
 const STYLE_ID = 'bl-score-ticker-tw';
 const CSS = `
+/* theme tokens */
+.bl-score { --bl-ink: #f4f4f4; --bl-dim: #333c57; --bl-muted: #94b0c2; --bl-panel: #1a1c2c; --bl-edge: #566c86; --bl-drum: #0b0b14; --bl-accent: #ffcd75; --bl-combo: #ef7d57; --bl-high: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-score, .bl-score:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-dim: #ddd4c0; --bl-muted: #566c86; --bl-panel: #f4f1e8; --bl-edge: #8a96a3; --bl-drum: #e2dacb; --bl-accent: #a86a12; --bl-combo: #c4502a; --bl-high: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-score, :where(.light, [data-theme="light"]) .bl-score:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-dim: #333c57; --bl-muted: #94b0c2; --bl-panel: #1a1c2c; --bl-edge: #566c86; --bl-drum: #0b0b14; --bl-accent: #ffcd75; --bl-combo: #ef7d57; --bl-high: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-score, .bl-score:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-dim: #ddd4c0; --bl-muted: #566c86; --bl-panel: #f4f1e8; --bl-edge: #8a96a3; --bl-drum: #e2dacb; --bl-accent: #a86a12; --bl-combo: #c4502a; --bl-high: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-score-pop { 0% { transform: translate(-50%, 10px); opacity: 0; } 15% { transform: translate(-50%, -4px); opacity: 1; } 100% { transform: translate(-50%, -44px); opacity: 0; } }
 @keyframes bl-score-fade { 0%, 70% { transform: translate(-50%, -8px); opacity: 1; } 100% { transform: translate(-50%, -8px); opacity: 0; } }
 @keyframes bl-score-flash { 50% { opacity: 0; } }
@@ -77,15 +83,15 @@ export default function ScoreTicker({
   shakeAt = 1000,
   duration = 600,
   size = 40,
-  textColor = '#f4f4f4',
-  dimColor = '#333c57',
-  mutedColor = '#94b0c2',
-  panelColor = '#1a1c2c',
-  edgeColor = '#566c86',
-  drumColor = '#0b0b14',
-  accentColor = '#ffcd75',
-  comboColor = '#ef7d57',
-  highColor = '#73eff7',
+  textColor,
+  dimColor,
+  mutedColor,
+  panelColor,
+  edgeColor,
+  drumColor,
+  accentColor,
+  comboColor,
+  highColor,
   fontFamily = '"Press Start 2P", ui-monospace, monospace',
   className = '',
   style
@@ -156,7 +162,7 @@ export default function ScoreTicker({
 
   return (
     <div
-      className={`inline-grid max-w-full justify-items-center gap-2.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-score inline-grid max-w-full justify-items-center gap-2.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       style={{
         '--bl-size': `${size}px`,
         '--bl-ink': textColor,

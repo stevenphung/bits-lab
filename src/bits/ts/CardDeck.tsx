@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-card-deck';
 const CSS = `
+/* theme tokens */
+.bl-deck { --bl-card: #262b44; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-chip: rgba(255,255,255,0.08); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-deck, .bl-deck:where(.light, [data-theme="light"]) { --bl-card: #ebe5d8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-chip: rgba(26,28,44,0.08); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-deck, :where(.light, [data-theme="light"]) .bl-deck:where(.dark, [data-theme="dark"]) { --bl-card: #262b44; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-chip: rgba(255,255,255,0.08); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-deck, .bl-deck:where([data-theme="system"]) { --bl-card: #ebe5d8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-chip: rgba(26,28,44,0.08); --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-deck { display: grid; justify-items: center; gap: 14px; font-family: var(--bl-font); color: var(--bl-ink); }
 .bl-deck__pile { position: relative; width: var(--bl-w); max-width: 100%; height: var(--bl-h); touch-action: pan-y; outline: none; }
 .bl-deck__pile:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 8px; border-radius: var(--bl-radius); }
@@ -82,12 +88,12 @@ export default function CardDeck({
   onChange,
   label = 'Card deck',
   radius = 16,
-  cardColor = '#262b44',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  chipColor = 'rgba(255,255,255,0.08)',
-  accentColor = '#73eff7',
+  cardColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  chipColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style

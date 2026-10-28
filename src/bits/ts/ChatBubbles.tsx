@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-chat';
 const CSS = `
+/* theme tokens */
+.bl-chat { --bl-bg: #11131c; --bl-me: #3987e5; --bl-me-ink: #ffffff; --bl-them: #29366f; --bl-them-ink: #f4f4f4; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-chip: rgba(255,255,255,0.1); --bl-picker: #1f2335; --bl-line: rgba(255,255,255,0.1); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-chat, .bl-chat:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-them: #e3dccd; --bl-them-ink: #1a1c2c; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-chip: rgba(26,28,44,0.1); --bl-picker: #ebe5d8; --bl-line: rgba(26,28,44,0.1); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-chat, :where(.light, [data-theme="light"]) .bl-chat:where(.dark, [data-theme="dark"]) { --bl-bg: #11131c; --bl-me: #3987e5; --bl-me-ink: #ffffff; --bl-them: #29366f; --bl-them-ink: #f4f4f4; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-chip: rgba(255,255,255,0.1); --bl-picker: #1f2335; --bl-line: rgba(255,255,255,0.1); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-chat, .bl-chat:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-them: #e3dccd; --bl-them-ink: #1a1c2c; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-chip: rgba(26,28,44,0.1); --bl-picker: #ebe5d8; --bl-line: rgba(26,28,44,0.1); --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-chat { display: flex; flex-direction: column; gap: 2px; height: var(--bl-h); overflow-y: auto; padding: 16px 14px; border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); font-size: 15px; scrollbar-width: thin; overscroll-behavior: contain; }
 .bl-chat__row { position: relative; display: flex; align-items: flex-end; gap: 8px; max-width: 100%; }
 .bl-chat__row[data-from="me"] { flex-direction: row-reverse; }
@@ -118,17 +124,17 @@ export default function ChatBubbles({
   height = 420,
   radius = 18,
   label = 'Conversation',
-  backgroundColor = '#11131c',
-  meColor = '#3987e5',
-  meTextColor = '#ffffff',
-  themColor = '#29366f',
-  themTextColor = '#f4f4f4',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  chipColor = 'rgba(255,255,255,0.1)',
-  pickerColor = '#1f2335',
-  lineColor = 'rgba(255,255,255,0.1)',
-  accentColor = '#73eff7',
+  backgroundColor,
+  meColor,
+  meTextColor,
+  themColor,
+  themTextColor,
+  textColor,
+  mutedColor,
+  chipColor,
+  pickerColor,
+  lineColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

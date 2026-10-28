@@ -1,4 +1,23 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useInsertionEffect, useRef, useState } from 'react';
+
+const STYLE_ID = 'bl-hotbar-dock-tw';
+const CSS = `
+/* theme tokens */
+.bl-hotbar { --bl-bg: #1a1c2c; --bl-slot-bg: #333c57; --bl-hover: #3d4766; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #0b0b14; --bl-select: #f4f4f4; --bl-accent: #73eff7; --bl-tip: #0b0b14; }
+:where(.light, [data-theme="light"]) .bl-hotbar, .bl-hotbar:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-slot-bg: #ddd4c0; --bl-hover: #ddd4c0; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #e2dacb; --bl-select: #1a1c2c; --bl-accent: #167f8f; --bl-tip: #e2dacb; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-hotbar, :where(.light, [data-theme="light"]) .bl-hotbar:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-slot-bg: #333c57; --bl-hover: #3d4766; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #0b0b14; --bl-select: #f4f4f4; --bl-accent: #73eff7; --bl-tip: #0b0b14; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-hotbar, .bl-hotbar:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-slot-bg: #ddd4c0; --bl-hover: #ddd4c0; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #e2dacb; --bl-select: #1a1c2c; --bl-accent: #167f8f; --bl-tip: #e2dacb; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -23,19 +42,20 @@ export default function HotbarDock({
   gap = 6,
   padding = 8,
   radius = 10,
-  backgroundColor = '#1a1c2c',
-  slotColor = '#333c57',
-  hoverColor = '#3d4766',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#0b0b14',
-  selectColor = '#f4f4f4',
-  accentColor = '#73eff7',
-  tooltipColor = '#0b0b14',
+  backgroundColor,
+  slotColor,
+  hoverColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  selectColor,
+  accentColor,
+  tooltipColor,
   fontFamily = 'inherit',
   className = '',
   style
 }) {
+  useStyles();
   const [inner, setInner] = useState(defaultValue ?? items[0]?.id);
   const selected = value ?? inner;
   const barRef = useRef(null);
@@ -108,7 +128,7 @@ export default function HotbarDock({
   return (
     <div
       ref={barRef}
-      className={`inline-flex items-end gap-(--bl-gap) rounded-(--bl-radius) bg-(--bl-bg) p-(--bl-pad) font-(family-name:--bl-font) shadow-[0_0_0_3px_var(--bl-line),0_12px_28px_-14px_rgba(0,0,0,0.85)] ${className}`}
+      className={`bl-hotbar inline-flex items-end gap-(--bl-gap) rounded-(--bl-radius) bg-(--bl-bg) p-(--bl-pad) font-(family-name:--bl-font) shadow-[0_0_0_3px_var(--bl-line),0_12px_28px_-14px_rgba(0,0,0,0.85)] ${className}`}
       role="toolbar"
       aria-label={label}
       onKeyDown={onKeyDown}

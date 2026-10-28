@@ -7,6 +7,12 @@ import { useId, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-tag-input';
 const CSS = `
+/* theme tokens */
+.bl-tags { --bl-bg: #1a1c2c; --bl-chip: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-line: #333c57; --bl-accent: #73eff7; --bl-error: #ef7d57; }
+:where(.light, [data-theme="light"]) .bl-tags, .bl-tags:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ddd4c0; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-error: #c4502a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tags, :where(.light, [data-theme="light"]) .bl-tags:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-line: #333c57; --bl-accent: #73eff7; --bl-error: #ef7d57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tags, .bl-tags:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ddd4c0; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-error: #c4502a; } }
+/* theme tokens end */
 .bl-tags { position: relative; width: 100%; max-width: var(--bl-w); font-family: var(--bl-font); color: var(--bl-ink); }
 .bl-tags__label { display: block; margin-bottom: 6px; color: var(--bl-muted); font-size: 13px; font-weight: 600; }
 .bl-tags__field { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 44px; padding: 6px 8px; box-sizing: border-box; border-radius: var(--bl-radius); background: var(--bl-bg); box-shadow: inset 0 0 0 1px var(--bl-line); cursor: text; transition: box-shadow 150ms; }
@@ -61,14 +67,14 @@ export default function TagInput({
   placeholder = 'Add a tag…',
   hint = 'Enter or comma to add. Paste a list to add many.',
   width = 520,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  dimColor = '#566c86',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  errorColor = '#ef7d57',
+  backgroundColor,
+  chipColor,
+  textColor,
+  mutedColor,
+  dimColor,
+  lineColor,
+  accentColor,
+  errorColor,
   radius = 12,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',

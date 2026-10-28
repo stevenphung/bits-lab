@@ -1,14 +1,25 @@
-import { useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type KeyboardEvent } from 'react';
+import { useId, useInsertionEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type KeyboardEvent } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// Tabs with an indicator that stretches toward the next tab before catching up, like a
-// caterpillar. Pill or underline style. Overflowing tab rows scroll, fade at the edges and
-// keep the active tab in view. Full ARIA tabs pattern: arrows, Home/End, automatic or
-// manual activation, and optional panels.
+const STYLE_ID = 'bl-slide-tabs-tw';
+const CSS = `
+/* theme tokens */
+.bl-stabs { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: rgba(255,255,255,0.06); --bl-line: rgba(255,255,255,0.12); --bl-active-bg: #f4f4f4; --bl-active-ink: #1a1c2c; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-stabs, .bl-stabs:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: rgba(26,28,44,0.06); --bl-line: rgba(26,28,44,0.12); --bl-active-bg: #1a1c2c; --bl-active-ink: #f4f4f4; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-stabs, :where(.light, [data-theme="light"]) .bl-stabs:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: rgba(255,255,255,0.06); --bl-line: rgba(255,255,255,0.12); --bl-active-bg: #f4f4f4; --bl-active-ink: #1a1c2c; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-stabs, .bl-stabs:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: rgba(26,28,44,0.06); --bl-line: rgba(26,28,44,0.12); --bl-active-bg: #1a1c2c; --bl-active-ink: #f4f4f4; --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 export interface TabItem {
   id: string;
@@ -64,18 +75,18 @@ export default function SlideTabs({
   gap = 2,
   padding = 4,
   radius = 12,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  trackColor = 'rgba(255,255,255,0.06)',
-  lineColor = 'rgba(255,255,255,0.12)',
-  activeColor = '#f4f4f4',
-  activeTextColor = '#1a1c2c',
-  accentColor = '#73eff7',
+  textColor,
+  mutedColor,
+  trackColor,
+  lineColor,
+  activeColor,
+  activeTextColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
 }: SlideTabsProps) {
-  
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const [inner, setInner] = useState(defaultValue ?? items[0]?.id);
   const selected = value ?? inner;
@@ -165,7 +176,7 @@ export default function SlideTabs({
 
   return (
     <div
-      className={`group/tabs max-w-full min-w-0 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-stabs group/tabs max-w-full min-w-0 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       data-variant={variant}
       style={{
         '--bl-gap': `${gap}px`,

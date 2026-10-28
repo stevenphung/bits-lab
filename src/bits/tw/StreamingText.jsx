@@ -11,6 +11,12 @@ import { Fragment, useEffect, useInsertionEffect, useRef, useState } from 'react
 
 const STYLE_ID = 'bl-streaming-text-tw';
 const CSS = `
+/* theme tokens */
+.bl-stream { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.2); --bl-accent: #73eff7; --bl-cursor: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-stream, .bl-stream:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.2); --bl-accent: #167f8f; --bl-cursor: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-stream, :where(.light, [data-theme="light"]) .bl-stream:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.2); --bl-accent: #73eff7; --bl-cursor: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-stream, .bl-stream:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.2); --bl-accent: #167f8f; --bl-cursor: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-stream-in { from { opacity: 0; filter: blur(3px); } }
 @keyframes bl-stream-blink { 50% { opacity: 0; } }
 `;
@@ -144,12 +150,12 @@ export default function StreamingText({
   tail = 6,
   onDone,
   fontSize = 16,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = 'rgba(255,255,255,0.2)',
+  textColor,
+  mutedColor,
+  lineColor,
   codeBackground = 'rgba(255,255,255,0.07)',
-  accentColor = '#73eff7',
-  cursorColor = '#73eff7',
+  accentColor,
+  cursorColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   monoFontFamily = 'ui-monospace, SFMono-Regular, Menlo, monospace',
   className = '',
@@ -245,7 +251,7 @@ export default function StreamingText({
 
   return (
     <div
-      className={`text-(length:--bl-size) leading-[1.65] font-(family-name:--bl-font) text-(--bl-ink) [overflow-wrap:anywhere] *:first:mt-0 *:last:mb-0 [&_p]:mt-0 [&_p]:mb-[0.8em] [&_h1]:mt-[1em] [&_h1]:mb-[0.45em] [&_h1]:leading-[1.3] [&_h1]:font-bold [&_h1]:text-[1.45em] [&_h2]:mt-[1em] [&_h2]:mb-[0.45em] [&_h2]:leading-[1.3] [&_h2]:font-bold [&_h2]:text-[1.25em] [&_h3]:mt-[1em] [&_h3]:mb-[0.45em] [&_h3]:leading-[1.3] [&_h3]:font-bold [&_h3]:text-[1.08em] [&_ul]:mt-0 [&_ul]:mb-[0.8em] [&_ul]:list-disc [&_ul]:pl-[1.4em] [&_ol]:mt-0 [&_ol]:mb-[0.8em] [&_ol]:list-decimal [&_ol]:pl-[1.4em] [&_li]:my-[0.2em] [&_blockquote]:mx-0 [&_blockquote]:mt-0 [&_blockquote]:mb-[0.8em] [&_blockquote]:border-l-3 [&_blockquote]:border-solid [&_blockquote]:border-(--bl-line) [&_blockquote]:pl-[0.9em] [&_blockquote]:text-(--bl-muted) [&_code]:rounded-[5px] [&_code]:bg-(--bl-code-bg) [&_code]:px-[0.35em] [&_code]:py-[0.1em] [&_code]:font-(family-name:--bl-mono) [&_code]:text-[0.9em] [&_pre]:mt-0 [&_pre]:mb-[0.8em] [&_pre]:overflow-x-auto [&_pre]:rounded-[10px] [&_pre]:bg-(--bl-code-bg) [&_pre]:px-3.5 [&_pre]:py-3 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-[0.86em] [&_pre_code]:leading-[1.55] [&_pre_code]:whitespace-pre [&_a]:text-(--bl-accent) [&_a]:underline [&_a]:underline-offset-2 ${className}`}
+      className={`bl-stream text-(length:--bl-size) leading-[1.65] font-(family-name:--bl-font) text-(--bl-ink) [overflow-wrap:anywhere] *:first:mt-0 *:last:mb-0 [&_p]:mt-0 [&_p]:mb-[0.8em] [&_h1]:mt-[1em] [&_h1]:mb-[0.45em] [&_h1]:leading-[1.3] [&_h1]:font-bold [&_h1]:text-[1.45em] [&_h2]:mt-[1em] [&_h2]:mb-[0.45em] [&_h2]:leading-[1.3] [&_h2]:font-bold [&_h2]:text-[1.25em] [&_h3]:mt-[1em] [&_h3]:mb-[0.45em] [&_h3]:leading-[1.3] [&_h3]:font-bold [&_h3]:text-[1.08em] [&_ul]:mt-0 [&_ul]:mb-[0.8em] [&_ul]:list-disc [&_ul]:pl-[1.4em] [&_ol]:mt-0 [&_ol]:mb-[0.8em] [&_ol]:list-decimal [&_ol]:pl-[1.4em] [&_li]:my-[0.2em] [&_blockquote]:mx-0 [&_blockquote]:mt-0 [&_blockquote]:mb-[0.8em] [&_blockquote]:border-l-3 [&_blockquote]:border-solid [&_blockquote]:border-(--bl-line) [&_blockquote]:pl-[0.9em] [&_blockquote]:text-(--bl-muted) [&_code]:rounded-[5px] [&_code]:bg-(--bl-code-bg) [&_code]:px-[0.35em] [&_code]:py-[0.1em] [&_code]:font-(family-name:--bl-mono) [&_code]:text-[0.9em] [&_pre]:mt-0 [&_pre]:mb-[0.8em] [&_pre]:overflow-x-auto [&_pre]:rounded-[10px] [&_pre]:bg-(--bl-code-bg) [&_pre]:px-3.5 [&_pre]:py-3 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-[0.86em] [&_pre_code]:leading-[1.55] [&_pre_code]:whitespace-pre [&_a]:text-(--bl-accent) [&_a]:underline [&_a]:underline-offset-2 ${className}`}
       aria-busy={!done}
       style={{
         '--bl-size': `${fontSize}px`,

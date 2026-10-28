@@ -11,6 +11,12 @@ import { useEffect, useId, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-agent-card-tw';
 const CSS = `
+/* theme tokens */
+.bl-agent { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-code: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-line: #333c57; --bl-accent: #73eff7; --bl-ok: #38b764; --bl-error: #ef7d57; }
+:where(.light, [data-theme="light"]) .bl-agent, .bl-agent:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-code: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-ok: #2b8a4a; --bl-error: #c4502a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-agent, :where(.light, [data-theme="light"]) .bl-agent:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-code: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-line: #333c57; --bl-accent: #73eff7; --bl-ok: #38b764; --bl-error: #ef7d57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-agent, .bl-agent:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-code: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-ok: #2b8a4a; --bl-error: #c4502a; } }
+/* theme tokens end */
 @keyframes bl-agent-spin { to { transform: rotate(360deg); } }
 @keyframes bl-agent-line { from { opacity: 0; transform: translateY(4px); } }
 `;
@@ -55,16 +61,16 @@ export default function AgentCard({
   onOpenChange,
   width = 520,
   logHeight = 160,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  codeColor = '#0b0b14',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  dimColor = '#566c86',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  okColor = '#38b764',
-  errorColor = '#ef7d57',
+  backgroundColor,
+  chipColor,
+  codeColor,
+  textColor,
+  mutedColor,
+  dimColor,
+  lineColor,
+  accentColor,
+  okColor,
+  errorColor,
   radius = 14,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   monoFamily = 'ui-monospace, SFMono-Regular, Menlo, monospace',
@@ -103,7 +109,7 @@ export default function AgentCard({
 
   return (
     <article
-      className={`group/agent w-full max-w-(--bl-w) overflow-hidden rounded-(--bl-radius) bg-(--bl-bg) font-(family-name:--bl-font) text-(--bl-ink) shadow-[0_0_0_1px_var(--bl-line)] transition-shadow duration-300 ease-[ease] data-[status=error]:shadow-[0_0_0_1px_var(--bl-error)] data-[status=running]:shadow-[0_0_0_1px_var(--bl-accent),0_0_24px_-8px_var(--bl-accent)] ${className}`}
+      className={`bl-agent group/agent w-full max-w-(--bl-w) overflow-hidden rounded-(--bl-radius) bg-(--bl-bg) font-(family-name:--bl-font) text-(--bl-ink) shadow-[0_0_0_1px_var(--bl-line)] transition-shadow duration-300 ease-[ease] data-[status=error]:shadow-[0_0_0_1px_var(--bl-error)] data-[status=running]:shadow-[0_0_0_1px_var(--bl-accent),0_0_24px_-8px_var(--bl-accent)] ${className}`}
       data-status={status}
       aria-labelledby={`${uid}-tool`}
       style={{

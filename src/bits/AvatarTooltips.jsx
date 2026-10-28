@@ -7,6 +7,12 @@ import { useId, useInsertionEffect, useState } from 'react';
 
 const STYLE_ID = 'bl-avatar-tooltips';
 const CSS = `
+/* theme tokens */
+.bl-avs { --bl-bg: #1a1c2c; --bl-chip: #333c57; --bl-ink: #f4f4f4; --bl-tip: #f4f4f4; --bl-tip-ink: #1a1c2c; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-avs, .bl-avs:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ddd4c0; --bl-ink: #1a1c2c; --bl-tip: #1a1c2c; --bl-tip-ink: #f4f4f4; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-avs, :where(.light, [data-theme="light"]) .bl-avs:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #333c57; --bl-ink: #f4f4f4; --bl-tip: #f4f4f4; --bl-tip-ink: #1a1c2c; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-avs, .bl-avs:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ddd4c0; --bl-ink: #1a1c2c; --bl-tip: #1a1c2c; --bl-tip-ink: #f4f4f4; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-avs { display: inline-flex; align-items: center; margin: 0; padding: var(--bl-pad) 0 0; list-style: none; font-family: var(--bl-font); }
 .bl-avs__item { position: relative; flex: 0 0 auto; transition: margin 340ms cubic-bezier(.3,1.35,.5,1); }
 .bl-avs__item + .bl-avs__item { margin-left: calc(var(--bl-overlap) * -1); }
@@ -51,12 +57,12 @@ export default function AvatarTooltips({
   ring = 3,
   sway = 12,
   label = 'Team',
-  backgroundColor = '#1a1c2c',
-  chipColor = '#333c57',
-  textColor = '#f4f4f4',
-  tooltipColor = '#f4f4f4',
-  tooltipTextColor = '#1a1c2c',
-  accentColor = '#73eff7',
+  backgroundColor,
+  chipColor,
+  textColor,
+  tooltipColor,
+  tooltipTextColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

@@ -30,6 +30,12 @@ export interface SpoilerProps {
 
 const STYLE_ID = 'bl-spoiler';
 const CSS = `
+/* theme tokens */
+.bl-spoiler { --bl-cover: rgba(148,176,194,0.18); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-spoiler, .bl-spoiler:where(.light, [data-theme="light"]) { --bl-cover: rgba(86,108,134,0.18); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-spoiler, :where(.light, [data-theme="light"]) .bl-spoiler:where(.dark, [data-theme="dark"]) { --bl-cover: rgba(148,176,194,0.18); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-spoiler, .bl-spoiler:where([data-theme="system"]) { --bl-cover: rgba(86,108,134,0.18); --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-spoiler { border-radius: 4px; color: transparent; background-image: var(--bl-dots), var(--bl-dots); background-size: var(--bl-tile) var(--bl-tile), calc(var(--bl-tile) * 1.37) calc(var(--bl-tile) * 1.37); background-color: var(--bl-cover); -webkit-box-decoration-break: clone; box-decoration-break: clone; cursor: pointer; user-select: none; -webkit-user-select: none; transition: color 500ms ease, background-size 700ms cubic-bezier(.2,.9,.25,1), background-color 400ms ease; animation: bl-spoiler-drift 2.4s linear infinite; }
 .bl-spoiler:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 2px; }
 .bl-spoiler[data-revealed] { color: inherit; background-color: transparent; background-size: calc(var(--bl-tile) * 5) calc(var(--bl-tile) * 5), calc(var(--bl-tile) * 6) calc(var(--bl-tile) * 6); cursor: text; user-select: text; -webkit-user-select: text; animation: bl-spoiler-scatter 700ms ease forwards; }
@@ -78,8 +84,8 @@ export default function Spoiler({
   rehide = false,
   label = 'Spoiler',
   dotColor = '#f4f4f4',
-  coverColor = 'rgba(148,176,194,0.18)',
-  accentColor = '#73eff7',
+  coverColor,
+  accentColor,
   tile = 24,
   density = 60,
   className = '',

@@ -1,13 +1,25 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useInsertionEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// A line that draws itself down the side of the content as you scroll, with a glowing head
-// and a marker beside each child that lights up once the line passes it. Use it for
-// changelogs, timelines, how-it-works steps or long articles. Works with any scroll box.
+const STYLE_ID = 'bl-tracing-line-tw';
+const CSS = `
+/* theme tokens */
+.bl-trace { --bl-from: #41a6f6; --bl-to: #73eff7; --bl-glow: rgba(115,239,247,0.35); --bl-track: rgba(148,176,194,0.22); --bl-bg: #1a1c2c; }
+:where(.light, [data-theme="light"]) .bl-trace, .bl-trace:where(.light, [data-theme="light"]) { --bl-from: #2470c2; --bl-to: #167f8f; --bl-glow: rgba(22,127,143,0.35); --bl-track: rgba(86,108,134,0.22); --bl-bg: #f4f1e8; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-trace, :where(.light, [data-theme="light"]) .bl-trace:where(.dark, [data-theme="dark"]) { --bl-from: #41a6f6; --bl-to: #73eff7; --bl-glow: rgba(115,239,247,0.35); --bl-track: rgba(148,176,194,0.22); --bl-bg: #1a1c2c; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-trace, .bl-trace:where([data-theme="system"]) { --bl-from: #2470c2; --bl-to: #167f8f; --bl-glow: rgba(22,127,143,0.35); --bl-track: rgba(86,108,134,0.22); --bl-bg: #f4f1e8; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 function scrollParent(node: HTMLElement | null): HTMLElement | Window {
   for (let el = node?.parentElement; el; el = el.parentElement) {
@@ -47,15 +59,15 @@ export default function TracingLine({
   markerOffset = 14,
   square = false,
   activeLine = 0.55,
-  fromColor = '#41a6f6',
-  toColor = '#73eff7',
-  glowColor = 'rgba(115,239,247,0.35)',
-  trackColor = 'rgba(148,176,194,0.22)',
-  backgroundColor = '#1a1c2c',
+  fromColor,
+  toColor,
+  glowColor,
+  trackColor,
+  backgroundColor,
   className = '',
   style
 }: TracingLineProps) {
-  
+  useStyles();
   const rootRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [markers, setMarkers] = useState<number[]>([]);
@@ -123,7 +135,7 @@ export default function TracingLine({
   return (
     <div
       ref={rootRef}
-      className={`relative pl-(--bl-gutter) ${className}`}
+      className={`bl-trace relative pl-(--bl-gutter) ${className}`}
       style={{
         '--bl-gutter': `${gutter}px`,
         '--bl-w': `${lineWidth}px`,

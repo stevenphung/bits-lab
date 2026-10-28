@@ -1,14 +1,25 @@
-import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useId, useInsertionEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// A number you can scrub. Drag the label left or right to change the value, like the fields in
-// a design tool; a little pixel ruler slides under it while you drag. Hold Shift for big steps
-// and Alt for fine ones. Or click into the field and type, or use the arrow keys. It's a real
-// text input with a label, so forms and screen readers work as usual.
+const STYLE_ID = 'bl-scrub-number-tw';
+const CSS = `
+/* theme tokens */
+.bl-scrub { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-scrub, .bl-scrub:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-scrub, :where(.light, [data-theme="light"]) .bl-scrub:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-scrub, .bl-scrub:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 const decimalsOf = (step: number) => (String(step).split('.')[1] ?? '').length;
 
@@ -53,17 +64,17 @@ export default function ScrubNumber({
   unit = '',
   width = 64,
   radius = 8,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  chipColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style
 }: ScrubNumberProps) {
-  
+  useStyles();
   const id = useId();
   const [inner, setInner] = useState(defaultValue);
   const value = controlled ?? inner;
@@ -130,7 +141,7 @@ export default function ScrubNumber({
   return (
     <span
       ref={rootRef}
-      className={`group/scrub relative inline-flex items-stretch overflow-hidden rounded-(--bl-radius) bg-(--bl-bg) font-(family-name:--bl-font) text-[14px] text-(--bl-ink) shadow-[inset_0_0_0_1px_var(--bl-line)] focus-within:shadow-[inset_0_0_0_2px_var(--bl-accent)] ${className}`}
+      className={`bl-scrub group/scrub relative inline-flex items-stretch overflow-hidden rounded-(--bl-radius) bg-(--bl-bg) font-(family-name:--bl-font) text-[14px] text-(--bl-ink) shadow-[inset_0_0_0_1px_var(--bl-line)] focus-within:shadow-[inset_0_0_0_2px_var(--bl-accent)] ${className}`}
       data-scrubbing={scrubbing || undefined}
       style={{ '--bl-w': `${width}px`, '--bl-radius': `${radius}px`, '--bl-bg': backgroundColor, '--bl-chip': chipColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-line': lineColor, '--bl-accent': accentColor, '--bl-font': fontFamily, '--off': '0px', ...style } as CSSVars}
     >

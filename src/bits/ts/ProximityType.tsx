@@ -9,6 +9,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-proximity-type';
 const CSS = `
+/* theme tokens */
+.bl-prox { --bl-ink: #f4f4f4; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-prox, .bl-prox:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-prox, :where(.light, [data-theme="light"]) .bl-prox:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-prox, .bl-prox:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-prox { margin: 0; font-family: var(--bl-font); font-size: var(--bl-size); line-height: 1.1; color: var(--bl-ink); touch-action: pan-y; }
 .bl-prox__word { display: inline-block; white-space: nowrap; }
 .bl-prox__ch { --k: 0; display: inline-block; white-space: pre; font-weight: calc(var(--bl-wmin) + var(--k) * (var(--bl-wmax) - var(--bl-wmin))); font-stretch: calc(var(--bl-dmin) + var(--k) * (var(--bl-dmax) - var(--bl-dmin))); color: color-mix(in srgb, var(--bl-accent) calc(var(--k) * var(--bl-tint)), var(--bl-ink)); transform: translateY(calc(var(--k) * var(--bl-lift) * -1)); transform-origin: 50% 100%; }
@@ -61,8 +67,8 @@ export default function ProximityType({
   tint = 0,
   ease = 0.2,
   fontSize = 56,
-  textColor = '#f4f4f4',
-  accentColor = '#73eff7',
+  textColor,
+  accentColor,
   fontFamily = '"Roboto Flex", ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

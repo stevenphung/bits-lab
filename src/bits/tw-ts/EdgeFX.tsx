@@ -13,6 +13,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-edge-fx-tw';
 const CSS = `
+/* theme tokens */
+.bl-edge { --bl-a: #73eff7; --bl-bg: #1a1c2c; --bl-glare: rgba(244,244,244,0.22); }
+:where(.light, [data-theme="light"]) .bl-edge, .bl-edge:where(.light, [data-theme="light"]) { --bl-a: #167f8f; --bl-bg: #f4f1e8; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-edge, :where(.light, [data-theme="light"]) .bl-edge:where(.dark, [data-theme="dark"]) { --bl-a: #73eff7; --bl-bg: #1a1c2c; --bl-glare: rgba(244,244,244,0.22); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-edge, .bl-edge:where([data-theme="system"]) { --bl-a: #167f8f; --bl-bg: #f4f1e8; } }
+/* theme tokens end */
 @property --bl-edge-turn { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 @keyframes bl-edge-march { to { background-position: var(--bl-dash) 0, calc(var(--bl-dash) * -1) 100%, 0 calc(var(--bl-dash) * -1), 100% var(--bl-dash); } }
 @keyframes bl-edge-spin { to { --bl-edge-turn: 360deg; } }
@@ -63,11 +69,11 @@ export default function EdgeFX({
   dash = 12,
   speed = 0.8,
   reach = 160,
-  color = '#73eff7',
+  color,
   secondColor = '#41a6f6',
   lineColor = '#333c57',
-  backgroundColor = '#1a1c2c',
-  glareColor = 'rgba(244,244,244,0.22)',
+  backgroundColor,
+  glareColor,
   className = '',
   style
 }: EdgeFXProps) {
@@ -102,7 +108,7 @@ export default function EdgeFX({
   return (
     <div
       ref={rootRef}
-      className={`group/edge relative isolate box-border block rounded-(--bl-radius) bg-(--bl-line) p-(--bl-w) [--bl-on:1] data-[active=hover]:[--bl-on:0] data-[active=hover]:focus-within:[--bl-on:1] data-[active=hover]:hover:[--bl-on:1] [&[data-mode=glow][data-active=hover]:not([data-lit])]:[--bl-on:0]! [&[data-mode=glow][data-lit]]:[--bl-on:1]! ${className}`}
+      className={`bl-edge group/edge relative isolate box-border block rounded-(--bl-radius) bg-(--bl-line) p-(--bl-w) [--bl-on:1] data-[active=hover]:[--bl-on:0] data-[active=hover]:focus-within:[--bl-on:1] data-[active=hover]:hover:[--bl-on:1] [&[data-mode=glow][data-active=hover]:not([data-lit])]:[--bl-on:0]! [&[data-mode=glow][data-lit]]:[--bl-on:1]! ${className}`}
       data-mode={mode}
       data-active={active}
       style={{ '--bl-w': `${width}px`, '--bl-radius': `${radius}px`, '--bl-dash': `${dash}px`, '--bl-speed': `${speed * (mode === 'energy' ? 4 : mode === 'glare' ? 3 : 1)}s`, '--bl-reach': `${reach}px`, '--bl-a': color, '--bl-b': mode === 'ants' ? lineColor : secondColor, '--bl-line': lineColor, '--bl-bg': backgroundColor, '--bl-glare': glareColor, ...style } as CSSVars}

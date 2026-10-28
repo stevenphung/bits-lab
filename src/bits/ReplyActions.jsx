@@ -7,6 +7,12 @@ import { useEffect, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-reply-actions';
 const CSS = `
+/* theme tokens */
+.bl-reply { --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-ok: #a7f070; }
+:where(.light, [data-theme="light"]) .bl-reply, .bl-reply:where(.light, [data-theme="light"]) { --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-ok: #2f7d22; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-reply, :where(.light, [data-theme="light"]) .bl-reply:where(.dark, [data-theme="dark"]) { --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-ok: #a7f070; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-reply, .bl-reply:where([data-theme="system"]) { --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-ok: #2f7d22; } }
+/* theme tokens end */
 .bl-reply { display: inline-flex; align-items: center; gap: 2px; color: var(--bl-muted); font-family: var(--bl-font); font-size: 13px; }
 .bl-reply__btn { display: inline-grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; }
 .bl-reply__btn:hover { background: var(--bl-chip); color: var(--bl-ink); }
@@ -63,12 +69,12 @@ export default function ReplyActions({
   onFeedback,
   regenerateTime = 1200,
   label = 'Reply actions',
-  chipColor = '#262b44',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
-  okColor = '#a7f070',
+  chipColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  accentColor,
+  okColor,
   fontFamily = 'inherit',
   className = '',
   style

@@ -1,4 +1,23 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useInsertionEffect, useRef, useState } from 'react';
+
+const STYLE_ID = 'bl-marquee-wall-tw';
+const CSS = `
+/* theme tokens */
+.bl-mwall { --bl-ink: #f4f4f4; --bl-accent: #73eff7; --bl-chip: rgba(255,255,255,0.08); }
+:where(.light, [data-theme="light"]) .bl-mwall, .bl-mwall:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-accent: #167f8f; --bl-chip: rgba(26,28,44,0.08); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-mwall, :where(.light, [data-theme="light"]) .bl-mwall:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-accent: #73eff7; --bl-chip: rgba(255,255,255,0.08); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-mwall, .bl-mwall:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-accent: #167f8f; --bl-chip: rgba(26,28,44,0.08); } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -119,13 +138,14 @@ export default function Marquee({
   height = 420,
   showPause = true,
   label = 'Featured',
-  textColor = '#f4f4f4',
-  accentColor = '#73eff7',
-  chipColor = 'rgba(255,255,255,0.08)',
+  textColor,
+  accentColor,
+  chipColor,
   fontFamily = 'inherit',
   className = '',
   style
 }) {
+  useStyles();
   const [paused, setPaused] = useState(false);
   // Deal the items round-robin into lanes, so each lane gets a mix.
   const count = Math.max(1, Math.min(lanes, items.length || 1));
@@ -133,7 +153,7 @@ export default function Marquee({
 
   return (
     <div
-      className={`group/mw relative grid gap-2.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-mwall group/mw relative grid gap-2.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       data-vertical={vertical || undefined}
       style={{ '--bl-gap': `${gap}px`, '--bl-fade': `${fade}px`, '--bl-h': `${height}px`, '--bl-dim': dim, '--bl-ink': textColor, '--bl-accent': accentColor, '--bl-chip': chipColor, '--bl-font': fontFamily, ...style }}
     >

@@ -13,6 +13,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-shadow-stack-tw';
 const CSS = `
+/* theme tokens */
+.bl-stack { --bl-face: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-stack, .bl-stack:where(.light, [data-theme="light"]) { --bl-face: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-stack, :where(.light, [data-theme="light"]) .bl-stack:where(.dark, [data-theme="dark"]) { --bl-face: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-stack, .bl-stack:where([data-theme="system"]) { --bl-face: #a86a12; } }
+/* theme tokens end */
 @keyframes bl-stack-breathe { 50% { letter-spacing: 0.02em; } }
 `;
 
@@ -99,7 +105,7 @@ export default function ShadowStack({
   spacing = 6,
   follow = false,
   press = true,
-  faceColor = '#ffcd75',
+  faceColor,
   colors = ['#ef7d57', '#b13e53', '#5d275d', '#1a1c2c'],
   fontSize = 56,
   fontFamily = '"Press Start 2P", ui-monospace, monospace',
@@ -146,7 +152,7 @@ export default function ShadowStack({
   return (
     <Tag
       ref={rootRef}
-      className={`m-0 font-(family-name:--bl-font) text-(length:--bl-size) leading-[1.1] text-(--bl-face) [text-shadow:var(--bl-shadow)] [transform:translate(var(--bl-push-x),var(--bl-push-y))] [transition:text-shadow_160ms_steps(4),transform_160ms_steps(4)] data-[follow]:cursor-default data-[follow]:select-none data-[mode=echo]:animate-[bl-stack-breathe_2.6s_ease-in-out_infinite] motion-reduce:animate-none! motion-reduce:[transition:none] ${className}`}
+      className={`bl-stack m-0 font-(family-name:--bl-font) text-(length:--bl-size) leading-[1.1] text-(--bl-face) [text-shadow:var(--bl-shadow)] [transform:translate(var(--bl-push-x),var(--bl-push-y))] [transition:text-shadow_160ms_steps(4),transform_160ms_steps(4)] data-[follow]:cursor-default data-[follow]:select-none data-[mode=echo]:animate-[bl-stack-breathe_2.6s_ease-in-out_infinite] motion-reduce:animate-none! motion-reduce:[transition:none] ${className}`}
       data-mode={mode}
       data-follow={follow || undefined}
       onPointerDown={() => setPress(true)}

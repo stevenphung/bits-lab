@@ -11,6 +11,12 @@ import { useEffect, useId, useInsertionEffect, useLayoutEffect, useRef, useState
 
 const STYLE_ID = 'bl-breadcrumb-trail-tw';
 const CSS = `
+/* theme tokens */
+.bl-crumbs { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-hover: rgba(255,255,255,0.08); --bl-chip: rgba(255,255,255,0.05); --bl-menu: #1a1c2c; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-crumbs, .bl-crumbs:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-hover: rgba(26,28,44,0.08); --bl-chip: rgba(26,28,44,0.05); --bl-menu: #f4f1e8; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-crumbs, :where(.light, [data-theme="light"]) .bl-crumbs:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-hover: rgba(255,255,255,0.08); --bl-chip: rgba(255,255,255,0.05); --bl-menu: #1a1c2c; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-crumbs, .bl-crumbs:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-hover: rgba(26,28,44,0.08); --bl-chip: rgba(26,28,44,0.05); --bl-menu: #f4f1e8; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-crumbs-in { from { opacity: 0; transform: translateY(4px) scale(0.92); } }
 @keyframes bl-crumbs-menu { from { opacity: 0; transform: scale(0.9) translateY(-4px); } }
 `;
@@ -37,14 +43,14 @@ export default function BreadcrumbTrail({
   moreLabel = 'Show hidden pages',
   label = 'Breadcrumb',
   fontSize = 14,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  dimColor = '#566c86',
-  hoverColor = 'rgba(255,255,255,0.08)',
-  chipColor = 'rgba(255,255,255,0.05)',
-  menuColor = '#1a1c2c',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  textColor,
+  mutedColor,
+  dimColor,
+  hoverColor,
+  chipColor,
+  menuColor,
+  lineColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
@@ -160,7 +166,7 @@ export default function BreadcrumbTrail({
 
   const folded = items.slice(1, 1 + hidden);
   return (
-    <nav ref={navRef} aria-label={label} className={`relative min-w-0 font-(family-name:--bl-font) text-(length:--bl-size) ${className}`} style={{ '--bl-size': `${fontSize}px`, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-dim': dimColor, '--bl-hover': hoverColor, '--bl-chip': chipColor, '--bl-menu': menuColor, '--bl-line': lineColor, '--bl-accent': accentColor, '--bl-font': fontFamily, '--bl-menu-x': `${menuX}px`, ...style }}>
+    <nav ref={navRef} aria-label={label} className={`bl-crumbs relative min-w-0 font-(family-name:--bl-font) text-(length:--bl-size) ${className}`} style={{ '--bl-size': `${fontSize}px`, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-dim': dimColor, '--bl-hover': hoverColor, '--bl-chip': chipColor, '--bl-menu': menuColor, '--bl-line': lineColor, '--bl-accent': accentColor, '--bl-font': fontFamily, '--bl-menu-x': `${menuX}px`, ...style }}>
       <ol className="m-0 flex min-w-0 list-none items-center gap-1 p-0 whitespace-nowrap">
         {items.length > 0 && crumb(items[0], 0)}
         {hidden > 0 && (

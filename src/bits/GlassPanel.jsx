@@ -8,6 +8,12 @@ import { useEffect, useInsertionEffect, useRef } from 'react';
 
 const STYLE_ID = 'bl-glass-panel';
 const CSS = `
+/* theme tokens */
+.bl-glass { --bl-edge: rgba(255,255,255,0.35); --bl-line: rgba(255,255,255,0.12); --bl-ink: #f4f4f4; }
+:where(.light, [data-theme="light"]) .bl-glass, .bl-glass:where(.light, [data-theme="light"]) { --bl-line: rgba(26,28,44,0.12); --bl-ink: #1a1c2c; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-glass, :where(.light, [data-theme="light"]) .bl-glass:where(.dark, [data-theme="dark"]) { --bl-edge: rgba(255,255,255,0.35); --bl-line: rgba(255,255,255,0.12); --bl-ink: #f4f4f4; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-glass, .bl-glass:where([data-theme="system"]) { --bl-line: rgba(26,28,44,0.12); --bl-ink: #1a1c2c; } }
+/* theme tokens end */
 .bl-glass { --gx: 50%; --gy: 0%; position: relative; overflow: hidden; isolation: isolate; padding: var(--bl-pad); border-radius: var(--bl-radius); background: var(--bl-tint); color: var(--bl-ink); font-family: var(--bl-font); -webkit-backdrop-filter: blur(var(--bl-blur)) saturate(var(--bl-sat)); backdrop-filter: blur(var(--bl-blur)) saturate(var(--bl-sat)); box-shadow: inset 0 1px 0 var(--bl-edge), inset 0 0 0 1px var(--bl-line), 0 20px 40px -24px rgba(0,0,0,0.7); }
 .bl-glass::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(circle var(--bl-sheen-size) at var(--gx) var(--gy), var(--bl-sheen), transparent 70%); pointer-events: none; transition: background-position 200ms; }
 .bl-glass[data-pixel]::after { content: ""; position: absolute; inset: 0; z-index: -1; background-image: var(--bl-dither); background-size: 4px 4px; opacity: 0.35; image-rendering: pixelated; pointer-events: none; }
@@ -37,11 +43,11 @@ export default function GlassPanel({
   radius = 18,
   tint = 'rgba(38,43,68,0.42)',
   fallbackTint = 'rgba(26,28,44,0.92)',
-  edgeColor = 'rgba(255,255,255,0.35)',
-  lineColor = 'rgba(255,255,255,0.12)',
+  edgeColor,
+  lineColor,
   sheenColor = 'rgba(255,255,255,0.14)',
   sheenSize = 260,
-  textColor = '#f4f4f4',
+  textColor,
   fontFamily = 'inherit',
   className = '',
   style

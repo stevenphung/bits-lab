@@ -8,6 +8,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-text-on-path';
 const CSS = `
+/* theme tokens */
+.bl-tpath { --bl-ink: #f4f4f4; --bl-guide: rgba(255,255,255,0.18); }
+:where(.light, [data-theme="light"]) .bl-tpath, .bl-tpath:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-guide: rgba(26,28,44,0.18); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tpath, :where(.light, [data-theme="light"]) .bl-tpath:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-guide: rgba(255,255,255,0.18); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tpath, .bl-tpath:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-guide: rgba(26,28,44,0.18); } }
+/* theme tokens end */
 .bl-tpath { display: block; width: 100%; max-width: var(--bl-w); overflow: visible; color: var(--bl-ink); font-family: var(--bl-font); }
 .bl-tpath text { fill: currentColor; font-size: var(--bl-size); font-weight: var(--bl-weight); letter-spacing: var(--bl-spacing); }
 .bl-tpath__guide { fill: none; stroke: var(--bl-guide); stroke-width: 1; stroke-dasharray: 3 5; }
@@ -77,8 +83,8 @@ export default function TextOnPath({
   showPath = false,
   pauseOnHover = true,
   width = 900,
-  textColor = '#f4f4f4',
-  guideColor = 'rgba(255,255,255,0.18)',
+  textColor,
+  guideColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   label,
   className = '',

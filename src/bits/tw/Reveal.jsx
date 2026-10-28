@@ -1,4 +1,23 @@
-import { Children, useEffect, useRef, useState } from 'react';
+import { Children, useEffect, useInsertionEffect, useRef, useState } from 'react';
+
+const STYLE_ID = 'bl-reveal-tw';
+const CSS = `
+/* theme tokens */
+.bl-reveal { --bl-cover: #0b0b14; }
+:where(.light, [data-theme="light"]) .bl-reveal, .bl-reveal:where(.light, [data-theme="light"]) { --bl-cover: #f4f1e8; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-reveal, :where(.light, [data-theme="light"]) .bl-reveal:where(.dark, [data-theme="dark"]) { --bl-cover: #0b0b14; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-reveal, .bl-reveal:where([data-theme="system"]) { --bl-cover: #f4f1e8; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -29,11 +48,12 @@ export default function Reveal({
   distance = 24,
   steps = 8,
   blocks = [8, 5],
-  coverColor = '#0b0b14',
+  coverColor,
   onReveal,
   className = '',
   style
 }) {
+  useStyles();
   const rootRef = useRef(null);
   const revealRef = useRef(onReveal);
   revealRef.current = onReveal;
@@ -67,7 +87,7 @@ export default function Reveal({
   return (
     <Tag
       ref={rootRef}
-      className={`group/rev relative ${className}`}
+      className={`bl-reveal group/rev relative ${className}`}
       data-effect={effect}
       data-shown={shown || undefined}
       style={{ '--bl-dur': `${duration}ms`, '--bl-delay': `${delay}ms`, '--bl-stagger': `${stagger}ms`, '--bl-distance': `${distance}px`, '--bl-steps': steps, '--bl-cols': cols, '--bl-rows': rows, '--bl-cover': coverColor, ...style }}

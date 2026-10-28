@@ -7,6 +7,12 @@ import { useId, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-pricing-flip';
 const CSS = `
+/* theme tokens */
+.bl-price { --bl-bg: #1a1c2c; --bl-card: #262b44; --bl-track: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-save: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-price, .bl-price:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-card: #ebe5d8; --bl-track: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-save: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-price, :where(.light, [data-theme="light"]) .bl-price:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-card: #262b44; --bl-track: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-save: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-price, .bl-price:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-card: #ebe5d8; --bl-track: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-save: #a86a12; } }
+/* theme tokens end */
 .bl-price { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; justify-items: center; width: 100%; color: var(--bl-ink); font-family: var(--bl-font); }
 .bl-price__switch { position: relative; display: inline-grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 999px; background: var(--bl-track); box-shadow: inset 0 0 0 1px var(--bl-line); }
 .bl-price__thumb { position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 999px; background: var(--bl-accent); transition: transform 320ms cubic-bezier(.3,1.35,.5,1); }
@@ -96,15 +102,15 @@ export default function PricingFlip({
   billedYearly = total => `Billed ${total} yearly`,
   width = 1000,
   priceSize = 44,
-  backgroundColor = '#1a1c2c',
-  cardColor = '#262b44',
-  trackColor = '#0b0b14',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  onAccentColor = '#0b0b14',
-  saveColor = '#ffcd75',
+  backgroundColor,
+  cardColor,
+  trackColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
+  onAccentColor,
+  saveColor,
   radius = 18,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   label = 'Billing period',

@@ -6,6 +6,12 @@ import { useEffect, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-tracing-line';
 const CSS = `
+/* theme tokens */
+.bl-trace { --bl-from: #41a6f6; --bl-to: #73eff7; --bl-glow: rgba(115,239,247,0.35); --bl-track: rgba(148,176,194,0.22); --bl-bg: #1a1c2c; }
+:where(.light, [data-theme="light"]) .bl-trace, .bl-trace:where(.light, [data-theme="light"]) { --bl-from: #2470c2; --bl-to: #167f8f; --bl-glow: rgba(22,127,143,0.35); --bl-track: rgba(86,108,134,0.22); --bl-bg: #f4f1e8; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-trace, :where(.light, [data-theme="light"]) .bl-trace:where(.dark, [data-theme="dark"]) { --bl-from: #41a6f6; --bl-to: #73eff7; --bl-glow: rgba(115,239,247,0.35); --bl-track: rgba(148,176,194,0.22); --bl-bg: #1a1c2c; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-trace, .bl-trace:where([data-theme="system"]) { --bl-from: #2470c2; --bl-to: #167f8f; --bl-glow: rgba(22,127,143,0.35); --bl-track: rgba(86,108,134,0.22); --bl-bg: #f4f1e8; } }
+/* theme tokens end */
 .bl-trace { position: relative; padding-left: var(--bl-gutter); }
 .bl-trace__track, .bl-trace__fill { position: absolute; left: calc(var(--bl-gutter) / 2 - var(--bl-w) / 2); top: var(--bl-start); width: var(--bl-w); border-radius: var(--bl-w); }
 .bl-trace__track { bottom: var(--bl-end); background: var(--bl-track); }
@@ -41,11 +47,11 @@ export default function TracingLine({
   markerOffset = 14,
   square = false,
   activeLine = 0.55,
-  fromColor = '#41a6f6',
-  toColor = '#73eff7',
-  glowColor = 'rgba(115,239,247,0.35)',
-  trackColor = 'rgba(148,176,194,0.22)',
-  backgroundColor = '#1a1c2c',
+  fromColor,
+  toColor,
+  glowColor,
+  trackColor,
+  backgroundColor,
   className = '',
   style
 }) {

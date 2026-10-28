@@ -11,6 +11,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-health-bar-tw';
 const CSS = `
+/* theme tokens */
+.bl-hp { --bl-track: #1a1c2c; --bl-label: #f4f4f4; }
+:where(.light, [data-theme="light"]) .bl-hp, .bl-hp:where(.light, [data-theme="light"]) { --bl-track: #f4f1e8; --bl-label: #1a1c2c; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-hp, :where(.light, [data-theme="light"]) .bl-hp:where(.dark, [data-theme="dark"]) { --bl-track: #1a1c2c; --bl-label: #f4f4f4; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-hp, .bl-hp:where([data-theme="system"]) { --bl-track: #f4f1e8; --bl-label: #1a1c2c; } }
+/* theme tokens end */
 @keyframes bl-hp-shimmer { to { transform: translateX(100%); } }
 @keyframes bl-hp-pulse { 50% { box-shadow: 0 -3px 0 0 var(--bl-low), 0 3px 0 0 var(--bl-low), -3px 0 0 0 var(--bl-low), 3px 0 0 0 var(--bl-low); } }
 `;
@@ -68,8 +74,8 @@ export default function HealthBar({
   lowColor = '#b13e53',
   damageColor = '#f4f4f4',
   healColor = '#a7f070',
-  trackColor = '#1a1c2c',
-  labelColor = '#f4f4f4',
+  trackColor,
+  labelColor,
   lowThreshold = 0.25,
   delay = 350,
   drainDuration = 600,
@@ -105,7 +111,7 @@ export default function HealthBar({
 
   return (
     <div
-      className={`group/hp grid gap-1.5 [font-family:var(--bl-font,'Press_Start_2P',ui-monospace,monospace)] text-(--bl-label) ${className}`}
+      className={`bl-hp group/hp grid gap-1.5 [font-family:var(--bl-font,'Press_Start_2P',ui-monospace,monospace)] text-(--bl-label) ${className}`}
       data-mode={mode}
       data-flash={flash || undefined}
       data-critical={critical || undefined}

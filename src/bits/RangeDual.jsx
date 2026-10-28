@@ -8,6 +8,12 @@ import { useId, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-range-dual';
 const CSS = `
+/* theme tokens */
+.bl-range { --bl-bg: #1a1c2c; --bl-field: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-range, .bl-range:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-field: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-range, :where(.light, [data-theme="light"]) .bl-range:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-field: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-range, .bl-range:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-field: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-range { width: 100%; max-width: var(--bl-w); padding-top: 34px; font-family: var(--bl-font); color: var(--bl-ink); }
 .bl-range__label { display: block; margin: -34px 0 18px; color: var(--bl-muted); font-size: 13px; font-weight: 600; }
 .bl-range__hist { display: flex; align-items: flex-end; gap: 2px; height: var(--bl-hist-h); padding: 0 calc(var(--bl-thumb) / 2); }
@@ -57,14 +63,14 @@ export default function RangeDual({
   width = 460,
   thumbSize = 22,
   histogramHeight = 56,
-  backgroundColor = '#1a1c2c',
-  fieldColor = '#0b0b14',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  dimColor = '#566c86',
-  trackColor = '#333c57',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  fieldColor,
+  textColor,
+  mutedColor,
+  dimColor,
+  trackColor,
+  lineColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

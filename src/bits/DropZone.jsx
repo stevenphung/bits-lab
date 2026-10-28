@@ -7,6 +7,12 @@ import { useEffect, useId, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-dropzone';
 const CSS = `
+/* theme tokens */
+.bl-drop { --bl-bg: #1a1c2c; --bl-over: #202a4a; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.22); --bl-chip: rgba(255,255,255,0.07); --bl-success: #38b764; --bl-error: #ef7d57; }
+:where(.light, [data-theme="light"]) .bl-drop, .bl-drop:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-over: #dfe6f2; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.22); --bl-chip: rgba(26,28,44,0.07); --bl-success: #2b8a4a; --bl-error: #c4502a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-drop, :where(.light, [data-theme="light"]) .bl-drop:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-over: #202a4a; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.22); --bl-chip: rgba(255,255,255,0.07); --bl-success: #38b764; --bl-error: #ef7d57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-drop, .bl-drop:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-over: #dfe6f2; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.22); --bl-chip: rgba(26,28,44,0.07); --bl-success: #2b8a4a; --bl-error: #c4502a; } }
+/* theme tokens end */
 .bl-drop { display: grid; gap: 14px; width: 100%; max-width: var(--bl-w); font-family: var(--bl-font); color: var(--bl-ink); }
 .bl-drop__zone { position: relative; display: block; width: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: center; cursor: pointer; perspective: 800px; }
 .bl-drop__zone:focus-visible { outline: none; }
@@ -88,15 +94,15 @@ export default function DropZone({
   magnetic = true,
   width = 520,
   radius = 16,
-  backgroundColor = '#1a1c2c',
-  overColor = '#202a4a',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = 'rgba(255,255,255,0.22)',
-  chipColor = 'rgba(255,255,255,0.07)',
+  backgroundColor,
+  overColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  chipColor,
   accentColor = '#73eff7',
-  successColor = '#38b764',
-  errorColor = '#ef7d57',
+  successColor,
+  errorColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

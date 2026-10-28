@@ -1,15 +1,25 @@
-import { Children, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent, type ReactElement, type ReactNode } from 'react';
+import { Children, useEffect, useInsertionEffect, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent, type ReactElement, type ReactNode } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// A deck of cards you deal through. The top card sits on a slightly fanned pile; drag or swipe
-// it past the edge and it flies off, spinning a little the way you threw it, then slides under
-// the bottom of the deck. The arrow buttons (or the Left and Right keys) deal forward and back.
-// Each card stays in the page; the deck says which card is on top. Reduced motion swaps cards
-// without the flight.
+const STYLE_ID = 'bl-card-deck-tw';
+const CSS = `
+/* theme tokens */
+.bl-deck { --bl-card: #262b44; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-chip: rgba(255,255,255,0.08); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-deck, .bl-deck:where(.light, [data-theme="light"]) { --bl-card: #ebe5d8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-chip: rgba(26,28,44,0.08); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-deck, :where(.light, [data-theme="light"]) .bl-deck:where(.dark, [data-theme="dark"]) { --bl-card: #262b44; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-chip: rgba(255,255,255,0.08); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-deck, .bl-deck:where([data-theme="system"]) { --bl-card: #ebe5d8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-chip: rgba(26,28,44,0.08); --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 const Arrow = ({ flip }: { flip?: boolean }) => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ transform: flip ? 'scaleX(-1)' : undefined }}>
@@ -57,17 +67,17 @@ export default function CardDeck({
   onChange,
   label = 'Card deck',
   radius = 16,
-  cardColor = '#262b44',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  chipColor = 'rgba(255,255,255,0.08)',
-  accentColor = '#73eff7',
+  cardColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  chipColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style
 }: CardDeckProps) {
-  
+  useStyles();
   const cards = Children.toArray(children);
   const n = cards.length;
   const [top, setTop] = useState(0);
@@ -130,7 +140,7 @@ export default function CardDeck({
 
   return (
     <div
-      className={`grid justify-items-center gap-3.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-deck grid justify-items-center gap-3.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       style={{ '--bl-w': `${width}px`, '--bl-h': `${height}px`, '--bl-offset': `${offset}px`, '--bl-fan': `${fan}deg`, '--bl-radius': `${radius}px`, '--bl-card': cardColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-line': lineColor, '--bl-chip': chipColor, '--bl-accent': accentColor, '--bl-font': fontFamily, ...style } as CSSVars}
     >
       <div ref={pileRef} className="relative h-(--bl-h) w-(--bl-w) max-w-full touch-pan-y outline-none focus-visible:rounded-(--bl-radius) focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-(--bl-accent) focus-visible:outline-solid" role="group" aria-roledescription="card deck" aria-label={`${label}: card ${n ? top + 1 : 0} of ${n}`} tabIndex={0} onKeyDown={onKeyDown}>

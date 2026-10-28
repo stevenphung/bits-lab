@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-funnel-flow';
 const CSS = `
+/* theme tokens */
+.bl-funnel { --bl-bar: #3b5dc9; --bl-bar-active: #73eff7; --bl-band: rgba(59,93,201,0.22); --bl-band-active: rgba(115,239,247,0.22); --bl-particle: #a5c8ff; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-chip: #1a1c2c; --bl-tip: #262b44; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-funnel, .bl-funnel:where(.light, [data-theme="light"]) { --bl-bar-active: #167f8f; --bl-band-active: rgba(22,127,143,0.22); --bl-particle: #3b5dc9; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-chip: #f4f1e8; --bl-tip: #ebe5d8; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-funnel, :where(.light, [data-theme="light"]) .bl-funnel:where(.dark, [data-theme="dark"]) { --bl-bar: #3b5dc9; --bl-bar-active: #73eff7; --bl-band: rgba(59,93,201,0.22); --bl-band-active: rgba(115,239,247,0.22); --bl-particle: #a5c8ff; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-chip: #1a1c2c; --bl-tip: #262b44; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-funnel, .bl-funnel:where([data-theme="system"]) { --bl-bar-active: #167f8f; --bl-band-active: rgba(22,127,143,0.22); --bl-particle: #3b5dc9; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-chip: #f4f1e8; --bl-tip: #ebe5d8; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-funnel { position: relative; width: 100%; font-family: var(--bl-font); color: var(--bl-ink); }
 .bl-funnel:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 4px; border-radius: 8px; }
 .bl-funnel__svg { display: block; width: 100%; overflow: visible; }
@@ -89,17 +95,17 @@ export default function FunnelFlow({
   particleSize = 3,
   locale = 'en-US',
   label = 'Conversion funnel',
-  barColor = '#3b5dc9',
-  activeColor = '#73eff7',
-  bandColor = 'rgba(59,93,201,0.22)',
-  bandActiveColor = 'rgba(115,239,247,0.22)',
-  particleColor = '#a5c8ff',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  chipColor = '#1a1c2c',
-  tooltipColor = '#262b44',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  barColor,
+  activeColor,
+  bandColor,
+  bandActiveColor,
+  particleColor,
+  textColor,
+  mutedColor,
+  chipColor,
+  tooltipColor,
+  lineColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

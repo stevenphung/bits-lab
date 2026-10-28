@@ -8,6 +8,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-wobble-card';
 const CSS = `
+/* theme tokens */
+.bl-wobble { --bl-bg: #262b44; --bl-ink: #f4f4f4; --bl-line: #333c57; --bl-accent: #73eff7; --bl-sheen: rgba(115,239,247,0.18); }
+:where(.light, [data-theme="light"]) .bl-wobble, .bl-wobble:where(.light, [data-theme="light"]) { --bl-bg: #ebe5d8; --bl-ink: #1a1c2c; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-sheen: rgba(22,127,143,0.18); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-wobble, :where(.light, [data-theme="light"]) .bl-wobble:where(.dark, [data-theme="dark"]) { --bl-bg: #262b44; --bl-ink: #f4f4f4; --bl-line: #333c57; --bl-accent: #73eff7; --bl-sheen: rgba(115,239,247,0.18); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-wobble, .bl-wobble:where([data-theme="system"]) { --bl-bg: #ebe5d8; --bl-ink: #1a1c2c; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-sheen: rgba(22,127,143,0.18); } }
+/* theme tokens end */
 .bl-wobble { position: relative; box-sizing: border-box; width: 100%; max-width: var(--bl-w); touch-action: pan-y; }
 .bl-wobble__body { position: relative; box-sizing: border-box; overflow: hidden; padding: var(--bl-pad); border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); box-shadow: 0 0 0 2px var(--bl-line), 0 18px 40px -22px rgba(0,0,0,0.8); transform-origin: 50% 50%; will-change: transform; transition: box-shadow 200ms; }
 .bl-wobble__body::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(circle at var(--bl-mx, 50%) var(--bl-my, 50%), var(--bl-sheen), transparent 60%); opacity: 0; transition: opacity 250ms; pointer-events: none; }
@@ -56,11 +62,11 @@ export default function WobbleCard({
   width = 360,
   padding = 24,
   radius = 18,
-  backgroundColor = '#262b44',
-  textColor = '#f4f4f4',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  sheenColor = 'rgba(115,239,247,0.18)',
+  backgroundColor,
+  textColor,
+  lineColor,
+  accentColor,
+  sheenColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

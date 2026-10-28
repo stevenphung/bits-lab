@@ -7,6 +7,12 @@ import { useEffect, useId, useInsertionEffect, useState } from 'react';
 
 const STYLE_ID = 'bl-ring-progress';
 const CSS = `
+/* theme tokens */
+.bl-ring { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-hover: rgba(255,255,255,0.06); --bl-focus: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-ring, .bl-ring:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-hover: rgba(26,28,44,0.06); --bl-focus: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ring, :where(.light, [data-theme="light"]) .bl-ring:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-hover: rgba(255,255,255,0.06); --bl-focus: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ring, .bl-ring:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-hover: rgba(26,28,44,0.06); --bl-focus: #167f8f; } }
+/* theme tokens end */
 .bl-ring { position: relative; display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 22px; max-width: 100%; color: var(--bl-ink); font-family: var(--bl-font); }
 .bl-ring__figure { position: relative; flex: 0 0 auto; width: var(--bl-size); max-width: 100%; aspect-ratio: 1; }
 .bl-ring__figure svg { display: block; width: 100%; height: 100%; overflow: visible; }
@@ -58,10 +64,10 @@ export default function RingProgress({
   formatValue = defaultFormat,
   colors = DEFAULT_COLORS,
   trackOpacity = 0.18,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  hoverColor = 'rgba(255,255,255,0.06)',
-  focusColor = '#73eff7',
+  textColor,
+  mutedColor,
+  hoverColor,
+  focusColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

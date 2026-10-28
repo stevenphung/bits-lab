@@ -12,6 +12,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-rating-pips-tw';
 const CSS = `
+/* theme tokens */
+.bl-pips { --bl-full: #b13e53; --bl-empty: #333c57; --bl-preview: #ef7d57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-pips, .bl-pips:where(.light, [data-theme="light"]) { --bl-empty: #ddd4c0; --bl-preview: #c4502a; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-pips, :where(.light, [data-theme="light"]) .bl-pips:where(.dark, [data-theme="dark"]) { --bl-full: #b13e53; --bl-empty: #333c57; --bl-preview: #ef7d57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-pips, .bl-pips:where([data-theme="system"]) { --bl-empty: #ddd4c0; --bl-preview: #c4502a; --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-pips-pop { 40% { transform: scale(1.35) translateY(-12%); } }
 `;
 
@@ -78,10 +84,10 @@ export default function RatingPips({
   label = 'Rating',
   size = 28,
   gap = 4,
-  fullColor = '#b13e53',
-  emptyColor = '#333c57',
-  previewColor = '#ef7d57',
-  accentColor = '#73eff7',
+  fullColor,
+  emptyColor,
+  previewColor,
+  accentColor,
   className = '',
   style
 }: RatingPipsProps) {
@@ -119,7 +125,7 @@ export default function RatingPips({
   const say = (v: number) => `${v} of ${max}`;
   if (readOnly) {
     return (
-      <span className={`group/pips inline-flex touch-manipulation gap-(--bl-gap) rounded-[8px] p-1 outline-none focus-visible:shadow-[0_0_0_2px_var(--bl-accent)] data-[interactive]:cursor-pointer ${className}`} role="img" aria-label={`${label}: ${say(value)}`} style={{ '--bl-size': `${size}px`, '--bl-gap': `${gap}px`, '--bl-full': fullColor, '--bl-empty': emptyColor, '--bl-preview': previewColor, '--bl-accent': accentColor, ...style } as CSSVars}>
+      <span className={`bl-pips group/pips inline-flex touch-manipulation gap-(--bl-gap) rounded-[8px] p-1 outline-none focus-visible:shadow-[0_0_0_2px_var(--bl-accent)] data-[interactive]:cursor-pointer ${className}`} role="img" aria-label={`${label}: ${say(value)}`} style={{ '--bl-size': `${size}px`, '--bl-gap': `${gap}px`, '--bl-full': fullColor, '--bl-empty': emptyColor, '--bl-preview': previewColor, '--bl-accent': accentColor, ...style } as CSSVars}>
         {Array.from({ length: max }, (_, i) => (
           <span key={i} className="bl-pips__pip group/pip relative size-(--bl-size) [&_svg]:absolute [&_svg]:inset-0 [&_svg]:h-full [&_svg]:w-full [&_svg]:[shape-rendering:crispEdges]" style={{ '--fill': Math.max(0, Math.min(1, value - i)) } as CSSVars}>
             <span className="absolute inset-0 text-(--bl-empty)">
@@ -137,7 +143,7 @@ export default function RatingPips({
   return (
     <span
       ref={rootRef}
-      className={`group/pips inline-flex touch-manipulation gap-(--bl-gap) rounded-[8px] p-1 outline-none focus-visible:shadow-[0_0_0_2px_var(--bl-accent)] data-[interactive]:cursor-pointer ${className}`}
+      className={`bl-pips group/pips inline-flex touch-manipulation gap-(--bl-gap) rounded-[8px] p-1 outline-none focus-visible:shadow-[0_0_0_2px_var(--bl-accent)] data-[interactive]:cursor-pointer ${className}`}
       role="slider"
       tabIndex={0}
       aria-label={label}

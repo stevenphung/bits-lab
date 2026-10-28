@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-breadcrumb-trail';
 const CSS = `
+/* theme tokens */
+.bl-crumbs { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-hover: rgba(255,255,255,0.08); --bl-chip: rgba(255,255,255,0.05); --bl-menu: #1a1c2c; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-crumbs, .bl-crumbs:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-hover: rgba(26,28,44,0.08); --bl-chip: rgba(26,28,44,0.05); --bl-menu: #f4f1e8; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-crumbs, :where(.light, [data-theme="light"]) .bl-crumbs:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-hover: rgba(255,255,255,0.08); --bl-chip: rgba(255,255,255,0.05); --bl-menu: #1a1c2c; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-crumbs, .bl-crumbs:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-hover: rgba(26,28,44,0.08); --bl-chip: rgba(26,28,44,0.05); --bl-menu: #f4f1e8; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-crumbs { position: relative; min-width: 0; font-family: var(--bl-font); font-size: var(--bl-size); }
 .bl-crumbs__list { display: flex; align-items: center; gap: 4px; min-width: 0; margin: 0; padding: 0; list-style: none; white-space: nowrap; }
 .bl-crumbs__item { display: flex; align-items: center; gap: 4px; min-width: 0; animation: bl-crumbs-in 260ms cubic-bezier(.3,1.4,.5,1) both; }
@@ -85,14 +91,14 @@ export default function BreadcrumbTrail({
   moreLabel = 'Show hidden pages',
   label = 'Breadcrumb',
   fontSize = 14,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  dimColor = '#566c86',
-  hoverColor = 'rgba(255,255,255,0.08)',
-  chipColor = 'rgba(255,255,255,0.05)',
-  menuColor = '#1a1c2c',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  textColor,
+  mutedColor,
+  dimColor,
+  hoverColor,
+  chipColor,
+  menuColor,
+  lineColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

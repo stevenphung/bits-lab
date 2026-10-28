@@ -12,6 +12,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-level-up-stats-tw';
 const CSS = `
+/* theme tokens */
+.bl-lvlup { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-good: #a7f070; --bl-bad: #ef7d57; --bl-gold: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-lvlup, .bl-lvlup:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-good: #2f7d22; --bl-bad: #c4502a; --bl-gold: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-lvlup, :where(.light, [data-theme="light"]) .bl-lvlup:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-good: #a7f070; --bl-bad: #ef7d57; --bl-gold: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-lvlup, .bl-lvlup:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-good: #2f7d22; --bl-bad: #c4502a; --bl-gold: #a86a12; } }
+/* theme tokens end */
 @keyframes bl-lvlup-row { from { opacity: 0; transform: translateX(-12px); } }
 @keyframes bl-lvlup-banner { 0% { opacity: 0; transform: scale(0.6); } 60% { transform: scale(1.1); } }
 `;
@@ -78,14 +84,14 @@ export default function LevelUpStats({
   locale,
   currency = 'USD',
   width = 380,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  goodColor = '#a7f070',
-  badColor = '#ef7d57',
-  goldColor = '#ffcd75',
+  backgroundColor,
+  chipColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  goodColor,
+  badColor,
+  goldColor,
   fontFamily = 'inherit',
   className = '',
   style
@@ -133,7 +139,7 @@ export default function LevelUpStats({
   return (
     <section
       ref={rootRef}
-      className={`grid gap-2.5 p-4 w-[min(var(--bl-w),100%)] box-border bg-(--bl-bg) text-(--bl-ink) font-(family-name:--bl-font) text-[14px] shadow-[inset_0_0_0_3px_var(--bl-line),6px_6px_0_rgba(0,0,0,0.45)] ${className}`}
+      className={`bl-lvlup grid gap-2.5 p-4 w-[min(var(--bl-w),100%)] box-border bg-(--bl-bg) text-(--bl-ink) font-(family-name:--bl-font) text-[14px] shadow-[inset_0_0_0_3px_var(--bl-line),6px_6px_0_rgba(0,0,0,0.45)] ${className}`}
       aria-label={`${title}, ${period}`}
       style={{ '--bl-w': `${width}px`, '--bl-bg': backgroundColor, '--bl-chip': chipColor, '--bl-line': lineColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-good': goodColor, '--bl-bad': badColor, '--bl-gold': goldColor, '--bl-font': fontFamily, ...style } as CSSVars}
     >

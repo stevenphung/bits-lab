@@ -55,6 +55,12 @@ export interface DateRangeProps {
 
 const STYLE_ID = 'bl-date-range-tw';
 const CSS = `
+/* theme tokens */
+.bl-dr { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-hover: rgba(255,255,255,0.07); --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-band: rgba(115,239,247,0.16); }
+:where(.light, [data-theme="light"]) .bl-dr, .bl-dr:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-hover: rgba(26,28,44,0.07); --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-band: rgba(22,127,143,0.16); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-dr, :where(.light, [data-theme="light"]) .bl-dr:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-dim: #566c86; --bl-hover: rgba(255,255,255,0.07); --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-band: rgba(115,239,247,0.16); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-dr, .bl-dr:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-dim: #8a96a3; --bl-hover: rgba(26,28,44,0.07); --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-band: rgba(22,127,143,0.16); } }
+/* theme tokens end */
 @keyframes bl-dr-slide { from { opacity: 0; transform: translateX(calc(var(--bl-dir) * 28px)); } }
 @keyframes bl-dr-pop { 40% { transform: scale(1.15); } }
 `;
@@ -112,15 +118,15 @@ export default function DateRange({
   label = 'Choose dates',
   cellSize = 38,
   narrowAt = 620,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  dimColor = '#566c86',
-  hoverColor = 'rgba(255,255,255,0.07)',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  onAccentColor = '#0b0b14',
-  bandColor = 'rgba(115,239,247,0.16)',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  dimColor,
+  hoverColor,
+  lineColor,
+  accentColor,
+  onAccentColor,
+  bandColor,
   radius = 16,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
@@ -322,7 +328,7 @@ export default function DateRange({
   return (
     <div
       ref={rootRef}
-      className={`group/dr box-border flex w-fit max-w-full gap-[18px] rounded-(--bl-radius) bg-(--bl-bg) p-4 font-(family-name:--bl-font) text-(--bl-ink) shadow-[0_0_0_1px_var(--bl-line),0_24px_50px_-28px_rgba(0,0,0,0.85)] data-[narrow]:flex-col ${className}`}
+      className={`bl-dr group/dr box-border flex w-fit max-w-full gap-[18px] rounded-(--bl-radius) bg-(--bl-bg) p-4 font-(family-name:--bl-font) text-(--bl-ink) shadow-[0_0_0_1px_var(--bl-line),0_24px_50px_-28px_rgba(0,0,0,0.85)] data-[narrow]:flex-col ${className}`}
       role="group"
       aria-label={label}
       data-narrow={narrow || undefined}

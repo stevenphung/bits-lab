@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-pixel-loader-tw';
 const CSS = `
+/* theme tokens */
+.bl-loader { --bl-accent: #a7f070; --bl-frame: #566c86; --bl-text: #f4f4f4; --bl-muted: #94b0c2; }
+:where(.light, [data-theme="light"]) .bl-loader, .bl-loader:where(.light, [data-theme="light"]) { --bl-accent: #2f7d22; --bl-frame: #8a96a3; --bl-text: #1a1c2c; --bl-muted: #566c86; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-loader, :where(.light, [data-theme="light"]) .bl-loader:where(.dark, [data-theme="dark"]) { --bl-accent: #a7f070; --bl-frame: #566c86; --bl-text: #f4f4f4; --bl-muted: #94b0c2; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-loader, .bl-loader:where([data-theme="system"]) { --bl-accent: #2f7d22; --bl-frame: #8a96a3; --bl-text: #1a1c2c; --bl-muted: #566c86; } }
+/* theme tokens end */
 @keyframes bl-loader-spin { to { transform: rotate(360deg); } }
 @keyframes bl-loader-pop { 50% { filter: brightness(1.8); transform: scaleY(1.2); } }
 @keyframes bl-loader-flash { 50% { opacity: 0; } }
@@ -70,10 +76,10 @@ export default function PixelLoader({
   tipInterval = 3200,
   chunks = 20,
   width = 440,
-  accentColor = '#a7f070',
-  frameColor = '#566c86',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
+  accentColor,
+  frameColor,
+  textColor,
+  mutedColor,
   simulateDuration = 6000,
   loop = true,
   showPercent = true,
@@ -125,7 +131,7 @@ export default function PixelLoader({
 
   return (
     <div
-      className={`group/loader grid w-[min(var(--bl-width),100%)] justify-items-center gap-[18px] [font-family:var(--bl-font,'Press_Start_2P',ui-monospace,monospace)] text-(--bl-text) uppercase ${className}`}
+      className={`bl-loader group/loader grid w-[min(var(--bl-width),100%)] justify-items-center gap-[18px] [font-family:var(--bl-font,'Press_Start_2P',ui-monospace,monospace)] text-(--bl-text) uppercase ${className}`}
       data-done={done || undefined}
       style={{
         '--bl-width': `${width}px`,

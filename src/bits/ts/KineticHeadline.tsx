@@ -11,6 +11,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-kinetic-headline';
 const CSS = `
+/* theme tokens */
+.bl-kinetic { --bl-ink: #f4f4f4; --bl-accent: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-kinetic, .bl-kinetic:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-accent: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-kinetic, :where(.light, [data-theme="light"]) .bl-kinetic:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-accent: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-kinetic, .bl-kinetic:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-accent: #a86a12; } }
+/* theme tokens end */
 .bl-kinetic { margin: 0; font-family: var(--bl-font); font-size: var(--bl-size); line-height: 1.05; color: var(--bl-ink); letter-spacing: -0.01em; }
 .bl-kinetic__letter { --k: 0.5; display: inline-block; white-space: pre; font-weight: calc(var(--bl-wmin) + var(--k) * (var(--bl-wmax) - var(--bl-wmin))); font-stretch: calc(var(--bl-dmin) + var(--k) * (var(--bl-dmax) - var(--bl-dmin))); color: color-mix(in srgb, var(--bl-accent) calc(var(--k) * var(--bl-tint)), var(--bl-ink)); }
 .bl-kinetic__word { display: inline-block; white-space: nowrap; }
@@ -69,8 +75,8 @@ export default function KineticHeadline({
   maxWidth = 100,
   tint = 0,
   fontSize = 72,
-  textColor = '#f4f4f4',
-  accentColor = '#ffcd75',
+  textColor,
+  accentColor,
   fontFamily = '"Roboto Flex", ui-sans-serif, system-ui, sans-serif',
   className = '',
   style

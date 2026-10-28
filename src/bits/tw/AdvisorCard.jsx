@@ -10,6 +10,12 @@ import { useEffect, useId, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-advisor-card-tw';
 const CSS = `
+/* theme tokens */
+.bl-advisor { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #0b0b14; --bl-accent: #73eff7; --bl-ok: #a7f070; }
+:where(.light, [data-theme="light"]) .bl-advisor, .bl-advisor:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #e2dacb; --bl-accent: #167f8f; --bl-ok: #2f7d22; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-advisor, :where(.light, [data-theme="light"]) .bl-advisor:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #0b0b14; --bl-accent: #73eff7; --bl-ok: #a7f070; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-advisor, .bl-advisor:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #e2dacb; --bl-accent: #167f8f; --bl-ok: #2f7d22; } }
+/* theme tokens end */
 @keyframes bl-advisor-fuse { from { transform: scaleX(1); } to { transform: scaleX(0); } }
 `;
 
@@ -37,14 +43,14 @@ export default function AdvisorCard({
   acceptLabel = 'Accept',
   dismissLabel = 'Not now',
   width = 400,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  trackColor = '#0b0b14',
-  accentColor = '#73eff7',
-  okColor = '#a7f070',
+  backgroundColor,
+  chipColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  trackColor,
+  accentColor,
+  okColor,
   highColor = '#a7f070',
   midColor = '#ffcd75',
   lowColor = '#ef7d57',
@@ -87,7 +93,7 @@ export default function AdvisorCard({
 
   return (
     <section
-      className={`grid gap-3 p-4 w-[min(var(--bl-w),100%)] box-border bg-(--bl-bg) text-(--bl-ink) font-(family-name:--bl-font) text-[14px] shadow-[inset_0_0_0_3px_var(--bl-line),6px_6px_0_rgba(0,0,0,0.45)] ${className}`}
+      className={`bl-advisor grid gap-3 p-4 w-[min(var(--bl-w),100%)] box-border bg-(--bl-bg) text-(--bl-ink) font-(family-name:--bl-font) text-[14px] shadow-[inset_0_0_0_3px_var(--bl-line),6px_6px_0_rgba(0,0,0,0.45)] ${className}`}
       aria-label={`${advisor}: ${pick.title}`}
       style={{ '--bl-w': `${width}px`, '--bl-bg': backgroundColor, '--bl-chip': chipColor, '--bl-line': lineColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-track': trackColor, '--bl-accent': accentColor, '--bl-ok': okColor, '--bl-undo': `${undoWindow}ms`, '--bl-font': fontFamily, '--tone': tone, ...style }}
     >

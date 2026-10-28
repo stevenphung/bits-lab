@@ -11,6 +11,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-suggestion-chips-tw';
 const CSS = `
+/* theme tokens */
+.bl-chips { --bl-chip: #262b44; --bl-hover: #2e3552; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-chips, .bl-chips:where(.light, [data-theme="light"]) { --bl-chip: #ebe5d8; --bl-hover: #e0d8c6; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-chips, :where(.light, [data-theme="light"]) .bl-chips:where(.dark, [data-theme="dark"]) { --bl-chip: #262b44; --bl-hover: #2e3552; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-chips, .bl-chips:where([data-theme="system"]) { --bl-chip: #ebe5d8; --bl-hover: #e0d8c6; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-chips-in { from { opacity: 0; transform: translateY(10px) scale(0.92); } }
 @keyframes bl-chips-out { to { opacity: 0; transform: translateY(-6px) scale(0.95); } }
 `;
@@ -78,12 +84,12 @@ export default function SuggestionChips({
   align = 'center',
   stagger = 60,
   label = 'Suggestions',
-  chipColor = '#262b44',
-  hoverColor = '#2e3552',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  chipColor,
+  hoverColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
   radius = 999,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
@@ -113,7 +119,7 @@ export default function SuggestionChips({
   };
 
   return (
-    <div className={`grid w-full gap-3 font-(family-name:--bl-font) [justify-items:var(--bl-align)] ${className}`} style={{ '--bl-align': align === 'start' ? 'start' : 'center', '--bl-justify': align === 'start' ? 'flex-start' : 'center', '--bl-stagger': `${stagger}ms`, '--bl-chip': chipColor, '--bl-hover': hoverColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-line': lineColor, '--bl-accent': accentColor, '--bl-radius': `${radius}px`, '--bl-font': fontFamily, ...style } as CSSVars}>
+    <div className={`bl-chips grid w-full gap-3 font-(family-name:--bl-font) [justify-items:var(--bl-align)] ${className}`} style={{ '--bl-align': align === 'start' ? 'start' : 'center', '--bl-justify': align === 'start' ? 'flex-start' : 'center', '--bl-stagger': `${stagger}ms`, '--bl-chip': chipColor, '--bl-hover': hoverColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-line': lineColor, '--bl-accent': accentColor, '--bl-radius': `${radius}px`, '--bl-font': fontFamily, ...style } as CSSVars}>
       <ul className="group/chips flex flex-wrap gap-2 [justify-content:var(--bl-justify)]" aria-label={label} data-leaving={leaving || undefined}>
         {shown.map((item, i) => (
           <li key={`${round}-${item.text}`}>

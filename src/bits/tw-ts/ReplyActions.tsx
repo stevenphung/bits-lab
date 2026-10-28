@@ -12,6 +12,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-reply-actions-tw';
 const CSS = `
+/* theme tokens */
+.bl-reply { --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-ok: #a7f070; }
+:where(.light, [data-theme="light"]) .bl-reply, .bl-reply:where(.light, [data-theme="light"]) { --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-ok: #2f7d22; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-reply, :where(.light, [data-theme="light"]) .bl-reply:where(.dark, [data-theme="dark"]) { --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-ok: #a7f070; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-reply, .bl-reply:where([data-theme="system"]) { --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-ok: #2f7d22; } }
+/* theme tokens end */
 @keyframes bl-reply-spin { to { transform: rotate(360deg); } }
 @keyframes bl-reply-in { from { opacity: 0; transform: translateX(-6px); } }
 `;
@@ -83,12 +89,12 @@ export default function ReplyActions({
   onFeedback,
   regenerateTime = 1200,
   label = 'Reply actions',
-  chipColor = '#262b44',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
-  okColor = '#a7f070',
+  chipColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  accentColor,
+  okColor,
   fontFamily = 'inherit',
   className = '',
   style
@@ -154,7 +160,7 @@ export default function ReplyActions({
   };
 
   return (
-    <div className={`inline-flex items-center gap-0.5 font-(family-name:--bl-font) text-[13px] text-(--bl-muted) ${className}`} role="toolbar" aria-label={label} style={{ '--bl-chip': chipColor, '--bl-line': lineColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-accent': accentColor, '--bl-ok': okColor, '--bl-font': fontFamily, ...style } as CSSVars}>
+    <div className={`bl-reply inline-flex items-center gap-0.5 font-(family-name:--bl-font) text-[13px] text-(--bl-muted) ${className}`} role="toolbar" aria-label={label} style={{ '--bl-chip': chipColor, '--bl-line': lineColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-accent': accentColor, '--bl-ok': okColor, '--bl-font': fontFamily, ...style } as CSSVars}>
       <button type="button" className="inline-grid size-[30px] cursor-pointer place-items-center border-0 bg-transparent p-0 text-inherit hover:bg-(--bl-chip) hover:text-(--bl-ink) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--bl-accent) focus-visible:outline-solid disabled:cursor-default disabled:opacity-40 aria-pressed:text-(--bl-accent) data-[done]:text-(--bl-ok) data-[busy]:[&_svg]:animate-[bl-reply-spin_600ms_steps(8)_infinite] motion-reduce:data-[busy]:[&_svg]:animate-none [&_svg]:size-4" aria-label={copied ? 'Copied' : 'Copy'} data-done={copied || undefined} onClick={copy}>
         {copied ? ICONS.check : ICONS.copy}
       </button>

@@ -56,6 +56,12 @@ export interface StepLoaderProps {
 
 const STYLE_ID = 'bl-step-loader-tw';
 const CSS = `
+/* theme tokens */
+.bl-steps { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #38b764; --bl-on-accent: #0b0b14; --bl-error: #b13e53; }
+:where(.light, [data-theme="light"]) .bl-steps, .bl-steps:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #2b8a4a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-steps, :where(.light, [data-theme="light"]) .bl-steps:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #38b764; --bl-on-accent: #0b0b14; --bl-error: #b13e53; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-steps, .bl-steps:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #2b8a4a; } }
+/* theme tokens end */
 @keyframes bl-steps-spin { to { transform: rotate(360deg); } }
 @keyframes bl-steps-draw { to { stroke-dashoffset: 0; } }
 @keyframes bl-steps-pop-icon { 40% { transform: scale(1.25); } }
@@ -100,14 +106,14 @@ export default function StepLoader({
   errorMessage = 'Something went wrong.',
   width = 440,
   maxListHeight = 320,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  trackColor = '#333c57',
-  lineColor = '#333c57',
-  accentColor = '#38b764',
-  onAccentColor = '#0b0b14',
-  errorColor = '#b13e53',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  trackColor,
+  lineColor,
+  accentColor,
+  onAccentColor,
+  errorColor,
   backdropColor = 'rgba(8,8,16,0.65)',
   radius = 16,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
@@ -159,7 +165,7 @@ export default function StepLoader({
 
   const panel = (
     <div
-      className={`group/steps relative box-border w-full max-w-(--bl-w) rounded-(--bl-radius) bg-(--bl-bg) p-[22px] font-(family-name:--bl-font) text-(--bl-ink) shadow-[0_0_0_1px_var(--bl-line),0_30px_60px_-30px_rgba(0,0,0,0.85)] ${className}`}
+      className={`bl-steps group/steps relative box-border w-full max-w-(--bl-w) rounded-(--bl-radius) bg-(--bl-bg) p-[22px] font-(family-name:--bl-font) text-(--bl-ink) shadow-[0_0_0_1px_var(--bl-line),0_30px_60px_-30px_rgba(0,0,0,0.85)] ${className}`}
       role={fixed ? 'dialog' : 'region'}
       aria-modal={fixed || undefined}
       aria-labelledby={`${uid}-title`}

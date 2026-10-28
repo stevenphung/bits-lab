@@ -51,6 +51,12 @@ export interface MobileTabBarProps {
 
 const STYLE_ID = 'bl-mobile-tab-bar-tw';
 const CSS = `
+/* theme tokens */
+.bl-tabbar { --bl-tab-ink: #94b0c2; --bl-bg: #1a1c2c; --bl-active: #0b0b14; --bl-blob: #73eff7; --bl-line: #333c57; --bl-accent: #f4f4f4; --bl-badge: #b13e53; }
+:where(.light, [data-theme="light"]) .bl-tabbar, .bl-tabbar:where(.light, [data-theme="light"]) { --bl-tab-ink: #566c86; --bl-bg: #f4f1e8; --bl-active: #e2dacb; --bl-blob: #167f8f; --bl-line: #cfc4ad; --bl-accent: #1a1c2c; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tabbar, :where(.light, [data-theme="light"]) .bl-tabbar:where(.dark, [data-theme="dark"]) { --bl-tab-ink: #94b0c2; --bl-bg: #1a1c2c; --bl-active: #0b0b14; --bl-blob: #73eff7; --bl-line: #333c57; --bl-accent: #f4f4f4; --bl-badge: #b13e53; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tabbar, .bl-tabbar:where([data-theme="system"]) { --bl-tab-ink: #566c86; --bl-bg: #f4f1e8; --bl-active: #e2dacb; --bl-blob: #167f8f; --bl-line: #cfc4ad; --bl-accent: #1a1c2c; } }
+/* theme tokens end */
 @keyframes bl-tabbar-bounce { 0% { transform: scale(1); } 30% { transform: scale(0.8) translateY(2px); } 60% { transform: scale(1.18) translateY(-3px); } 100% { transform: none; } }
 `;
 
@@ -74,13 +80,13 @@ export default function MobileTabBar({
   haptics = false,
   stretch = 1,
   label = 'Main',
-  backgroundColor = '#1a1c2c',
-  textColor = '#94b0c2',
-  activeColor = '#0b0b14',
-  blobColor = '#73eff7',
-  lineColor = '#333c57',
-  accentColor = '#f4f4f4',
-  badgeColor = '#b13e53',
+  backgroundColor,
+  textColor,
+  activeColor,
+  blobColor,
+  lineColor,
+  accentColor,
+  badgeColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
@@ -145,12 +151,12 @@ export default function MobileTabBar({
   return (
     <nav
       ref={rootRef}
-      className={`group/bar relative box-border flex w-full bg-(--bl-bg) px-2 pt-2 pb-[calc(8px_+_env(safe-area-inset-bottom,0px))] font-(family-name:--bl-font) text-(--bl-muted) shadow-[0_-1px_0_var(--bl-line)] data-[fixed]:fixed data-[fixed]:inset-x-0 data-[fixed]:bottom-0 data-[fixed]:z-30 data-[floating]:mx-3 data-[floating]:mt-0 data-[floating]:mb-3 data-[floating]:w-auto data-[floating]:rounded-full data-[floating]:pb-2 data-[floating]:shadow-[0_0_0_1px_var(--bl-line),0_16px_40px_-16px_rgba(0,0,0,0.8)] ${className}`}
+      className={`bl-tabbar group/bar relative box-border flex w-full bg-(--bl-bg) px-2 pt-2 pb-[calc(8px_+_env(safe-area-inset-bottom,0px))] font-(family-name:--bl-font) text-(--bl-muted) shadow-[0_-1px_0_var(--bl-line)] data-[fixed]:fixed data-[fixed]:inset-x-0 data-[fixed]:bottom-0 data-[fixed]:z-30 data-[floating]:mx-3 data-[floating]:mt-0 data-[floating]:mb-3 data-[floating]:w-auto data-[floating]:rounded-full data-[floating]:pb-2 data-[floating]:shadow-[0_0_0_1px_var(--bl-line),0_16px_40px_-16px_rgba(0,0,0,0.8)] ${className}`}
       aria-label={label}
       data-labels={labels}
       data-floating={floating || undefined}
       data-fixed={fixed || undefined}
-      style={{ '--bl-bg': backgroundColor, '--bl-active': activeColor, '--bl-blob': blobColor, '--bl-line': lineColor, '--bl-accent': accentColor, '--bl-badge': badgeColor, '--bl-font': fontFamily, color: textColor, ...style } as CSSVars}
+      style={{ '--bl-bg': backgroundColor, '--bl-active': activeColor, '--bl-blob': blobColor, '--bl-line': lineColor, '--bl-accent': accentColor, '--bl-badge': badgeColor, '--bl-font': fontFamily, color: textColor ?? 'var(--bl-tab-ink)', ...style } as CSSVars}
     >
       <span className="pointer-events-none absolute top-2 right-[var(--bl-r,0px)] bottom-[calc(8px_+_env(safe-area-inset-bottom,0px))] left-[var(--bl-l,0px)] rounded-full bg-(--bl-blob) [transition:left_var(--bl-lead-l)_cubic-bezier(.3,1.2,.5,1)_var(--bl-delay-l),right_var(--bl-lead-r)_cubic-bezier(.3,1.2,.5,1)_var(--bl-delay-r)] group-data-[floating]/bar:bottom-2 motion-reduce:[transition:none]" aria-hidden="true" />
       {tabs.map((tab, i) => (

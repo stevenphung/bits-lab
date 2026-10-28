@@ -14,3 +14,4 @@ docs/AIRBNB_DESIGN_LANGUAGE.md
 # npm package build output
 packages/bits-lab/dist
 packages/bits-lab/*.tgz
+scripts/.theme-report.json

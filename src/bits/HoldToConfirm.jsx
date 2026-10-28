@@ -7,6 +7,12 @@ import { useEffect, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-hold-confirm';
 const CSS = `
+/* theme tokens */
+.bl-hold { --bl-bg: #333c57; --bl-fill: #b13e53; --bl-fuse: #ef7d57; --bl-spark: #ffcd75; --bl-ink: #f4f4f4; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-hold, .bl-hold:where(.light, [data-theme="light"]) { --bl-bg: #ddd4c0; --bl-fuse: #c4502a; --bl-spark: #a86a12; --bl-ink: #1a1c2c; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-hold, :where(.light, [data-theme="light"]) .bl-hold:where(.dark, [data-theme="dark"]) { --bl-bg: #333c57; --bl-fill: #b13e53; --bl-fuse: #ef7d57; --bl-spark: #ffcd75; --bl-ink: #f4f4f4; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-hold, .bl-hold:where([data-theme="system"]) { --bl-bg: #ddd4c0; --bl-fuse: #c4502a; --bl-spark: #a86a12; --bl-ink: #1a1c2c; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-hold { --p: 0; position: relative; display: inline-grid; place-items: center; min-width: var(--bl-w); height: var(--bl-h); padding: 0 22px; overflow: hidden; border: 0; border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); font: inherit; font-family: var(--bl-font); font-size: 15px; font-weight: 700; cursor: pointer; user-select: none; touch-action: none; box-shadow: inset 0 -4px 0 rgba(0,0,0,0.3); -webkit-tap-highlight-color: transparent; }
 .bl-hold:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 3px; }
 .bl-hold:disabled { cursor: not-allowed; opacity: 0.5; }
@@ -42,12 +48,12 @@ export default function HoldToConfirm({
   width = 200,
   height = 52,
   radius = 10,
-  backgroundColor = '#333c57',
-  fillColor = '#b13e53',
-  fuseColor = '#ef7d57',
-  sparkColor = '#ffcd75',
-  textColor = '#f4f4f4',
-  accentColor = '#73eff7',
+  backgroundColor,
+  fillColor,
+  fuseColor,
+  sparkColor,
+  textColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style

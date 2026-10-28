@@ -11,6 +11,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-toggle-group-tw';
 const CSS = `
+/* theme tokens */
+.bl-tg { --bl-track: rgba(255,255,255,0.06); --bl-line: rgba(255,255,255,0.1); --bl-thumb: #f4f4f4; --bl-thumb-ink: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-tg, .bl-tg:where(.light, [data-theme="light"]) { --bl-track: rgba(26,28,44,0.06); --bl-line: rgba(26,28,44,0.1); --bl-thumb: #1a1c2c; --bl-thumb-ink: #f4f4f4; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tg, :where(.light, [data-theme="light"]) .bl-tg:where(.dark, [data-theme="dark"]) { --bl-track: rgba(255,255,255,0.06); --bl-line: rgba(255,255,255,0.1); --bl-thumb: #f4f4f4; --bl-thumb-ink: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tg, .bl-tg:where([data-theme="system"]) { --bl-track: rgba(26,28,44,0.06); --bl-line: rgba(26,28,44,0.1); --bl-thumb: #1a1c2c; --bl-thumb-ink: #f4f4f4; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-tg-pop { 40% { transform: scale(0.94); } }
 `;
 
@@ -75,13 +81,13 @@ export default function ToggleGroup({
   radius = 12,
   gap = 2,
   padding = 4,
-  trackColor = 'rgba(255,255,255,0.06)',
-  lineColor = 'rgba(255,255,255,0.1)',
-  thumbColor = '#f4f4f4',
-  thumbTextColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
+  trackColor,
+  lineColor,
+  thumbColor,
+  thumbTextColor,
+  textColor,
+  mutedColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
@@ -164,7 +170,7 @@ export default function ToggleGroup({
 
   return (
     <div
-      className={`group/tg relative isolate inline-flex max-w-full gap-(--bl-gap) overflow-x-auto rounded-(--bl-radius) bg-(--bl-track) p-(--bl-pad) font-(family-name:--bl-font) shadow-[inset_0_0_0_1px_var(--bl-line)] [scrollbar-width:none] data-[full]:flex data-[full]:w-full ${className}`}
+      className={`bl-tg group/tg relative isolate inline-flex max-w-full gap-(--bl-gap) overflow-x-auto rounded-(--bl-radius) bg-(--bl-track) p-(--bl-pad) font-(family-name:--bl-font) shadow-[inset_0_0_0_1px_var(--bl-line)] [scrollbar-width:none] data-[full]:flex data-[full]:w-full ${className}`}
       role={multiple ? 'group' : 'radiogroup'}
       aria-label={label}
       data-type={type}

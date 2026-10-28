@@ -10,6 +10,12 @@ import { useInsertionEffect, useMemo, useState } from 'react';
 
 const STYLE_ID = 'bl-spoiler-tw';
 const CSS = `
+/* theme tokens */
+.bl-spoiler { --bl-cover: rgba(148,176,194,0.18); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-spoiler, .bl-spoiler:where(.light, [data-theme="light"]) { --bl-cover: rgba(86,108,134,0.18); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-spoiler, :where(.light, [data-theme="light"]) .bl-spoiler:where(.dark, [data-theme="dark"]) { --bl-cover: rgba(148,176,194,0.18); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-spoiler, .bl-spoiler:where([data-theme="system"]) { --bl-cover: rgba(86,108,134,0.18); --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-spoiler-drift { to { background-position: var(--bl-tile) calc(var(--bl-tile) * -1), calc(var(--bl-tile) * -1.37) calc(var(--bl-tile) * 1.37); } }
 @keyframes bl-spoiler-scatter { to { background-position: calc(var(--bl-tile) * 3) calc(var(--bl-tile) * -2), calc(var(--bl-tile) * -3) calc(var(--bl-tile) * 2); opacity: 1; } }
 `;
@@ -53,8 +59,8 @@ export default function Spoiler({
   rehide = false,
   label = 'Spoiler',
   dotColor = '#f4f4f4',
-  coverColor = 'rgba(148,176,194,0.18)',
-  accentColor = '#73eff7',
+  coverColor,
+  accentColor,
   tile = 24,
   density = 60,
   className = '',
@@ -78,7 +84,7 @@ export default function Spoiler({
 
   return (
     <span
-      className={`cursor-pointer rounded-[4px] bg-(--bl-cover) text-transparent box-decoration-clone select-none [background-image:var(--bl-dots),var(--bl-dots)] [background-size:var(--bl-tile)_var(--bl-tile),calc(var(--bl-tile)*1.37)_calc(var(--bl-tile)*1.37)] animate-[bl-spoiler-drift_2.4s_linear_infinite] [transition:color_500ms_ease,background-size_700ms_cubic-bezier(.2,.9,.25,1),background-color_400ms_ease] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--bl-accent) data-[revealed]:animate-[bl-spoiler-scatter_700ms_ease_forwards] data-[revealed]:cursor-text data-[revealed]:bg-transparent data-[revealed]:text-inherit data-[revealed]:select-text data-[revealed]:[background-size:calc(var(--bl-tile)*5)_calc(var(--bl-tile)*5),calc(var(--bl-tile)*6)_calc(var(--bl-tile)*6)] data-[gone]:animate-none! data-[gone]:[background:none]! motion-reduce:animate-none motion-reduce:[transition:color_150ms] motion-reduce:data-[revealed]:animate-none motion-reduce:data-[revealed]:[background:none] ${className}`}
+      className={`bl-spoiler cursor-pointer rounded-[4px] bg-(--bl-cover) text-transparent box-decoration-clone select-none [background-image:var(--bl-dots),var(--bl-dots)] [background-size:var(--bl-tile)_var(--bl-tile),calc(var(--bl-tile)*1.37)_calc(var(--bl-tile)*1.37)] animate-[bl-spoiler-drift_2.4s_linear_infinite] [transition:color_500ms_ease,background-size_700ms_cubic-bezier(.2,.9,.25,1),background-color_400ms_ease] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--bl-accent) data-[revealed]:animate-[bl-spoiler-scatter_700ms_ease_forwards] data-[revealed]:cursor-text data-[revealed]:bg-transparent data-[revealed]:text-inherit data-[revealed]:select-text data-[revealed]:[background-size:calc(var(--bl-tile)*5)_calc(var(--bl-tile)*5),calc(var(--bl-tile)*6)_calc(var(--bl-tile)*6)] data-[gone]:animate-none! data-[gone]:[background:none]! motion-reduce:animate-none motion-reduce:[transition:color_150ms] motion-reduce:data-[revealed]:animate-none motion-reduce:data-[revealed]:[background:none] ${className}`}
       data-revealed={shown || undefined}
       data-gone={(shown && gone) || undefined}
       role={interactive ? 'button' : undefined}

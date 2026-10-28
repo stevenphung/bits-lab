@@ -9,6 +9,12 @@ import { useEffect, useId, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-thinking-tw';
 const CSS = `
+/* theme tokens */
+.bl-think { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-shine: #f4f4f4; --bl-line: rgba(255,255,255,0.12); --bl-hover: rgba(255,255,255,0.06); --bl-accent: #73eff7; --bl-success: #38b764; }
+:where(.light, [data-theme="light"]) .bl-think, .bl-think:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-shine: #8a96a3; --bl-line: rgba(26,28,44,0.12); --bl-hover: rgba(26,28,44,0.06); --bl-accent: #167f8f; --bl-success: #2b8a4a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-think, :where(.light, [data-theme="light"]) .bl-think:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-shine: #f4f4f4; --bl-line: rgba(255,255,255,0.12); --bl-hover: rgba(255,255,255,0.06); --bl-accent: #73eff7; --bl-success: #38b764; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-think, .bl-think:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-shine: #8a96a3; --bl-line: rgba(26,28,44,0.12); --bl-hover: rgba(26,28,44,0.06); --bl-accent: #167f8f; --bl-success: #2b8a4a; } }
+/* theme tokens end */
 @keyframes bl-think-shine { from { background-position: 100% 0; } to { background-position: -150% 0; } }
 @keyframes bl-think-spin { to { transform: rotate(360deg); } }
 `;
@@ -36,13 +42,13 @@ export default function ThinkingShimmer({
   onOpenChange,
   shimmerSpeed = 1800,
   width = 560,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  shineColor = '#f4f4f4',
-  lineColor = 'rgba(255,255,255,0.12)',
-  hoverColor = 'rgba(255,255,255,0.06)',
-  accentColor = '#73eff7',
-  successColor = '#38b764',
+  textColor,
+  mutedColor,
+  shineColor,
+  lineColor,
+  hoverColor,
+  accentColor,
+  successColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
@@ -96,7 +102,7 @@ export default function ThinkingShimmer({
 
   return (
     <div
-      className={`w-full max-w-(--bl-w) font-(family-name:--bl-font) text-[14px] text-(--bl-ink) ${className}`}
+      className={`bl-think w-full max-w-(--bl-w) font-(family-name:--bl-font) text-[14px] text-(--bl-ink) ${className}`}
       style={{
         '--bl-w': `${width}px`,
         '--bl-ink': textColor,

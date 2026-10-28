@@ -9,6 +9,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-feed-list';
 const CSS = `
+/* theme tokens */
+.bl-feed { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-hover: rgba(255,255,255,0.05); --bl-chip: rgba(255,255,255,0.07); --bl-line: #333c57; --bl-accent: #73eff7; --bl-flash: rgba(115,239,247,0.14); }
+:where(.light, [data-theme="light"]) .bl-feed, .bl-feed:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-hover: rgba(26,28,44,0.05); --bl-chip: rgba(26,28,44,0.07); --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-flash: rgba(22,127,143,0.14); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-feed, :where(.light, [data-theme="light"]) .bl-feed:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-hover: rgba(255,255,255,0.05); --bl-chip: rgba(255,255,255,0.07); --bl-line: #333c57; --bl-accent: #73eff7; --bl-flash: rgba(115,239,247,0.14); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-feed, .bl-feed:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-hover: rgba(26,28,44,0.05); --bl-chip: rgba(26,28,44,0.07); --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-flash: rgba(22,127,143,0.14); } }
+/* theme tokens end */
 .bl-feed { margin: 0; padding: 6px; list-style: none; width: 100%; max-width: var(--bl-w); max-height: var(--bl-max-h); overflow-y: auto; box-sizing: border-box; border-radius: var(--bl-radius); background: var(--bl-bg); font-family: var(--bl-font); color: var(--bl-ink); box-shadow: inset 0 0 0 1px var(--bl-line); outline: none; }
 .bl-feed:focus-visible { box-shadow: inset 0 0 0 2px var(--bl-accent); }
 .bl-feed__item { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 280ms cubic-bezier(.3,.8,.3,1), opacity 220ms; }
@@ -96,14 +102,14 @@ export default function FeedList({
   width = 480,
   maxHeight = 420,
   radius = 14,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  hoverColor = 'rgba(255,255,255,0.05)',
-  chipColor = 'rgba(255,255,255,0.07)',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  flashColor = 'rgba(115,239,247,0.14)',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  hoverColor,
+  chipColor,
+  lineColor,
+  accentColor,
+  flashColor,
   fontFamily = 'inherit',
   className = '',
   style

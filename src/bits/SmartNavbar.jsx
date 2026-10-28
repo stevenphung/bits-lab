@@ -7,6 +7,12 @@ import { useEffect, useId, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-smart-navbar';
 const CSS = `
+/* theme tokens */
+.bl-nav { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line-top: rgba(255,255,255,0.08); --bl-bg-pill: rgba(26,28,44,0.72); --bl-line: rgba(255,255,255,0.12); --bl-hover: rgba(255,255,255,0.08); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-nav, .bl-nav:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line-top: rgba(26,28,44,0.08); --bl-bg-pill: rgba(244,241,232,0.82); --bl-line: rgba(26,28,44,0.12); --bl-hover: rgba(26,28,44,0.08); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-nav, :where(.light, [data-theme="light"]) .bl-nav:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line-top: rgba(255,255,255,0.08); --bl-bg-pill: rgba(26,28,44,0.72); --bl-line: rgba(255,255,255,0.12); --bl-hover: rgba(255,255,255,0.08); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-nav, .bl-nav:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line-top: rgba(26,28,44,0.08); --bl-bg-pill: rgba(244,241,232,0.82); --bl-line: rgba(26,28,44,0.12); --bl-hover: rgba(26,28,44,0.08); --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-nav { position: sticky; top: 0; z-index: 40; height: 0; font-family: var(--bl-font); container-type: inline-size; }
 .bl-nav__bar { position: relative; display: flex; align-items: center; gap: 18px; width: 100%; max-width: 100%; height: var(--bl-h); margin: 0 auto; padding: 0 var(--bl-pad); box-sizing: border-box; color: var(--bl-ink); background: var(--bl-bg-top); border-bottom: 1px solid var(--bl-line-top); transition: max-width var(--bl-dur) var(--bl-ease), margin-top var(--bl-dur) var(--bl-ease), height var(--bl-dur) var(--bl-ease), border-radius var(--bl-dur) var(--bl-ease), background-color var(--bl-dur), box-shadow var(--bl-dur), border-color var(--bl-dur), transform var(--bl-dur) var(--bl-ease); }
 .bl-nav[data-pill] .bl-nav__bar { max-width: var(--bl-pill-w); height: var(--bl-pill-h); margin-top: var(--bl-pill-top); border-radius: var(--bl-pill-r); background: var(--bl-bg-pill); border-color: transparent; box-shadow: 0 0 0 1px var(--bl-line), 0 12px 32px -14px rgba(0,0,0,0.6); backdrop-filter: blur(var(--bl-blur)) saturate(1.4); -webkit-backdrop-filter: blur(var(--bl-blur)) saturate(1.4); }
@@ -60,14 +66,14 @@ export default function SmartNavbar({
   radius = 999,
   blur = 14,
   duration = 380,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
+  textColor,
+  mutedColor,
   topColor = 'transparent',
-  topLineColor = 'rgba(255,255,255,0.08)',
-  pillColor = 'rgba(26,28,44,0.72)',
-  lineColor = 'rgba(255,255,255,0.12)',
-  hoverColor = 'rgba(255,255,255,0.08)',
-  accentColor = '#73eff7',
+  topLineColor,
+  pillColor,
+  lineColor,
+  hoverColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   label = 'Main',
   className = '',

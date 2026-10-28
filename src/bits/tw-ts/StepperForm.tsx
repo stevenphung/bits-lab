@@ -53,6 +53,12 @@ type Field = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 const STYLE_ID = 'bl-stepper-form-tw';
 const CSS = `
+/* theme tokens */
+.bl-stepper { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-error: #ef7d57; }
+:where(.light, [data-theme="light"]) .bl-stepper, .bl-stepper:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-error: #c4502a; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-stepper, :where(.light, [data-theme="light"]) .bl-stepper:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-error: #ef7d57; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-stepper, .bl-stepper:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-error: #c4502a; } }
+/* theme tokens end */
 @keyframes bl-stepper-in { from { opacity: 0; transform: translateX(calc(var(--bl-dir, 1) * 26px)); } }
 @keyframes bl-stepper-shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
 `;
@@ -80,14 +86,14 @@ export default function StepperForm({
   checkingLabel = 'Checking…',
   label = 'Form',
   width = 520,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  trackColor = '#333c57',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  onAccentColor = '#0b0b14',
-  errorColor = '#ef7d57',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  trackColor,
+  lineColor,
+  accentColor,
+  onAccentColor,
+  errorColor,
   radius = 16,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
@@ -167,7 +173,7 @@ export default function StepperForm({
   return (
     <form
       ref={formRef}
-      className={`box-border w-full max-w-(--bl-w) rounded-(--bl-radius) bg-(--bl-bg) p-5 font-(family-name:--bl-font) text-(--bl-ink) shadow-[0_0_0_1px_var(--bl-line),0_24px_50px_-28px_rgba(0,0,0,0.85)] ${className}`}
+      className={`bl-stepper box-border w-full max-w-(--bl-w) rounded-(--bl-radius) bg-(--bl-bg) p-5 font-(family-name:--bl-font) text-(--bl-ink) shadow-[0_0_0_1px_var(--bl-line),0_24px_50px_-28px_rgba(0,0,0,0.85)] ${className}`}
       aria-label={label}
       noValidate
       onSubmit={onSubmit}

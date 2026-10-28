@@ -1,4 +1,23 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useInsertionEffect, useRef, useState } from 'react';
+
+const STYLE_ID = 'bl-changelog-tw';
+const CSS = `
+/* theme tokens */
+.bl-log { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-log, .bl-log:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-log, :where(.light, [data-theme="light"]) .bl-log:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-track: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-log, .bl-log:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-track: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -15,17 +34,18 @@ export default function ChangelogTimeline({
   dateColumn = 140,
   stickyTop = 24,
   width = 760,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  trackColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  trackColor,
+  accentColor,
   mediaRadius = 12,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   label = 'Changelog',
   className = '',
   style
 }) {
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const listRef = useRef(null);
   const lineRef = useRef(null);
@@ -70,7 +90,7 @@ export default function ChangelogTimeline({
 
   return (
     <section
-      className={`@container relative mx-auto w-full max-w-(--bl-w) font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-log @container relative mx-auto w-full max-w-(--bl-w) font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       aria-label={label}
       style={{
         '--bl-w': `${width}px`,

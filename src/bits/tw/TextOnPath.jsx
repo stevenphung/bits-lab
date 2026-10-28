@@ -1,4 +1,23 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useInsertionEffect, useRef, useState } from 'react';
+
+const STYLE_ID = 'bl-text-on-path-tw';
+const CSS = `
+/* theme tokens */
+.bl-tpath { --bl-ink: #f4f4f4; --bl-guide: rgba(255,255,255,0.18); }
+:where(.light, [data-theme="light"]) .bl-tpath, .bl-tpath:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-guide: rgba(26,28,44,0.18); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tpath, :where(.light, [data-theme="light"]) .bl-tpath:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-guide: rgba(255,255,255,0.18); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tpath, .bl-tpath:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-guide: rgba(26,28,44,0.18); } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -30,13 +49,14 @@ export default function TextOnPath({
   showPath = false,
   pauseOnHover = true,
   width = 900,
-  textColor = '#f4f4f4',
-  guideColor = 'rgba(255,255,255,0.18)',
+  textColor,
+  guideColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   label,
   className = '',
   style
 }) {
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const preset = typeof path === 'string' && PATHS[path] ? PATHS[path] : null;
   const d = preset ? preset.d : path;
@@ -99,7 +119,7 @@ export default function TextOnPath({
   return (
     <svg
       ref={svgRef}
-      className={`block w-full max-w-(--bl-w) overflow-visible font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-tpath block w-full max-w-(--bl-w) overflow-visible font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       viewBox={box}
       role="img"
       aria-label={label ?? text.trim()}

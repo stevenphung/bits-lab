@@ -13,6 +13,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-reaction-combo-tw';
 const CSS = `
+/* theme tokens */
+.bl-react { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-gold: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-react, .bl-react:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-gold: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-react, :where(.light, [data-theme="light"]) .bl-react:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-gold: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-react, .bl-react:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-gold: #a86a12; } }
+/* theme tokens end */
 @keyframes bl-react-pop { 40% { transform: scale(1.5) translateY(-3px); } }
 @keyframes bl-react-up { from { transform: translateY(100%); } }
 @keyframes bl-react-down { from { transform: translateY(-100%); } }
@@ -97,13 +103,13 @@ export default function ReactionCombo({
   comboWindow = 900,
   showCombo = true,
   label = 'Reactions',
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
-  goldColor = '#ffcd75',
+  backgroundColor,
+  chipColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  accentColor,
+  goldColor,
   fontFamily = 'inherit',
   className = '',
   style
@@ -144,7 +150,7 @@ export default function ReactionCombo({
   };
 
   return (
-    <div className={`relative inline-flex items-center gap-0.5 bg-(--bl-bg) p-1 font-(family-name:--bl-font) text-[14px] text-(--bl-ink) shadow-[inset_0_0_0_3px_var(--bl-line),4px_4px_0_rgba(0,0,0,0.45)] ${className}`} role="group" aria-label={label} style={{ '--bl-bg': backgroundColor, '--bl-chip': chipColor, '--bl-line': lineColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-accent': accentColor, '--bl-gold': goldColor, '--bl-font': fontFamily, ...style } as CSSVars}>
+    <div className={`bl-react relative inline-flex items-center gap-0.5 bg-(--bl-bg) p-1 font-(family-name:--bl-font) text-[14px] text-(--bl-ink) shadow-[inset_0_0_0_3px_var(--bl-line),4px_4px_0_rgba(0,0,0,0.45)] ${className}`} role="group" aria-label={label} style={{ '--bl-bg': backgroundColor, '--bl-chip': chipColor, '--bl-line': lineColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-accent': accentColor, '--bl-gold': goldColor, '--bl-font': fontFamily, ...style } as CSSVars}>
       {reactions.map(reaction => {
         const toggles = reaction.toggle !== false;
         const isOn = toggles && on.includes(reaction.id);

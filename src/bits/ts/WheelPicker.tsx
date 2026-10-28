@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-wheel-picker';
 const CSS = `
+/* theme tokens */
+.bl-wheel { --bl-bg: #1a1c2c; --bl-band: rgba(115,239,247,0.08); --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-wheel, .bl-wheel:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-band: rgba(22,127,143,0.08); --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-wheel, :where(.light, [data-theme="light"]) .bl-wheel:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-band: rgba(115,239,247,0.08); --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-wheel, .bl-wheel:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-band: rgba(22,127,143,0.08); --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-wheel { position: relative; display: inline-block; width: var(--bl-w); height: calc(var(--bl-row) * var(--bl-visible)); overflow: hidden; border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); font-size: var(--bl-size); box-shadow: inset 0 0 0 1px var(--bl-line); cursor: grab; touch-action: none; user-select: none; outline: none; perspective: 600px; }
 .bl-wheel:focus-visible { box-shadow: inset 0 0 0 2px var(--bl-accent); }
 .bl-wheel[data-dragging] { cursor: grabbing; }
@@ -71,12 +77,12 @@ export default function WheelPicker({
   label = 'Pick an option',
   fontSize = 18,
   radius = 14,
-  backgroundColor = '#1a1c2c',
-  bandColor = 'rgba(115,239,247,0.08)',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  bandColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style

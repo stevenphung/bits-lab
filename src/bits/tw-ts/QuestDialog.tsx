@@ -11,6 +11,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-quest-dialog-tw';
 const CSS = `
+/* theme tokens */
+.bl-quest { --bl-box: #1a1c2c; --bl-border: #f4f4f4; --bl-text: #f4f4f4; --bl-name: #0b0b14; --bl-accent: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-quest, .bl-quest:where(.light, [data-theme="light"]) { --bl-box: #f4f1e8; --bl-border: #1a1c2c; --bl-text: #1a1c2c; --bl-accent: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-quest, :where(.light, [data-theme="light"]) .bl-quest:where(.dark, [data-theme="dark"]) { --bl-box: #1a1c2c; --bl-border: #f4f4f4; --bl-text: #f4f4f4; --bl-name: #0b0b14; --bl-accent: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-quest, .bl-quest:where([data-theme="system"]) { --bl-box: #f4f1e8; --bl-border: #1a1c2c; --bl-text: #1a1c2c; --bl-accent: #a86a12; } }
+/* theme tokens end */
 @keyframes bl-quest-bob { 50% { transform: translateY(4px); } }
 @keyframes bl-quest-blink { 50% { opacity: 0; } }
 `;
@@ -102,12 +108,12 @@ export default function QuestDialog({
   fontSize = 13,
   minLines = 3,
   portraitSize = 72,
-  boxColor = '#1a1c2c',
-  borderColor = '#f4f4f4',
-  textColor = '#f4f4f4',
-  nameColor = '#0b0b14',
+  boxColor,
+  borderColor,
+  textColor,
+  nameColor,
   nameBackground = '#ffcd75',
-  accentColor = '#ffcd75',
+  accentColor,
   fontFamily,
   bodyFont,
   loop = false,
@@ -198,7 +204,7 @@ export default function QuestDialog({
   const portrait = line.portrait;
   return (
     <div
-      className={`relative m-1 w-[min(var(--bl-width),100%)] cursor-pointer bg-(--bl-box) px-[22px] pt-[22px] pb-5 text-(--bl-text) shadow-[0_-4px_0_0_var(--bl-border),0_4px_0_0_var(--bl-border),-4px_0_0_0_var(--bl-border),4px_0_0_0_var(--bl-border),inset_0_0_0_4px_#0b0b14,8px_8px_0_4px_rgba(11,11,20,0.45)] select-none focus-visible:outline-4 focus-visible:outline-offset-8 focus-visible:outline-[#41a6f6] focus-visible:outline-solid ${className}`}
+      className={`bl-quest relative m-1 w-[min(var(--bl-width),100%)] cursor-pointer bg-(--bl-box) px-[22px] pt-[22px] pb-5 text-(--bl-text) shadow-[0_-4px_0_0_var(--bl-border),0_4px_0_0_var(--bl-border),-4px_0_0_0_var(--bl-border),4px_0_0_0_var(--bl-border),inset_0_0_0_4px_#0b0b14,8px_8px_0_4px_rgba(11,11,20,0.45)] select-none focus-visible:outline-4 focus-visible:outline-offset-8 focus-visible:outline-[#41a6f6] focus-visible:outline-solid ${className}`}
       role="group"
       aria-roledescription="dialogue"
       aria-label={line.speaker ? `${line.speaker} says` : 'Dialogue'}

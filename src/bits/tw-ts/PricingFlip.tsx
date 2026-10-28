@@ -1,14 +1,6 @@
-import { useId, useRef, useState, type CSSProperties, type ReactNode, type KeyboardEvent } from 'react';
+import { useId, useInsertionEffect, useRef, useState, type CSSProperties, type ReactNode, type KeyboardEvent } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
-
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// Pricing cards with a Monthly / Yearly switch. Flipping it rolls every price digit to its
-// new value like a counter, shows what a year is billed at, and pops a "Save N%" badge
-// computed from your own numbers. The switch is a keyboard radio group, prices are read
-// out as words ("$12 per month"), and the change of period is announced once.
 
 export type BillingPeriod = 'monthly' | 'yearly';
 
@@ -63,6 +55,25 @@ export interface PricingFlipProps {
   style?: CSSProperties;
 }
 
+const STYLE_ID = 'bl-pricing-flip-tw';
+const CSS = `
+/* theme tokens */
+.bl-price { --bl-bg: #1a1c2c; --bl-card: #262b44; --bl-track: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-save: #ffcd75; }
+:where(.light, [data-theme="light"]) .bl-price, .bl-price:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-card: #ebe5d8; --bl-track: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-save: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-price, :where(.light, [data-theme="light"]) .bl-price:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-card: #262b44; --bl-track: #0b0b14; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; --bl-on-accent: #0b0b14; --bl-save: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-price, .bl-price:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-card: #ebe5d8; --bl-track: #e2dacb; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; --bl-save: #a86a12; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
+
 const DIGITS = Array.from({ length: 10 }, (_, i) => i);
 
 // A formatted price whose digits roll. Columns are keyed from the right, so "$9" → "$12"
@@ -109,22 +120,22 @@ export default function PricingFlip({
   billedYearly = (total: string) => `Billed ${total} yearly`,
   width = 1000,
   priceSize = 44,
-  backgroundColor = '#1a1c2c',
-  cardColor = '#262b44',
-  trackColor = '#0b0b14',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
-  onAccentColor = '#0b0b14',
-  saveColor = '#ffcd75',
+  backgroundColor,
+  cardColor,
+  trackColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
+  onAccentColor,
+  saveColor,
   radius = 18,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   label = 'Billing period',
   className = '',
   style
 }: PricingFlipProps) {
-  
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const [inner, setInner] = useState<BillingPeriod>(defaultPeriod);
   const period = controlled ?? inner;
@@ -153,7 +164,7 @@ export default function PricingFlip({
 
   return (
     <div
-      className={`grid w-full grid-cols-[minmax(0,1fr)] justify-items-center gap-7 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-price grid w-full grid-cols-[minmax(0,1fr)] justify-items-center gap-7 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       style={{
         '--bl-w': `${width}px`,
         '--bl-size': `${priceSize}px`,

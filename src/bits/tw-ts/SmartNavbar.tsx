@@ -1,14 +1,25 @@
-import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useId, useInsertionEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// Navbar that gets out of the way. Full width at the top of the page; once you scroll past
-// `shrinkAt` it tightens into a floating, blurred pill. Scrolling down hides it, scrolling
-// up (or tabbing into it) brings it back. Collapses to a menu button on narrow containers.
-// Tracks the nearest scroll box or the window.
+const STYLE_ID = 'bl-smart-navbar-tw';
+const CSS = `
+/* theme tokens */
+.bl-nav { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line-top: rgba(255,255,255,0.08); --bl-bg-pill: rgba(26,28,44,0.72); --bl-line: rgba(255,255,255,0.12); --bl-hover: rgba(255,255,255,0.08); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-nav, .bl-nav:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line-top: rgba(26,28,44,0.08); --bl-bg-pill: rgba(244,241,232,0.82); --bl-line: rgba(26,28,44,0.12); --bl-hover: rgba(26,28,44,0.08); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-nav, :where(.light, [data-theme="light"]) .bl-nav:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line-top: rgba(255,255,255,0.08); --bl-bg-pill: rgba(26,28,44,0.72); --bl-line: rgba(255,255,255,0.12); --bl-hover: rgba(255,255,255,0.08); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-nav, .bl-nav:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line-top: rgba(26,28,44,0.08); --bl-bg-pill: rgba(244,241,232,0.82); --bl-line: rgba(26,28,44,0.12); --bl-hover: rgba(26,28,44,0.08); --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 function scrollParent(node: HTMLElement | null): HTMLElement | Window {
   for (let el = node?.parentElement; el; el = el.parentElement) {
@@ -83,20 +94,20 @@ export default function SmartNavbar({
   radius = 999,
   blur = 14,
   duration = 380,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
+  textColor,
+  mutedColor,
   topColor = 'transparent',
-  topLineColor = 'rgba(255,255,255,0.08)',
-  pillColor = 'rgba(26,28,44,0.72)',
-  lineColor = 'rgba(255,255,255,0.12)',
-  hoverColor = 'rgba(255,255,255,0.08)',
-  accentColor = '#73eff7',
+  topLineColor,
+  pillColor,
+  lineColor,
+  hoverColor,
+  accentColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   label = 'Main',
   className = '',
   style
 }: SmartNavbarProps) {
-  
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const ref = useRef<HTMLDivElement>(null);
   const [pill, setPill] = useState(false);
@@ -166,7 +177,7 @@ export default function SmartNavbar({
   return (
     <div
       ref={ref}
-      className={`group/nav @container sticky top-0 z-40 h-0 font-(family-name:--bl-font) ${className}`}
+      className={`bl-nav group/nav @container sticky top-0 z-40 h-0 font-(family-name:--bl-font) ${className}`}
       data-pill={pill || undefined}
       data-hidden={hidden || undefined}
       style={{

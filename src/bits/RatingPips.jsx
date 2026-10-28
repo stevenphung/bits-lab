@@ -7,6 +7,12 @@ import { useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-rating-pips';
 const CSS = `
+/* theme tokens */
+.bl-pips { --bl-full: #b13e53; --bl-empty: #333c57; --bl-preview: #ef7d57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-pips, .bl-pips:where(.light, [data-theme="light"]) { --bl-empty: #ddd4c0; --bl-preview: #c4502a; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-pips, :where(.light, [data-theme="light"]) .bl-pips:where(.dark, [data-theme="dark"]) { --bl-full: #b13e53; --bl-empty: #333c57; --bl-preview: #ef7d57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-pips, .bl-pips:where([data-theme="system"]) { --bl-empty: #ddd4c0; --bl-preview: #c4502a; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-pips { display: inline-flex; gap: var(--bl-gap); padding: 4px; border-radius: 8px; outline: none; touch-action: manipulation; }
 .bl-pips[data-interactive] { cursor: pointer; }
 .bl-pips:focus-visible { box-shadow: 0 0 0 2px var(--bl-accent); }
@@ -60,10 +66,10 @@ export default function RatingPips({
   label = 'Rating',
   size = 28,
   gap = 4,
-  fullColor = '#b13e53',
-  emptyColor = '#333c57',
-  previewColor = '#ef7d57',
-  accentColor = '#73eff7',
+  fullColor,
+  emptyColor,
+  previewColor,
+  accentColor,
   className = '',
   style
 }) {

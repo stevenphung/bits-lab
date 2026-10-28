@@ -10,6 +10,12 @@ import { useEffect, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-hold-confirm-tw';
 const CSS = `
+/* theme tokens */
+.bl-hold { --bl-bg: #333c57; --bl-fill: #b13e53; --bl-fuse: #ef7d57; --bl-spark: #ffcd75; --bl-ink: #f4f4f4; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) .bl-hold, .bl-hold:where(.light, [data-theme="light"]) { --bl-bg: #ddd4c0; --bl-fuse: #c4502a; --bl-spark: #a86a12; --bl-ink: #1a1c2c; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-hold, :where(.light, [data-theme="light"]) .bl-hold:where(.dark, [data-theme="dark"]) { --bl-bg: #333c57; --bl-fill: #b13e53; --bl-fuse: #ef7d57; --bl-spark: #ffcd75; --bl-ink: #f4f4f4; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-hold, .bl-hold:where([data-theme="system"]) { --bl-bg: #ddd4c0; --bl-fuse: #c4502a; --bl-spark: #a86a12; --bl-ink: #1a1c2c; --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-hold-crackle { 50% { transform: translate(1px, -2px) scale(0.8); } }
 @keyframes bl-hold-flash { 33% { filter: brightness(1.8); } }
 `;
@@ -34,12 +40,12 @@ export default function HoldToConfirm({
   width = 200,
   height = 52,
   radius = 10,
-  backgroundColor = '#333c57',
-  fillColor = '#b13e53',
-  fuseColor = '#ef7d57',
-  sparkColor = '#ffcd75',
-  textColor = '#f4f4f4',
-  accentColor = '#73eff7',
+  backgroundColor,
+  fillColor,
+  fuseColor,
+  sparkColor,
+  textColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style
@@ -148,7 +154,7 @@ export default function HoldToConfirm({
     <button
       ref={ref}
       type="button"
-      className={`group/hold relative inline-grid h-(--bl-h) min-w-(--bl-w) cursor-pointer touch-none place-items-center overflow-hidden rounded-(--bl-radius) border-0 bg-(--bl-bg) px-[22px] py-0 font-(family-name:--bl-font) text-[15px] font-bold text-(--bl-ink) shadow-[inset_0_-4px_0_rgba(0,0,0,0.3)] select-none [--p:0] [-webkit-tap-highlight-color:transparent] focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-(--bl-accent) focus-visible:outline-solid disabled:cursor-not-allowed disabled:opacity-50 data-[state=done]:animate-[bl-hold-flash_420ms_steps(3)] motion-reduce:data-[state=done]:animate-none ${className}`}
+      className={`bl-hold group/hold relative inline-grid h-(--bl-h) min-w-(--bl-w) cursor-pointer touch-none place-items-center overflow-hidden rounded-(--bl-radius) border-0 bg-(--bl-bg) px-[22px] py-0 font-(family-name:--bl-font) text-[15px] font-bold text-(--bl-ink) shadow-[inset_0_-4px_0_rgba(0,0,0,0.3)] select-none [--p:0] [-webkit-tap-highlight-color:transparent] focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-(--bl-accent) focus-visible:outline-solid disabled:cursor-not-allowed disabled:opacity-50 data-[state=done]:animate-[bl-hold-flash_420ms_steps(3)] motion-reduce:data-[state=done]:animate-none ${className}`}
       data-state={state}
       disabled={disabled}
       style={{ '--bl-w': `${width}px`, '--bl-h': `${height}px`, '--bl-radius': `${radius}px`, '--bl-bg': backgroundColor, '--bl-fill': fillColor, '--bl-fuse': fuseColor, '--bl-spark': sparkColor, '--bl-ink': textColor, '--bl-accent': accentColor, '--bl-font': fontFamily, ...style }}

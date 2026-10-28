@@ -39,7 +39,8 @@ function Frame() {
 
   if (!Component) return null;
   return (
-    <div id="stage" style={{ position: 'relative', width: fixture.width ?? 560, height: fixture.height ?? 360, overflow: 'hidden' }}>
+    // ?theme=light checks the light palette: the stage is the themed ancestor.
+    <div id="stage" data-theme={params.get('theme') ?? undefined} style={{ position: 'relative', width: fixture.width ?? 560, height: fixture.height ?? 360, overflow: 'hidden' }}>
       {fixture.render ? fixture.render(Component, mod) : <Component {...fixture.props} />}
     </div>
   );
@@ -186,7 +187,7 @@ const frame = (side, name, index, fixture) =>
   new Promise(resolve => {
     const iframe = document.createElement('iframe');
     iframe.style.cssText = `width:${(fixture.width ?? 560) + 20}px;height:${(fixture.height ?? 360) + 20}px;border:0;`;
-    iframe.src = `/tw-check.html?frame=${side}&name=${name}&fixture=${index}`;
+    iframe.src = `/tw-check.html?frame=${side}&name=${name}&fixture=${index}${params.get('theme') ? `&theme=${params.get('theme')}` : ''}`;
     document.getElementById('frames').appendChild(iframe);
     const started = Date.now();
     const poll = () => {

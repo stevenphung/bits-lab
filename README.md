@@ -76,6 +76,23 @@ export function Onboarding({ onDeleteDraft }) {
 - **Entry points:** each component also has its own, e.g. `import Toaster, { toast } from "bits-lab/ToastStack"`.
 - **Requirements:** React 19. `GravityBox` uses `matter-js` for its physics, so it lives at `bits-lab/GravityBox` and needs `npm install matter-js`.
 
+### Light mode
+
+89 components switch to a light palette when they sit inside an element with the `light` class or `data-theme="light"`. Put it on `<html>` to theme the whole app, or on any wrapper to theme one area:
+
+```html
+<html data-theme="light">        <!-- whole app light -->
+<div class="light">…</div>       <!-- one area light -->
+<div data-theme="system">…</div> <!-- follow the OS setting -->
+```
+
+- **Nested dark:** a `dark` class or `data-theme="dark"` inside a light area switches back to dark.
+- **Overlays:** toasts, dialogs and menus render into `document.body`, so set the theme on `<html>` or `<body>` for them to follow it.
+- **Colour props still win:** passing `textColor`, `accentColor` and so on overrides the theme in both modes.
+- **Dark by design:** screen-like components stay dark in every theme, e.g. BootSequence, CRTPower, TerminalDemo, CodeShowcase, GameOver, Screensaver, DynamicIsland and StoryViewer. Backgrounds and effects take their colours from props.
+
+The site's preview has a ☀ Light / ☾ Dark switch on every component page.
+
 ### Or copy the source
 
 Prefer to own the code? Every component is also in a [shadcn](https://ui.shadcn.com)-compatible registry, in JavaScript, TypeScript, CSS and Tailwind versions:
@@ -191,3 +208,4 @@ For later releases, bump the version first with `npm version patch` (or `minor`)
 1. Put the component in `src/bits/Name.jsx`.
 2. Add an entry to `COMPONENTS` in `src/meta.js`.
 3. Add its demo config to `DEMOS` in `src/catalog.jsx`, keyed by slug.
+4. Give it light mode: leave colour props without literal defaults, map them to CSS variables on the root, and run `python3 scripts/theme-tokens.py Name` (or `--dry Name` first to preview the palette). The script writes the token block into all four variants. Check it with `/tw-check.html?theme=light`.

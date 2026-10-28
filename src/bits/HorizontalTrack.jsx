@@ -7,6 +7,12 @@ import { Children, useEffect, useInsertionEffect, useRef, useState } from 'react
 
 const STYLE_ID = 'bl-horizontal-track';
 const CSS = `
+/* theme tokens */
+.bl-htrack { --bl-accent: #ffcd75; --bl-muted: #94b0c2; --bl-track: rgba(148,176,194,0.2); }
+:where(.light, [data-theme="light"]) .bl-htrack, .bl-htrack:where(.light, [data-theme="light"]) { --bl-accent: #a86a12; --bl-muted: #566c86; --bl-track: rgba(86,108,134,0.2); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-htrack, :where(.light, [data-theme="light"]) .bl-htrack:where(.dark, [data-theme="dark"]) { --bl-accent: #ffcd75; --bl-muted: #94b0c2; --bl-track: rgba(148,176,194,0.2); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-htrack, .bl-htrack:where([data-theme="system"]) { --bl-accent: #a86a12; --bl-muted: #566c86; --bl-track: rgba(86,108,134,0.2); } }
+/* theme tokens end */
 .bl-htrack { position: relative; height: var(--bl-len); }
 .bl-htrack__stage { position: sticky; top: 0; height: var(--bl-stage); display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
 .bl-htrack__header { padding: 0 var(--bl-pad); margin-bottom: 20px; }
@@ -51,9 +57,9 @@ export default function HorizontalTrack({
   snap = true,
   showProgress = true,
   label = 'Gallery',
-  accentColor = '#ffcd75',
-  mutedColor = '#94b0c2',
-  trackColor = 'rgba(148,176,194,0.2)',
+  accentColor,
+  mutedColor,
+  trackColor,
   barRadius = 2,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',

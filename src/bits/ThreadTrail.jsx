@@ -7,6 +7,12 @@ import { useId, useInsertionEffect, useState } from 'react';
 
 const STYLE_ID = 'bl-thread-trail';
 const CSS = `
+/* theme tokens */
+.bl-thread { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-mention: rgba(115,239,247,0.18); --bl-mention-ink: #73eff7; --bl-ok: #a7f070; }
+:where(.light, [data-theme="light"]) .bl-thread, .bl-thread:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-mention: rgba(22,127,143,0.18); --bl-mention-ink: #167f8f; --bl-ok: #2f7d22; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-thread, :where(.light, [data-theme="light"]) .bl-thread:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-chip: #262b44; --bl-line: #333c57; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-mention: rgba(115,239,247,0.18); --bl-mention-ink: #73eff7; --bl-ok: #a7f070; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-thread, .bl-thread:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-chip: #ebe5d8; --bl-line: #cfc4ad; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-mention: rgba(22,127,143,0.18); --bl-mention-ink: #167f8f; --bl-ok: #2f7d22; } }
+/* theme tokens end */
 .bl-thread { display: grid; gap: 0; width: min(var(--bl-w), 100%); color: var(--bl-ink); font-family: var(--bl-font); font-size: 14px; }
 .bl-thread__item { position: relative; display: grid; grid-template-columns: 36px 1fr; gap: 10px; padding-bottom: 14px; }
 .bl-thread__item:not(:last-child)::before { content: ''; position: absolute; top: 38px; bottom: 0; left: 16px; width: 4px; background: repeating-linear-gradient(var(--bl-line) 0 4px, transparent 4px 8px); }
@@ -74,15 +80,15 @@ export default function ThreadTrail({
   detailsLabel = 'What I did',
   agentBadge = 'AGENT',
   width = 520,
-  backgroundColor = '#1a1c2c',
-  chipColor = '#262b44',
-  lineColor = '#333c57',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
-  mentionColor = 'rgba(115,239,247,0.18)',
-  mentionTextColor = '#73eff7',
-  okColor = '#a7f070',
+  backgroundColor,
+  chipColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  accentColor,
+  mentionColor,
+  mentionTextColor,
+  okColor,
   fontFamily = 'inherit',
   className = '',
   style
