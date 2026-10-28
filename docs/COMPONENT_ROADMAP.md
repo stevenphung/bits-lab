@@ -485,6 +485,7 @@ Planned:
 - **Published:** private GitHub repo `stevenphung/bits-lab`, deployed by Vercel (team personal-8a16af13) to https://bits-lab.vercel.app on every push to `main`. Vercel builds from GitHub, so git-ignored files (the React Bits catalog, the five tools, the internal research notes and the importer) never leave this machine.
 - **Name check widened:** ToggleKit's bell was first named BellToggle, which is a React Bits name. It is now NotifyBell, and `check:originals` also checks named component exports.
 - **React Bits directory** (`/react-bits`): all 218 names by category, each linking to its reactbits.dev page, plus the Bits Lab originals that cover the same idea (131 of them, from the tables above). No code, previews or descriptions: writing our own blurb for each would mean paraphrasing theirs, so the names and links do the job.
+- **Taken off the site for now (2026-10-28):** the directory and the templates are no longer routed from `App.jsx`; their code stays in the repo to bring back later.
 - **Templates** (`/templates`): Questboard (SaaS landing page, 56 components), Emberfall (game page, 49) and Pocket Tavern (app launch page, 54). Between them they use all 159 components, which `npm run check:templates` enforces. Each is a full page without the library's header, loaded as its own chunk.
 
 ### 6.3 Left out on purpose

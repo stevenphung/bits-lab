@@ -33,10 +33,9 @@ The install command uses a shadcn-compatible registry that `scripts/build-regist
 npx shadcn@latest add http://localhost:5173/r/FocusPull.json
 ```
 
-Live at **https://bits-lab.vercel.app**. Two more pages sit beside the components:
+Live at **https://bits-lab.vercel.app**.
 
-- **Templates** (`/templates`): three full pages (a SaaS landing page, a game page and an app launch page) made only from Bits Lab components. Between them they use every component; `npm run check:templates` keeps it that way. Sources are in `src/templates/`.
-- **React Bits** (`/react-bits`): a link directory of every React Bits component, with the Bits Lab originals that cover the same idea. Names and links only (`src/lib/reactbits-directory.js`).
+Two pages are built but switched off for now: three templates (`src/templates/`, checked by `npm run check:templates`) and a React Bits link directory (`src/ui/DirectoryPage.jsx`). Neither is routed from `src/App.jsx`, so neither is in the build.
 
 ## Layout
 
