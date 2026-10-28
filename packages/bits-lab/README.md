@@ -1,8 +1,8 @@
 # Bits Lab
 
-159 original React components with an 8-bit soul: text effects, animated backgrounds, game UI, inputs, data displays, overlays, navigation and playful toys. Every component brings its own styles, so there is nothing else to import or configure.
+**The foundation for agent–human interfaces.** 159 original React components for the moments that matter when software can think: chat, streaming answers, live progress, tool calls, diffs, approvals and undo, plus everything around them (inputs, overlays, navigation, data and motion), in a playful 8-bit style. Every component brings its own styles, so there is nothing else to import or configure.
 
-Browse them all, tweak their props and copy the code at **https://bits-lab.vercel.app**.
+Try them all, tweak their props and copy the code at **https://bits-lab.vercel.app**.
 
 ## Install
 
@@ -23,14 +23,16 @@ import GravityBox from "bits-lab/GravityBox";
 ## Use
 
 ```jsx
-import { FocusPull, HoldToConfirm, PixelSpinners } from "bits-lab";
+import { AgentCard, DiffReveal, HoldToConfirm, ThinkingShimmer } from "bits-lab";
 
-export default function Page() {
+// One turn of an agent: think, act, show the change, wait for a yes.
+export function AgentTurn({ run, onApprove }) {
   return (
     <>
-      <FocusPull as="h1" text="Every pixel snaps into focus" />
-      <HoldToConfirm onConfirm={() => console.log("Deleted")}>Hold to delete</HoldToConfirm>
-      <PixelSpinners type="hourglass" label="Loading" showLabel />
+      <ThinkingShimmer thinking={run.thinking} steps={run.steps} />
+      <AgentCard tool={run.tool} args={run.args} status={run.status} logs={run.logs} />
+      <DiffReveal before={run.before} after={run.after} />
+      <HoldToConfirm onConfirm={onApprove}>Hold to approve</HoldToConfirm>
     </>
   );
 }

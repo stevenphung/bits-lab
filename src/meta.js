@@ -1,6 +1,7 @@
 // Plain metadata (no JSX) so both the app and scripts/build-registry.mjs can import it.
 
 export const CATEGORIES = [
+  { slug: 'ai', name: 'Agent Interfaces' },
   { slug: 'text-animations', name: 'Text Animations' },
   { slug: 'backgrounds', name: 'Backgrounds' },
   { slug: 'pixel-game', name: 'Pixel & Game UI' },
@@ -12,7 +13,6 @@ export const CATEGORIES = [
   { slug: 'data', name: 'Data & Numbers' },
   { slug: 'cards', name: 'Cards & Media' },
   { slug: 'playful', name: 'Physics & Playful' },
-  { slug: 'ai', name: 'AI Surfaces' },
   { slug: 'primitives', name: 'Primitives' }
 ];
 

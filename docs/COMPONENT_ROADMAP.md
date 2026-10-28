@@ -1,6 +1,8 @@
 # Bits Lab component roadmap
 
-Goal: turn Bits Lab into the largest library of highly polished React components. Researched 2026-10-27.
+**Mission (from 2026-10-28):** Bits Lab is the foundation for agent–human interfaces: the components people use to see what an agent is doing, steer it, approve it and undo it. New work is judged first by how well it serves that loop (ask, think, act, review, approve, undo) and the four promises: show the work, ask before acting, let people interrupt, make it delightful.
+
+Original goal: turn Bits Lab into the largest library of highly polished React components. Researched 2026-10-27.
 
 ## Status
 

@@ -4,11 +4,39 @@
 [![license](https://img.shields.io/badge/license-MIT-38b764)](packages/bits-lab/LICENSE)
 [![live site](https://img.shields.io/badge/live-bits--lab.vercel.app-3b5dc9)](https://bits-lab.vercel.app)
 
-**159 original React components with an 8-bit soul.** Text effects, animated backgrounds, game UI, inputs, charts, overlays, navigation and playful physics toys, all drawn in chunky pixels and the Sweetie 16 palette. Every component brings its own styles, works with the keyboard, respects reduced motion and comes in four flavours: JavaScript or TypeScript, styled with plain CSS or Tailwind.
+**The foundation for agent–human interfaces.**
 
-Browse them, tweak every prop live and copy the code at **[bits-lab.vercel.app](https://bits-lab.vercel.app)**.
+Agents are starting to do real work. The hard part is rarely the model; it's the interface. People need to see what an agent is doing, steer it, approve it and undo it. Bits Lab gives you those pieces: **159 original React components** for chat, streaming answers, live progress, tool calls, diffs, approvals and undo, plus everything around them (inputs, overlays, navigation, data and motion), in a playful 8-bit style that makes even waiting feel good.
 
-![The Bits Lab site: a component page with a live preview, the component list and the Crafting Table controls](docs/screenshots/home.jpg)
+Every component brings its own styles, works with the keyboard, respects reduced motion and comes in four flavours: JavaScript or TypeScript, styled with plain CSS or Tailwind. Try them and copy the code at **[bits-lab.vercel.app](https://bits-lab.vercel.app)**.
+
+![The Bits Lab homepage: “Build the interface between people and agents.” over a warp-speed starfield](docs/screenshots/home.jpg)
+
+## Mission
+
+Agents do the work. People stay in charge. An agent is only as trustworthy as the interface around it, so every Bits Lab component is built around four promises:
+
+- **Show the work.** Every step visible, nothing hidden.
+- **Ask before acting.** Big moves need a clear yes.
+- **Let people interrupt.** Pause, undo or take over at any time.
+- **Make it delightful.** Accessible, keyboard-friendly and fun.
+
+## The agent–human loop
+
+Each moment in a conversation with an agent maps to components you can drop in:
+
+| Moment | What the person needs | Components |
+|---|---|---|
+| **Ask** | Say what they want, by text or voice | ChatBubbles, SuggestionChips, VanishInput, VoiceOrb, CommandPalette |
+| **Think** | Know the agent is working, and on what | ThinkingShimmer, StreamingText, PixelSpinners, SkeletonShimmer |
+| **Act** | Follow tool calls and progress as they happen | AgentCard, StepLoader, FeedList |
+| **Review** | See exactly what will change | DiffReveal, CompareSlider |
+| **Approve** | Give a deliberate yes, or a clear no | HoldToConfirm, QuestDialog, OverlayKit (Dialog) |
+| **Undo** | Take it back, any time | ToastStack (undo actions), SpringDrawer |
+
+The homepage runs the whole loop live, built from seven of these components:
+
+![A live agent console: a chat thread, a “Thought for 2s” summary, an edit_file tool call, a word-level diff and a “Hold to approve” button](docs/screenshots/agent-console.jpg)
 
 ## Install
 
@@ -17,14 +45,16 @@ npm install bits-lab
 ```
 
 ```jsx
-import { FocusPull, HoldToConfirm, PixelSpinners } from "bits-lab";
+import { AgentCard, DiffReveal, HoldToConfirm, ThinkingShimmer } from "bits-lab";
 
-export default function Page() {
+// One turn of an agent: think, act, show the change, wait for a yes.
+export function AgentTurn({ run, onApprove }) {
   return (
     <>
-      <FocusPull as="h1" text="Every pixel snaps into focus" />
-      <HoldToConfirm onConfirm={() => console.log("Deleted")}>Hold to delete</HoldToConfirm>
-      <PixelSpinners type="hourglass" label="Loading" showLabel />
+      <ThinkingShimmer thinking={run.thinking} steps={run.steps} />
+      <AgentCard tool={run.tool} args={run.args} status={run.status} logs={run.logs} />
+      <DiffReveal before={run.before} after={run.after} />
+      <HoldToConfirm onConfirm={onApprove}>Hold to approve</HoldToConfirm>
     </>
   );
 }
@@ -50,6 +80,7 @@ The site shows the right command for each component and variant, for pnpm, npm, 
 
 | Category | Count | For example |
 |---|---|---|
+| Agent Interfaces | 6 | ChatBubbles, ThinkingShimmer, AgentCard, VoiceOrb, SuggestionChips, DiffReveal |
 | Text Animations | 15 | FocusPull, SignalText, PixelType, ShadowStack, KineticHeadline |
 | Backgrounds | 17 | RetroHorizon, AuroraBands, WarpField, CodeRain, LavaLamp |
 | Pixel & Game UI | 22 | QuestDialog, HealthBar, InventoryGrid, VoxelTiles, ArcadeButtons |
@@ -61,10 +92,11 @@ The site shows the right command for each component and variant, for pnpm, npm, 
 | Data & Numbers | 10 | TallyUp, SparkChart, RingProgress, BarRace, Heatmap |
 | Cards & Media | 15 | TradingCard, CardDeck, StoryViewer, SwipeActions, Discard |
 | Physics & Playful | 9 | GravityBox, StickerBoard, PointerKit, JellyBlob |
-| AI Surfaces | 6 | ChatBubbles, ThinkingShimmer, AgentCard, VoiceOrb |
 | Primitives | 4 | Accordion, OverlayKit, ToggleKit, GlassPanel |
 
 ## Screenshots
+
+![Agent components on the homepage: StreamingText, VoiceOrb, StepLoader, FeedList, QuestDialog, ToastStack and PixelSpinners](docs/screenshots/agent-components.jpg)
 
 | | |
 |---|---|
@@ -76,6 +108,8 @@ The site shows the right command for each component and variant, for pnpm, npm, 
 | **QuestDialog**, typewriter RPG dialogue with choices | **Every page:** install command, usage and full source, plus live controls |
 
 ## The site
+
+![A component page: live preview, the component list and the Crafting Table controls](docs/screenshots/component-page.jpg)
 
 Each component page has:
 

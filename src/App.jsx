@@ -40,7 +40,8 @@ export default function App() {
   const searchRef = useRef(null);
   const item = CATALOG.find(entry => entry.path === pathname);
   const isHome = pathname === '/';
-  const lastItem = useRef(CATALOG[0]);
+  // The Components tab opens on the first category's first component.
+  const lastItem = useRef(CATALOG.find(entry => entry.category === CATEGORIES[0].slug));
   if (item) lastItem.current = item;
 
   useEffect(() => {
