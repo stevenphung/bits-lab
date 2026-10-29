@@ -428,6 +428,7 @@ h1 {
   background: none;
   color: var(--cyan);
   font: 700 12px/1.2 var(--label);
+  text-decoration: none;
   text-transform: uppercase;
 }
 

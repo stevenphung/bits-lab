@@ -200,6 +200,10 @@ export default function ComponentPage({ item, categoryName }) {
             <Icon name={linkCopied ? 'check' : 'share'} size={16} />
             <span>{linkCopied ? 'Link copied' : 'Share'}</span>
           </button>
+          <a className="text-action" href={`/docs/${item.name}.md`} target="_blank" rel="noreferrer" title="This component's docs as Markdown, for AI coding tools">
+            <Icon name="external" size={16} />
+            <span>Docs for AI</span>
+          </a>
           {hasChanges && (
             <button type="button" className="text-action" onClick={resetAll}>
               <Icon name="reset" size={16} />

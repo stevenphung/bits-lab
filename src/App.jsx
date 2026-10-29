@@ -96,6 +96,9 @@ export default function App() {
             <a className="text-button" href="/r/registry.json" target="_blank" rel="noreferrer">
               Registry
             </a>
+            <a className="text-button" href="/llms.txt" target="_blank" rel="noreferrer" title="Docs for AI coding tools">
+              llms.txt
+            </a>
             <a className="round-button" href={REPO_URL} target="_blank" rel="noreferrer" aria-label="Bits Lab on GitHub">
               <Icon name="external" size={16} />
             </a>

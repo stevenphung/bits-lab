@@ -50,6 +50,7 @@ import { Switch, Checkbox } from "bits-lab/ToggleKit";
 ```
 
 - **Light mode:** add `data-theme="light"` (or the `light` class) to `<html>` or any wrapper; `data-theme="system"` follows the OS. Colour props still override. Overlays render into `<body>`, so theme `<html>` or `<body>` for them.
+- **Docs for AI tools:** `llms.txt` and `docs/<Name>.md` ship in the package (and at https://bits-lab.vercel.app/llms.txt), with every prop, type and default.
 - **TypeScript:** types are included.
 - **Next.js:** every file starts with `"use client"`, so components work in the App Router without a wrapper.
 - **Accessibility:** components follow WAI-ARIA patterns, work with the keyboard and respect reduced motion.

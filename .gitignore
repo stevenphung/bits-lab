@@ -1,6 +1,9 @@
 node_modules
 dist
 public/r
+public/docs
+public/llms.txt
+public/llms-full.txt
 public/pixel
 public/favicon.svg
 
@@ -13,5 +16,7 @@ docs/AIRBNB_DESIGN_LANGUAGE.md
 
 # npm package build output
 packages/bits-lab/dist
+packages/bits-lab/docs
+packages/bits-lab/llms.txt
 packages/bits-lab/*.tgz
 scripts/.theme-report.json

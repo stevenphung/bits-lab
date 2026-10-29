@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "registry": "node scripts/build-registry.mjs",
+    "docs": "node scripts/build-docs.mjs",
     "check:ts": "node scripts/check-ts-variants.mjs",
     "check:tw": "node scripts/check-tw-variants.mjs",
     "check:templates": "node scripts/check-templates.mjs",

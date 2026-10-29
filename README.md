@@ -94,6 +94,16 @@ export function Onboarding({ onDeleteDraft }) {
 
 The site's preview has a ☀ Light / ☾ Dark switch on every component page.
 
+### For AI coding tools
+
+The docs are also published as Markdown for assistants like Claude, Cursor and Copilot, following [llmstxt.org](https://llmstxt.org):
+
+- [`/llms.txt`](https://bits-lab.vercel.app/llms.txt): an index of every component with a one-line summary.
+- `/docs/<Name>.md`: one page per component with install, usage, every prop (type, default, notes), its types and accessibility, e.g. [`/docs/QuestLog.md`](https://bits-lab.vercel.app/docs/QuestLog.md).
+- [`/llms-full.txt`](https://bits-lab.vercel.app/llms-full.txt): everything in one file.
+
+The npm package ships `llms.txt` and `docs/` too, so tools can read them from `node_modules/bits-lab`. Each component page on the site links its Markdown ("Docs for AI").
+
 ### Or copy the source
 
 Prefer to own the code? Every component is also in a [shadcn](https://ui.shadcn.com)-compatible registry, in JavaScript, TypeScript, CSS and Tailwind versions:
@@ -210,4 +220,5 @@ For later releases, bump the version first with `npm version patch` (or `minor`)
 1. Put the component in `src/bits/Name.jsx`.
 2. Add an entry to `COMPONENTS` in `src/meta.js`.
 3. Add its demo config to `DEMOS` in `src/catalog.jsx`, keyed by slug.
-4. Give it light mode: leave colour props without literal defaults, map them to CSS variables on the root, and run `python3 scripts/theme-tokens.py Name` (or `--dry Name` first to preview the palette). The script writes the token block into all four variants. Check it with `/tw-check.html?theme=light`. Components whose colours live in their CSS instead of props get light overrides from `scripts/theme-fixed.py`.
+4. Its docs for AI tools are generated from the demo config and the TypeScript types (`npm run docs`, also run by the dev server and every build).
+5. Give it light mode: leave colour props without literal defaults, map them to CSS variables on the root, and run `python3 scripts/theme-tokens.py Name` (or `--dry Name` first to preview the palette). The script writes the token block into all four variants. Check it with `/tw-check.html?theme=light`. Components whose colours live in their CSS instead of props get light overrides from `scripts/theme-fixed.py`.

@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { buildRegistry } from './scripts/build-registry.mjs';
+import { buildDocs } from './scripts/build-docs.mjs';
 import { generatePixelAssets } from './scripts/generate-pixel-assets.mjs';
 
 const pixelAssets = () => ({
@@ -20,9 +21,11 @@ const registry = () => ({
   name: 'local-registry',
   async buildStart() {
     await buildRegistry();
+    await buildDocs();
   },
   async handleHotUpdate({ file }) {
     if (file.includes('/src/bits/') || file.endsWith('/src/meta.js')) await buildRegistry();
+    if (file.includes('/src/bits/') || /\/src\/(meta\.js|catalog[^/]*\.jsx)$/.test(file)) await buildDocs();
   }
 });
 

@@ -10,6 +10,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { transform } from 'esbuild';
 import { parse } from '@babel/parser';
+import { buildDocs } from './build-docs.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const pkgDir = path.join(root, 'packages/bits-lab');
@@ -98,3 +99,6 @@ try {
 const missing = COMPONENTS.filter(c => !fs.existsSync(path.join(dist, `${path.basename(c.file, '.jsx')}.d.ts`)));
 if (missing.length) throw new Error(`no declarations for ${missing.map(c => c.name).join(', ')}`);
 console.log(`package: ${COMPONENTS.length} components built to packages/bits-lab/dist (own entry only: ${separate.join(', ')})${skipped.length ? ` (left out of the index as duplicates: ${skipped.join(', ')})` : ''}`);
+
+// Docs for AI coding tools ship with the package: llms.txt and docs/<Name>.md.
+await buildDocs();
