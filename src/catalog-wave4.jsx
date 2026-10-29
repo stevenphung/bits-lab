@@ -828,13 +828,14 @@ export const WAVE4_DEMOS = {
 
   marquee: {
     source: marqueeSource,
-    defaults: { lanes: 2, vertical: false, speed: 40, variance: 0.3, alternate: true, slow: 0.15, dim: 0.45, gap: 16, height: 420 },
-    controls: [slider('lanes', 'Lanes', 1, 4, 1), toggle('vertical', 'Vertical'), slider('speed', 'Speed (px/s)', 5, 160, 5), slider('variance', 'Lane speed variance', 0, 1, 0.05), toggle('alternate', 'Alternate directions'), slider('slow', 'Hovered lane speed', 0, 1, 0.05), slider('dim', 'Dim others', 0.1, 1, 0.05), slider('gap', 'Gap', 4, 40, 2), slider('height', 'Height (vertical)', 240, 640, 10)],
+    defaults: { lanes: 2, vertical: false, speed: 40, variance: 0.3, alternate: true, scrub: true, slow: 0, dim: 0.45, gap: 16, height: 420 },
+    controls: [slider('lanes', 'Lanes', 1, 4, 1), toggle('vertical', 'Vertical'), slider('speed', 'Speed (px/s)', 5, 160, 5), slider('variance', 'Lane speed variance', 0, 1, 0.05), toggle('alternate', 'Alternate directions'), toggle('scrub', 'Drag to scrub'), slider('slow', 'Hovered lane speed', 0, 1, 0.05), slider('dim', 'Dim others', 0.1, 1, 0.05), slider('gap', 'Gap', 4, 40, 2), slider('height', 'Height (vertical)', 240, 640, 10)],
     docs: [
       ['items', 'ReactNode[]', '[]', 'Logos or cards, dealt round-robin into lanes.'],
       ['lanes / vertical', 'number / boolean', '2 / false', 'How many lanes, running across or up and down.'],
       ['speed / variance / alternate', 'number / number / boolean', '40 / 0.3 / true', 'px per second, how much lane speeds differ, and whether neighbours run opposite ways.'],
-      ['slow / dim', 'number 0–1', '0.15 / 0.45', 'Speed of a hovered lane (0 stops it) and how far other items in it dim.'],
+      ['slow / dim', 'number 0–1', '0 / 0.45', 'Speed a hovered lane eases to (0 stops it) and how far other items in it dim.'],
+      ['scrub', 'boolean', 'true', 'Drag a lane to scrub it; on release it coasts with momentum, then settles back to its pace. A drag does not click the item under it.'],
       ['gap / fade / height', 'number', '16 / 56 / 420', 'Spacing, edge fade, and the height of a vertical wall.'],
       ['showPause / label', 'boolean / string', 'true / "Featured"', 'Pause button; the list name for screen readers.'],
       ['Accessibility', '-', '-', 'Items read once as a list; moving copies are hidden. Pause button. Reduced motion: still.']
@@ -1180,12 +1181,13 @@ export const WAVE4_DEMOS = {
 
   'wheel-picker': {
     source: wheelPickerSource,
-    defaults: { visible: 5, rowHeight: 40, fontSize: 18, accentColor: '#73eff7' },
-    controls: [slider('visible', 'Rows shown', 3, 9, 2), slider('rowHeight', 'Row height', 28, 64, 2), slider('fontSize', 'Font size', 12, 28, 1), color('accentColor', 'Focus ring')],
+    defaults: { visible: 5, rowHeight: 40, fontSize: 18, drum: true, accentColor: '#73eff7' },
+    controls: [toggle('drum', 'Drum look'), slider('visible', 'Rows shown', 3, 9, 2), slider('rowHeight', 'Row height', 28, 64, 2), slider('fontSize', 'Font size', 12, 28, 1), color('accentColor', 'Focus ring')],
     docs: [
       ['options', '(string | number | { value, label })[]', '[]', 'The choices.'],
       ['value / defaultValue / onChange', 'value / value / (value, option) => void', 'first', 'Controlled or not.'],
       ['visible / rowHeight / width', 'number', '5 / 40 / 140', 'Rows shown (odd works best), row height and width.'],
+      ['drum', 'boolean', 'false', 'A barrel look: slats, shading, side rails and a deeper curve.'],
       ['label / fontSize / colours', 'string / number / string', '"Pick an option" / 18', 'The accessible name, text size and palette.'],
       ['Accessibility', '-', '-', 'A spin button: arrows, Page Up/Down, Home/End; the current option is its value text. Reduced motion: snaps without coasting.']
     ],

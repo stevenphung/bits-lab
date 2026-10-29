@@ -1,7 +1,9 @@
 import { useInsertionEffect } from 'react';
 
-// Chunky 8-bit button: notched pixel border, bevel, press-down, loading pips and a cracked
-// disabled state. A real <button>, so keyboard, focus and form behavior come for free.
+// Chunky 8-bit button: notched pixel border, bevel, press-down, loading pips with a shimmer and
+// a cracked disabled state. Variants include ghost (outline only, inherits the text colour) and
+// destructive (hazard stripes on hover); an icon with no label makes a square icon button, which
+// needs an aria-label. A real <button>, so keyboard, focus and form behavior come for free.
 
 const STYLE_ID = 'bl-pixel-button';
 const CSS = `
@@ -36,6 +38,14 @@ const CSS = `
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background: repeating-linear-gradient(135deg, transparent 0 6px, rgba(11, 11, 20, 0.35) 6px 8px);
 }
+.bl-pxbtn[data-variant="ghost"], .bl-pxbtn[data-variant="ghost"]:active:not(:disabled), .bl-pxbtn[data-variant="ghost"][data-pressed] { box-shadow: 0 calc(var(--bl-px) * -1) 0 0 currentColor, 0 var(--bl-px) 0 0 currentColor, calc(var(--bl-px) * -1) 0 0 0 currentColor, var(--bl-px) 0 0 0 currentColor; }
+.bl-pxbtn[data-variant="ghost"]:hover:not(:disabled) { filter: none; background: color-mix(in srgb, currentColor 14%, transparent); }
+.bl-pxbtn[data-variant="destructive"]:hover:not(:disabled) { background-image: repeating-linear-gradient(135deg, rgba(11, 11, 20, 0.16) 0 6px, transparent 6px 12px); }
+.bl-pxbtn[data-icon-only][data-size="sm"] { padding: 8px; }
+.bl-pxbtn[data-icon-only][data-size="md"] { padding: 12px; }
+.bl-pxbtn[data-icon-only][data-size="lg"] { padding: 16px; }
+.bl-pxbtn__shine { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.bl-pxbtn__shine::before { content: ""; position: absolute; top: 0; bottom: 0; left: -40%; width: 40%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent); animation: bl-pxbtn-shine 1.2s steps(8) infinite; }
 .bl-pxbtn__label { position: relative; }
 .bl-pxbtn[data-loading] .bl-pxbtn__label { visibility: hidden; }
 .bl-pxbtn__pips { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 6px; }
@@ -43,9 +53,11 @@ const CSS = `
 .bl-pxbtn__pips i:nth-child(2) { animation-delay: 0.3s; }
 .bl-pxbtn__pips i:nth-child(3) { animation-delay: 0.6s; }
 @keyframes bl-pxbtn-pip { 0%, 100% { opacity: 0.25; } 33% { opacity: 1; } }
+@keyframes bl-pxbtn-shine { to { transform: translateX(350%); } }
 @media (prefers-reduced-motion: reduce) {
   .bl-pxbtn { transition: none; }
   .bl-pxbtn__pips i { animation: none; opacity: 0.8; }
+  .bl-pxbtn__shine::before { display: none; }
 }
 `;
 
@@ -69,7 +81,9 @@ const VARIANTS = {
   secondary: { face: '#94b0c2', text: '#0b0b14' },
   success: { face: '#38b764', text: '#0b0b14' },
   warning: { face: '#ffcd75', text: '#0b0b14' },
-  info: { face: '#41a6f6', text: '#0b0b14' }
+  info: { face: '#41a6f6', text: '#0b0b14' },
+  destructive: { face: '#ef7d57', text: '#0b0b14' },
+  ghost: { face: 'transparent', text: 'currentColor' }
 };
 
 export default function PixelButton({
@@ -92,6 +106,7 @@ export default function PixelButton({
 }) {
   useStyles();
   const palette = VARIANTS[variant] ?? VARIANTS.primary;
+  const iconOnly = Boolean(icon) && (children === undefined || children === null || children === false);
 
   return (
     <button
@@ -99,6 +114,8 @@ export default function PixelButton({
       type={type}
       className={`bl-pxbtn ${className}`}
       data-size={size}
+      data-variant={variant}
+      data-icon-only={iconOnly || undefined}
       data-loading={loading || undefined}
       disabled={disabled}
       aria-busy={loading || undefined}
@@ -119,6 +136,7 @@ export default function PixelButton({
         {icon}
         {children}
       </span>
+      {loading && <span className="bl-pxbtn__shine" aria-hidden="true" />}
       {loading && (
         <span className="bl-pxbtn__pips" aria-hidden="true">
           <i />

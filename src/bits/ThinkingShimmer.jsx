@@ -3,6 +3,7 @@ import { useEffect, useId, useInsertionEffect, useRef, useState } from 'react';
 // "Thinking…" for AI products. While working, the label shimmers and an elapsed timer ticks;
 // when done it settles to "Thought for 12s". The header is a disclosure button that reveals
 // the steps (pending, active with a spinner, done with a check). Completion is announced.
+// variant="pill" is a compact one-line chip whose label rolls through phases while it works.
 
 const STYLE_ID = 'bl-thinking';
 const CSS = `
@@ -17,6 +18,12 @@ const CSS = `
 .bl-think__head:hover { background: var(--bl-hover); color: var(--bl-ink); }
 .bl-think__head:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 1px; }
 .bl-think__shine { background: linear-gradient(90deg, var(--bl-muted) 0%, var(--bl-muted) 35%, var(--bl-shine) 50%, var(--bl-muted) 65%, var(--bl-muted) 100%); background-size: 250% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: bl-think-shine var(--bl-speed) linear infinite; }
+.bl-think[data-variant="pill"] { display: inline-block; width: auto; max-width: 100%; }
+.bl-think__pill { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; padding: 5px 12px 5px 8px; border-radius: 999px; background: var(--bl-hover); color: var(--bl-muted); box-shadow: inset 0 0 0 1px var(--bl-line); }
+.bl-think__pill-icon { display: grid; flex: none; place-items: center; width: 14px; height: 14px; color: var(--bl-accent); }
+.bl-think__pill[data-done] .bl-think__pill-icon { color: var(--bl-success); }
+.bl-think__roll { position: relative; display: inline-grid; min-width: 0; overflow: hidden; }
+.bl-think__phase { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; animation: bl-think-roll 320ms cubic-bezier(.2,.9,.25,1) both; }
 .bl-think__time { font-variant-numeric: tabular-nums; opacity: 0.8; }
 .bl-think__chev { transition: transform 220ms cubic-bezier(.2,.9,.25,1); }
 .bl-think__head[aria-expanded="true"] .bl-think__chev { transform: rotate(90deg); }
@@ -36,7 +43,8 @@ const CSS = `
 .bl-think__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @keyframes bl-think-shine { from { background-position: 100% 0; } to { background-position: -150% 0; } }
 @keyframes bl-think-spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .bl-think__shine { animation: none; color: var(--bl-muted); background: none; } .bl-think__panel, .bl-think__chev { transition: none; } .bl-think__spin { animation-duration: 2.4s; } }
+@keyframes bl-think-roll { from { opacity: 0; transform: translateY(70%); } }
+@media (prefers-reduced-motion: reduce) { .bl-think__shine { animation: none; color: var(--bl-muted); background: none; } .bl-think__panel, .bl-think__chev { transition: none; } .bl-think__phase { animation: none; } .bl-think__spin { animation-duration: 2.4s; } }
 `;
 
 function useStyles() {
@@ -61,6 +69,9 @@ export default function ThinkingShimmer({
   open: controlledOpen,
   onOpenChange,
   shimmerSpeed = 1800,
+  variant = 'panel',
+  phases,
+  phaseInterval = 1600,
   width = 560,
   textColor,
   mutedColor,
@@ -102,6 +113,16 @@ export default function ThinkingShimmer({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [thinking]);
 
+  // Pill mode: which phase is showing, stepping on while thinking.
+  const [phase, setPhase] = useState(0);
+  const rollList = phases?.length ? phases : steps.filter(step => step.status === 'active').map(step => step.label);
+  const rolling = variant === 'pill' && thinking && rollList.length > 1;
+  useEffect(() => {
+    if (!rolling) return undefined;
+    const timer = setInterval(() => setPhase(p => p + 1), phaseInterval);
+    return () => clearInterval(timer);
+  }, [rolling, phaseInterval]);
+
   const toggle = () => {
     if (controlledOpen === undefined) setInnerOpen(o => !o);
     onOpenChange?.(!open);
@@ -118,24 +139,54 @@ export default function ThinkingShimmer({
       <span className="bl-think__dot" />
     );
 
+  const rootStyle = {
+    '--bl-w': `${width}px`,
+    '--bl-ink': textColor,
+    '--bl-muted': mutedColor,
+    '--bl-shine': shineColor,
+    '--bl-line': lineColor,
+    '--bl-hover': hoverColor,
+    '--bl-accent': accentColor,
+    '--bl-success': successColor,
+    '--bl-speed': `${shimmerSpeed}ms`,
+    '--bl-font': fontFamily,
+    ...style
+  };
+
+  // Compact pill: one line, no disclosure. While thinking the label rolls through the phases
+  // (or the active steps' labels); when done it settles on the done label with a check.
+  if (variant === 'pill') {
+    const text = thinking ? `${rollList[phase % Math.max(1, rollList.length)] ?? label}…` : doneLabel(final ?? elapsed);
+    return (
+      <div className={`bl-think ${className}`} data-variant="pill" style={rootStyle}>
+        <span className="bl-think__pill" data-done={!thinking || undefined}>
+          <span className="bl-think__pill-icon" aria-hidden="true">
+            {thinking ? <span className="bl-think__spin" /> : (
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2.5 7.5 5.5 10.5 11.5 3.5" />
+            </svg>
+            )}
+          </span>
+          <span className="bl-think__roll">
+            <span key={thinking ? phase : 'done'} className="bl-think__phase">
+              <span className={thinking ? 'bl-think__shine' : undefined}>{text}</span>
+            </span>
+          </span>
+          {thinking && showTimer && <span className="bl-think__time">{formatSeconds(elapsed)}</span>}
+        </span>
+        <span className="bl-think__sr" role="status">
+          {thinking ? '' : doneLabel(final ?? elapsed)}
+        </span>
+      </div>
+    );
+  }
+
   const headText = thinking ? `${label}…` : doneLabel(final ?? elapsed);
 
   return (
     <div
       className={`bl-think ${className}`}
-      style={{
-        '--bl-w': `${width}px`,
-        '--bl-ink': textColor,
-        '--bl-muted': mutedColor,
-        '--bl-shine': shineColor,
-        '--bl-line': lineColor,
-        '--bl-hover': hoverColor,
-        '--bl-accent': accentColor,
-        '--bl-success': successColor,
-        '--bl-speed': `${shimmerSpeed}ms`,
-        '--bl-font': fontFamily,
-        ...style
-      }}
+      style={rootStyle}
     >
       <button type="button" className="bl-think__head" aria-expanded={open} aria-controls={`${uid}-steps`} onClick={toggle} disabled={!steps.length}>
         <svg className="bl-think__chev" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true" style={{ opacity: steps.length ? 1 : 0 }}>

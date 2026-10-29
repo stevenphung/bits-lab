@@ -243,7 +243,7 @@ function ThinkingDemo(props) {
   const steps = PLAN.map((label, i) => ({ label, status: i < step ? 'done' : i === step ? 'active' : 'pending', detail: i === 1 && i < step ? '3 diamonds + 2 sticks, crafting table required.' : undefined }));
   return (
     <div style={{ ...stack, justifyItems: 'stretch', maxWidth: 560, margin: '0 auto', padding: '32px 16px' }}>
-      <ThinkingShimmer key={run} {...props} thinking={thinking} steps={steps} defaultOpen fontFamily={PIXEL_FONT} />
+      <ThinkingShimmer key={`${run}-${props.variant}`} {...props} thinking={thinking} steps={steps} phases={props.variant === 'pill' ? ['Reading your inventory', 'Checking recipes', 'Counting diamonds', 'Planning the dig'] : undefined} defaultOpen fontFamily={PIXEL_FONT} />
       {!thinking && <p style={{ ...hint, textAlign: 'left', color: 'var(--demo-ink, #f4f4f4)' }}>You have 2 of 3 diamonds. Mine one more below height 16.</p>}
       <div style={row}>
         <PixelButton size="sm" variant="secondary" onPress={() => setRun(r => r + 1)}>
@@ -496,12 +496,13 @@ const DEMO_ENTRIES = {
 
   'thinking-shimmer': {
     source: thinkingShimmerSource,
-    defaults: { shimmerSpeed: 1800, label: 'Thinking', showTimer: true, accentColor: '#73eff7' },
-    controls: [slider('shimmerSpeed', 'Shimmer (ms)', 600, 4000, 100), text('label', 'Label'), toggle('showTimer', 'Elapsed timer'), color('accentColor', 'Accent')],
+    defaults: { variant: 'panel', shimmerSpeed: 1800, label: 'Thinking', showTimer: true, accentColor: '#73eff7' },
+    controls: [select('variant', 'Layout', ['panel', 'pill']), slider('shimmerSpeed', 'Shimmer (ms)', 600, 4000, 100), text('label', 'Label'), toggle('showTimer', 'Elapsed timer'), color('accentColor', 'Accent')],
     docs: [
       ['thinking', 'boolean', 'true', 'While true the label shimmers and the timer ticks; false settles to the done label.'],
       ['steps', '{ label, status, detail?, id? }[]', '[]', 'Disclosed under the header: status is "pending", "active" (spinner) or "done" (check).'],
       ['label / doneLabel', 'string / (seconds) => string', '"Thinking" / "Thought for 12s"', 'Header text while working and when done.'],
+      ['variant / phases / phaseInterval', '"panel" | "pill" / ReactNode[] / number', '"panel" / active steps / 1600', 'pill is a compact one-line chip whose label rolls through the phases while it works.'],
       ['startedAt', 'number', 'mount time', 'Epoch ms the work began, if it started before this mounted.'],
       ['defaultOpen / open / onOpenChange', 'boolean / boolean / (open) => void', 'false', 'Disclosure state.'],
       ['showTimer / shimmerSpeed / colors', 'boolean / number / string', 'true / 1800', 'Timer and styling; completion is announced politely.']

@@ -3,7 +3,7 @@ import { useId, useInsertionEffect, useLayoutEffect, useRef, useState } from 're
 // Tabs with an indicator that stretches toward the next tab before catching up, like a
 // caterpillar. Pill or underline style. Overflowing tab rows scroll, fade at the edges and
 // keep the active tab in view. Full ARIA tabs pattern: arrows, Home/End, automatic or
-// manual activation, and optional panels.
+// manual activation, and optional panels. In pill style the pill can also be dragged to a tab.
 
 const STYLE_ID = 'bl-slide-tabs';
 const CSS = `
@@ -23,6 +23,8 @@ const CSS = `
 .bl-stabs__tab { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; flex: 0 0 auto; padding: 9px 16px; border: 0; border-radius: calc(var(--bl-radius) - var(--bl-pad) / 2); background: transparent; color: var(--bl-muted); font: inherit; font-size: var(--bl-size); font-weight: 600; white-space: nowrap; cursor: pointer; transition: color 200ms; }
 .bl-stabs[data-variant="underline"] .bl-stabs__tab { padding: 12px 14px; }
 .bl-stabs__tab:hover { color: var(--bl-ink); }
+.bl-stabs[data-draggable] .bl-stabs__tab[aria-selected="true"] { cursor: grab; touch-action: pan-y; }
+.bl-stabs[data-dragging] .bl-stabs__list, .bl-stabs[data-dragging] .bl-stabs__tab { cursor: grabbing; user-select: none; }
 .bl-stabs__tab[aria-selected="true"] { color: var(--bl-active-ink); }
 .bl-stabs[data-variant="underline"] .bl-stabs__tab[aria-selected="true"] { color: var(--bl-ink); }
 .bl-stabs__tab:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: -2px; }
@@ -48,6 +50,7 @@ export default function SlideTabs({
   variant = 'pill',
   stretch = true,
   activation = 'automatic',
+  dragToSwitch = true,
   duration = 380,
   label = 'Tabs',
   fontSize = 14,
@@ -151,12 +154,71 @@ export default function SlideTabs({
     if (activation === 'automatic') select(next);
   };
 
+
+  // Drag the pill (pill style only): it follows the pointer, and letting go selects the tab
+  // nearest its centre. A drag needs 4px of movement, so a plain click still just clicks.
+  const drag = useRef(null);
+  const dragged = useRef(false);
+  const [dragging, setDragging] = useState(false);
+  const canDrag = dragToSwitch && variant === 'pill';
+
+  const onPointerDown = event => {
+    const tab = event.target.closest('[role="tab"]');
+    const indicator = indicatorRef.current;
+    if (!canDrag || event.button !== 0 || !tab || !indicator || tabRefs.current.indexOf(tab) !== selectedIndex) return;
+    drag.current = { x: event.clientX, id: event.pointerId, left: indicator.offsetLeft, pill: indicator.offsetWidth, moved: false, target: selectedIndex };
+  };
+
+  const onPointerMove = event => {
+    const d = drag.current;
+    const indicator = indicatorRef.current;
+    if (!d || d.id !== event.pointerId || !indicator) return;
+    const dx = event.clientX - d.x;
+    if (!d.moved) {
+      if (Math.abs(dx) < 4) return;
+      d.moved = true;
+      event.currentTarget.setPointerCapture?.(event.pointerId);
+      setDragging(true);
+    }
+    const tabs = tabRefs.current.filter(Boolean);
+    const first = tabs[0];
+    const end = tabs[tabs.length - 1];
+    const width = indicator.offsetParent.clientWidth;
+    const left = Math.min(Math.max(d.left + dx, first.offsetLeft), end.offsetLeft + end.offsetWidth - d.pill);
+    indicator.style.transition = 'none';
+    indicator.style.left = `${left}px`;
+    indicator.style.right = `${width - left - d.pill}px`;
+    last.current = { left, right: width - left - d.pill };
+    const centre = left + d.pill / 2;
+    d.target = tabs.reduce((best, tab, i) => (Math.abs(tab.offsetLeft + tab.offsetWidth / 2 - centre) < Math.abs(tabs[best].offsetLeft + tabs[best].offsetWidth / 2 - centre) ? i : best), 0);
+  };
+
+  const onPointerUp = () => {
+    const d = drag.current;
+    drag.current = null;
+    if (!d?.moved) return;
+    // Swallow the click this release produces (if any), then forget about it.
+    dragged.current = true;
+    setTimeout(() => {
+      dragged.current = false;
+    }, 0);
+    setDragging(false);
+    if (d.target === selectedIndex) place(true);
+    else {
+      setFocusIndex(d.target);
+      select(d.target);
+    }
+    tabRefs.current[d.target]?.focus({ preventScroll: true });
+  };
+
   const panel = items[selectedIndex]?.content;
 
   return (
     <div
       className={`bl-stabs ${className}`}
       data-variant={variant}
+      data-draggable={canDrag || undefined}
+      data-dragging={dragging || undefined}
       style={{
         '--bl-gap': `${gap}px`,
         '--bl-pad': variant === 'pill' ? `${padding}px` : '0px',
@@ -176,7 +238,7 @@ export default function SlideTabs({
       }}
     >
       <div ref={scrollerRef} className="bl-stabs__scroller" onScroll={updateFades}>
-        <div className="bl-stabs__list" role="tablist" aria-label={label} onKeyDown={onKeyDown}>
+        <div className="bl-stabs__list" role="tablist" aria-label={label} onKeyDown={onKeyDown} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
           <span ref={indicatorRef} className="bl-stabs__indicator" aria-hidden="true" />
           {items.map((item, index) => (
             <button
@@ -192,6 +254,11 @@ export default function SlideTabs({
               aria-controls={item.content !== undefined ? `${uid}-panel` : undefined}
               tabIndex={index === (focusIndex ?? selectedIndex) ? 0 : -1}
               onClick={() => {
+                // The click that ends a drag has already been handled.
+                if (dragged.current) {
+                  dragged.current = false;
+                  return;
+                }
                 setFocusIndex(index);
                 select(index);
               }}

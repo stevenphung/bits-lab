@@ -24,11 +24,12 @@ function useStyles() {
 //
 // A moving wall of logos or cards, in lanes. Each lane loops on its own, neighbours run in
 // opposite directions at slightly different speeds, and lanes can run across or up and down.
-// Hover an item and its lane slows to a crawl while the item steps forward and the rest of
-// the lane dims, so the thing you're looking at holds still enough to read. A pause button
+// Hover an item and its lane eases to a stop while the item steps forward and the rest of the
+// lane dims, so the thing you're looking at holds still enough to read. Drag a lane to scrub it;
+// let go and it coasts with momentum before settling back to its pace. A pause button
 // stops everything; screen readers get each item once; reduced motion shows the lanes still.
 
-function Lane({ items, index, vertical, speed, variance, alternate, slow, paused }) {
+function Lane({ items, index, vertical, speed, variance, alternate, slow, paused, scrub }) {
   const laneRef = useRef(null);
   const trackRef = useRef(null);
   const setRef = useRef(null);
@@ -68,10 +69,11 @@ function Lane({ items, index, vertical, speed, variance, alternate, slow, paused
     const tick = now => {
       const dt = Math.max(0, Math.min(0.05, (now - last) / 1000));
       last = now;
-      const goal = pausedRef.current ? 0 : hovered ? slow : 1;
+      const goal = pausedRef.current || drag ? 0 : hovered ? slow : 1;
       rate += (goal - rate) * Math.min(1, dt * 6);
       const size = (vertical ? set.offsetHeight : set.offsetWidth) || 1;
-      offset = (((offset + dir * own * rate * dt) % size) + size) % size;
+      fling = drag ? 0 : Math.abs(fling) < 4 ? 0 : fling * Math.exp(-dt * 2.5);
+      offset = (((offset + dir * own * rate * dt + fling * dt) % size) + size) % size;
       track.style.transform = vertical ? `translateY(${-offset.toFixed(2)}px)` : `translateX(${-offset.toFixed(2)}px)`;
       raf = visible && !document.hidden ? requestAnimationFrame(tick) : 0;
     };
@@ -80,6 +82,49 @@ function Lane({ items, index, vertical, speed, variance, alternate, slow, paused
       last = performance.now();
       raf = requestAnimationFrame(tick);
     };
+    // Drag to scrub: the lane follows the pointer, then coasts on the release speed and settles
+    // back into its own pace. A drag that moved swallows the click, so links don't fire.
+    let drag = null;
+    let fling = 0;
+    const along = (event) => (vertical ? event.clientY : event.clientX);
+    const onDown = (event) => {
+      if (!scrub || event.button !== 0) return;
+      drag = { last: along(event), time: event.timeStamp, v: 0, moved: 0 };
+      fling = 0;
+    };
+    const onMove = (event) => {
+      if (!drag) return;
+      const p = along(event);
+      const d = p - drag.last;
+      const dt = Math.max(1, event.timeStamp - drag.time);
+      drag.moved += Math.abs(d);
+      if (drag.moved > 4 && lane.dataset.dragging === undefined) {
+        lane.dataset.dragging = '';
+        lane.setPointerCapture?.(event.pointerId);
+      }
+      drag.v = drag.v * 0.6 + ((-d / dt) * 1000) * 0.4;
+      offset -= d;
+      drag.last = p;
+      drag.time = event.timeStamp;
+      start();
+    };
+    const onUp = () => {
+      if (!drag) return;
+      fling = Math.max(-3000, Math.min(3000, drag.v));
+      const moved = drag.moved;
+      drag = null;
+      delete lane.dataset.dragging;
+      if (moved > 4) {
+        const swallow = (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+        };
+        lane.addEventListener('click', swallow, { capture: true, once: true });
+        setTimeout(() => lane.removeEventListener('click', swallow, { capture: true }), 0);
+      }
+    };
+    // Images and links inside a lane would start a native drag (and cancel the pointer).
+    const onDragStart = event => scrub && event.preventDefault();
     const onEnter = () => {
       hovered = true;
       lane.dataset.focus = '';
@@ -96,6 +141,11 @@ function Lane({ items, index, vertical, speed, variance, alternate, slow, paused
     document.addEventListener('visibilitychange', start);
     lane.addEventListener('pointerenter', onEnter);
     lane.addEventListener('pointerleave', onLeave);
+    lane.addEventListener('pointerdown', onDown);
+    lane.addEventListener('pointermove', onMove);
+    lane.addEventListener('pointerup', onUp);
+    lane.addEventListener('pointercancel', onUp);
+    lane.addEventListener('dragstart', onDragStart);
     start();
     return () => {
       cancelAnimationFrame(raf);
@@ -103,12 +153,17 @@ function Lane({ items, index, vertical, speed, variance, alternate, slow, paused
       document.removeEventListener('visibilitychange', start);
       lane.removeEventListener('pointerenter', onEnter);
       lane.removeEventListener('pointerleave', onLeave);
+      lane.removeEventListener('pointerdown', onDown);
+      lane.removeEventListener('pointermove', onMove);
+      lane.removeEventListener('pointerup', onUp);
+      lane.removeEventListener('pointercancel', onUp);
+      lane.removeEventListener('dragstart', onDragStart);
       track.style.transform = '';
     };
-  }, [index, vertical, speed, variance, alternate, slow]);
+  }, [index, vertical, speed, variance, alternate, slow, scrub]);
 
   return (
-    <div ref={laneRef} className="group/lane overflow-hidden [-webkit-mask-image:linear-gradient(90deg,transparent,#000_var(--bl-fade),#000_calc(100%_-_var(--bl-fade)),transparent)] [mask-image:linear-gradient(90deg,transparent,#000_var(--bl-fade),#000_calc(100%_-_var(--bl-fade)),transparent)] group-data-[vertical]/mw:min-w-0 group-data-[vertical]/mw:flex-1 group-data-[vertical]/mw:[-webkit-mask-image:linear-gradient(180deg,transparent,#000_var(--bl-fade),#000_calc(100%_-_var(--bl-fade)),transparent)] group-data-[vertical]/mw:[mask-image:linear-gradient(180deg,transparent,#000_var(--bl-fade),#000_calc(100%_-_var(--bl-fade)),transparent)]">
+    <div ref={laneRef} className="group/lane group-data-[scrub]/mw:cursor-grab group-data-[scrub]/mw:[touch-action:pan-y] group-data-[scrub]/mw:group-data-[vertical]/mw:[touch-action:pan-x] data-[dragging]:cursor-grabbing data-[dragging]:select-none overflow-hidden [-webkit-mask-image:linear-gradient(90deg,transparent,#000_var(--bl-fade),#000_calc(100%_-_var(--bl-fade)),transparent)] [mask-image:linear-gradient(90deg,transparent,#000_var(--bl-fade),#000_calc(100%_-_var(--bl-fade)),transparent)] group-data-[vertical]/mw:min-w-0 group-data-[vertical]/mw:flex-1 group-data-[vertical]/mw:[-webkit-mask-image:linear-gradient(180deg,transparent,#000_var(--bl-fade),#000_calc(100%_-_var(--bl-fade)),transparent)] group-data-[vertical]/mw:[mask-image:linear-gradient(180deg,transparent,#000_var(--bl-fade),#000_calc(100%_-_var(--bl-fade)),transparent)]">
       <div ref={trackRef} className="flex w-max will-change-transform group-data-[vertical]/mw:w-auto group-data-[vertical]/mw:flex-col">
         {Array.from({ length: copies }, (_, c) => (
           <div key={c} ref={c === 0 ? setRef : undefined} className="flex flex-none gap-(--bl-gap) pr-(--bl-gap) group-data-[vertical]/mw:flex-col group-data-[vertical]/mw:pr-0 group-data-[vertical]/mw:pb-(--bl-gap)">
@@ -131,7 +186,8 @@ export default function Marquee({
   speed = 40,
   variance = 0.3,
   alternate = true,
-  slow = 0.15,
+  slow = 0,
+  scrub = true,
   dim = 0.45,
   gap = 16,
   fade = 56,
@@ -153,8 +209,9 @@ export default function Marquee({
 
   return (
     <div
-      className={`bl-mwall group/mw relative grid gap-2.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      className={`bl-mwall group/mw grid-cols-[minmax(0,1fr)] relative grid gap-2.5 font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
       data-vertical={vertical || undefined}
+      data-scrub={scrub || undefined}
       style={{ '--bl-gap': `${gap}px`, '--bl-fade': `${fade}px`, '--bl-h': `${height}px`, '--bl-dim': dim, '--bl-ink': textColor, '--bl-accent': accentColor, '--bl-chip': chipColor, '--bl-font': fontFamily, ...style }}
     >
       <ul className="sr-only" aria-label={label}>
@@ -162,9 +219,9 @@ export default function Marquee({
           <li key={i}>{item}</li>
         ))}
       </ul>
-      <div className="flex flex-col gap-(--bl-gap) group-data-[vertical]/mw:h-(--bl-h) group-data-[vertical]/mw:flex-row" aria-hidden="true">
+      <div className="flex min-w-0 flex-col gap-(--bl-gap) group-data-[vertical]/mw:h-(--bl-h) group-data-[vertical]/mw:flex-row" aria-hidden="true">
         {dealt.map((laneItems, l) => (
-          <Lane key={l} items={laneItems} index={l} vertical={vertical} speed={speed} variance={variance} alternate={alternate} slow={slow} paused={paused} />
+          <Lane key={l} items={laneItems} index={l} vertical={vertical} speed={speed} variance={variance} alternate={alternate} slow={slow} paused={paused} scrub={scrub} />
         ))}
       </div>
       {showPause && (

@@ -41,6 +41,8 @@ export interface WheelPickerProps {
   label?: string;
   fontSize?: number;
   radius?: number;
+  /** A barrel look: slats, shading, side rails and a deeper curve. */
+  drum?: boolean;
   backgroundColor?: string;
   bandColor?: string;
   textColor?: string;
@@ -63,6 +65,7 @@ export default function WheelPicker({
   label = 'Pick an option',
   fontSize = 18,
   radius = 14,
+  drum = false,
   backgroundColor,
   bandColor,
   textColor,
@@ -217,8 +220,9 @@ export default function WheelPicker({
   return (
     <div
       ref={rootRef}
-      className={`bl-wheel relative inline-block h-[calc(var(--bl-row)_*_var(--bl-visible))] w-(--bl-w) cursor-grab touch-none overflow-hidden rounded-(--bl-radius) bg-(--bl-bg) font-(family-name:--bl-font) text-(length:--bl-size) text-(--bl-ink) shadow-[inset_0_0_0_1px_var(--bl-line)] outline-none select-none [perspective:600px] focus-visible:shadow-[inset_0_0_0_2px_var(--bl-accent)] data-[dragging]:cursor-grabbing ${className}`}
+      className={`bl-wheel group/wheel data-[drum]:[perspective:280px] data-[drum]:before:pointer-events-none data-[drum]:before:absolute data-[drum]:before:inset-y-0 data-[drum]:before:z-2 data-[drum]:before:w-2 data-[drum]:before:bg-[linear-gradient(var(--bl-line),var(--bl-muted)_50%,var(--bl-line))] data-[drum]:before:content-[''] data-[drum]:after:pointer-events-none data-[drum]:after:absolute data-[drum]:after:inset-y-0 data-[drum]:after:z-2 data-[drum]:after:w-2 data-[drum]:after:bg-[linear-gradient(var(--bl-line),var(--bl-muted)_50%,var(--bl-line))] data-[drum]:after:content-[''] data-[drum]:before:left-0 data-[drum]:after:right-0 relative inline-block h-[calc(var(--bl-row)_*_var(--bl-visible))] w-(--bl-w) cursor-grab touch-none overflow-hidden rounded-(--bl-radius) bg-(--bl-bg) font-(family-name:--bl-font) text-(length:--bl-size) text-(--bl-ink) shadow-[inset_0_0_0_1px_var(--bl-line)] outline-none select-none [perspective:600px] focus-visible:shadow-[inset_0_0_0_2px_var(--bl-accent)] data-[dragging]:cursor-grabbing ${className}`}
       role="spinbutton"
+      data-drum={drum || undefined}
       tabIndex={0}
       aria-label={label}
       aria-valuemin={0}
@@ -227,18 +231,19 @@ export default function WheelPicker({
       aria-valuetext={opts[index]?.label ?? ''}
       style={{ '--bl-w': `${width}px`, '--bl-row': `${rowHeight}px`, '--bl-visible': visible, '--bl-step': `${stepDeg}deg`, '--bl-radius-z': `${radiusZ.toFixed(1)}px`, '--bl-size': `${fontSize}px`, '--bl-radius': `${radius}px`, '--bl-bg': backgroundColor, '--bl-band': bandColor, '--bl-ink': textColor, '--bl-muted': mutedColor, '--bl-line': lineColor, '--bl-accent': accentColor, '--bl-font': fontFamily, ...style } as CSSVars}
     >
-      <span className="pointer-events-none absolute top-1/2 right-1.5 left-1.5 -mt-[calc(var(--bl-row)_/_2)] h-(--bl-row) rounded-[8px] bg-(--bl-band) shadow-[inset_0_0_0_1px_var(--bl-line)]" aria-hidden="true" />
+      <span className="pointer-events-none absolute top-1/2 right-1.5 left-1.5 -mt-[calc(var(--bl-row)_/_2)] h-(--bl-row) rounded-[8px] bg-(--bl-band) shadow-[inset_0_0_0_1px_var(--bl-line)] group-data-[drum]/wheel:z-1 group-data-[drum]/wheel:bg-transparent group-data-[drum]/wheel:shadow-[inset_0_0_0_2px_var(--bl-accent)]" aria-hidden="true" />
       <div className="absolute inset-0 [transform-style:preserve-3d]" aria-hidden="true">
         {opts.map((o, i) => {
           const k = i - pos;
           if (Math.abs(k) > visible / 2 + 1) return null;
           return (
-            <span key={String(o.value)} className="absolute top-1/2 right-0 left-0 -mt-[calc(var(--bl-row)_/_2)] grid h-(--bl-row) place-items-center whitespace-nowrap text-(--bl-muted) opacity-[calc(1_-_var(--far)_*_0.75)] [backface-visibility:hidden] [transform:rotateX(calc(var(--k)_*_var(--bl-step)_*_-1))_translateZ(var(--bl-radius-z))] data-[current]:font-bold data-[current]:text-(--bl-ink)" data-current={i === shown || undefined} style={{ '--k': k.toFixed(3), '--far': Math.min(1, Math.abs(k) / (visible / 2 + 0.5)).toFixed(3) } as CSSVars}>
+            <span key={String(o.value)} className="absolute top-1/2 right-0 left-0 -mt-[calc(var(--bl-row)_/_2)] group-data-[drum]/wheel:bg-(--bl-bg) group-data-[drum]/wheel:shadow-[inset_0_1px_0_var(--bl-line)] grid h-(--bl-row) place-items-center whitespace-nowrap text-(--bl-muted) opacity-[calc(1_-_var(--far)_*_0.75)] [backface-visibility:hidden] [transform:rotateX(calc(var(--k)_*_var(--bl-step)_*_-1))_translateZ(var(--bl-radius-z))] data-[current]:font-bold data-[current]:text-(--bl-ink)" data-current={i === shown || undefined} style={{ '--k': k.toFixed(3), '--far': Math.min(1, Math.abs(k) / (visible / 2 + 0.5)).toFixed(3) } as CSSVars}>
               {o.label}
             </span>
           );
         })}
       </div>
+      {drum && <span className="pointer-events-none absolute inset-0 z-1 bg-[linear-gradient(rgba(0,0,0,0.5),transparent_32%,rgba(255,255,255,0.06)_50%,transparent_68%,rgba(0,0,0,0.5))]" aria-hidden="true" />}
       <span className="pointer-events-none absolute inset-0 bg-[linear-gradient(var(--bl-bg),transparent_38%,transparent_62%,var(--bl-bg))]" aria-hidden="true" />
     </div>
   );

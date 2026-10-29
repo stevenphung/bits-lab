@@ -211,6 +211,16 @@ function PixelButtonDemo({ label, sound, ...props }) {
           </PixelButton>
         ))}
       </div>
+      <div style={row}>
+        <PixelButton variant="destructive" size="sm" onPress={() => sound && playChip('cancel')}>
+          Delete world
+        </PixelButton>
+        <PixelButton variant="ghost" size="sm" onPress={() => sound && playChip('select')}>
+          Settings
+        </PixelButton>
+        <PixelButton variant="info" size="sm" icon={<Sprite name="gem" size={14} />} aria-label="Shop" onPress={() => sound && playChip('select')} />
+        <PixelButton variant="ghost" size="sm" icon={<Sprite name="heart" size={14} />} aria-label="Favourite" onPress={() => sound && playChip('select')} />
+      </div>
     </div>
   );
 }
@@ -489,13 +499,13 @@ const layers = [
   'pixel-button': {
     source: pixelButtonSource,
     defaults: { label: 'Start game', variant: 'primary', size: 'lg', loading: false, disabled: false, sound: true },
-    controls: [text('label', 'Label'), select('variant', 'Variant', ['primary', 'secondary', 'success', 'warning', 'info']), select('size', 'Size', ['sm', 'md', 'lg']), toggle('loading', 'Loading'), toggle('disabled', 'Disabled'), toggle('sound', 'Click sound (demo)')],
+    controls: [text('label', 'Label'), select('variant', 'Variant', ['primary', 'secondary', 'success', 'warning', 'info', 'destructive', 'ghost']), select('size', 'Size', ['sm', 'md', 'lg']), toggle('loading', 'Loading'), toggle('disabled', 'Disabled'), toggle('sound', 'Click sound (demo)')],
     docs: [
-      ['variant', '"primary" | "secondary" | "success" | "warning" | "info"', '"primary"', 'Color preset.'],
+      ['variant', '"primary" | "secondary" | "success" | "warning" | "info" | "destructive" | "ghost"', '"primary"', 'Color preset. destructive gets hazard stripes on hover; ghost is an outline that takes the text colour around it.'],
       ['size', '"sm" | "md" | "lg"', '"md"', 'Size, including border thickness.'],
-      ['loading', 'boolean', 'false', 'Shows animated pips, sets aria-busy and ignores clicks.'],
+      ['loading', 'boolean', 'false', 'Shows animated pips and a shimmer, sets aria-busy and ignores clicks.'],
       ['disabled', 'boolean', 'false', 'Cracked, desaturated and not clickable.'],
-      ['icon', 'ReactNode', '-', 'Shown before the label.'],
+      ['icon', 'ReactNode', '-', 'Shown before the label. With no children it becomes a square icon button: give it an aria-label.'],
       ['onPress / onClick', '(event) => void', '-', 'Click handlers (both work).'],
       ['color / textColor / fontFamily', 'string', '-', 'Override the variant colors and font.']
     ],

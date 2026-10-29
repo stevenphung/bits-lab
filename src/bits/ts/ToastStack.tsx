@@ -6,15 +6,16 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 //   toast('Saved'), toast.success(...), toast.error(...), toast.info(...)
 //   toast.promise(fetchThing(), { loading: 'Saving…', success: 'Saved', error: 'Failed' })
 // Toasts stack like cards and fan out on hover or focus, swipe sideways to dismiss, pause
-// their timers while you read, and are announced to screen readers.
+// their timers while you read, and are announced to screen readers. NoticeStack is the inline
+// version: a pile of notice cards in the page, dismissed one at a time.
 
 const STYLE_ID = 'bl-toast-stack';
 const CSS = `
 /* theme tokens */
-.bl-toaster { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.12); --bl-accent: #73eff7; }
-:where(.light, [data-theme="light"]) .bl-toaster, .bl-toaster:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.12); --bl-accent: #167f8f; }
-:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-toaster, :where(.light, [data-theme="light"]) .bl-toaster:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.12); --bl-accent: #73eff7; }
-@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-toaster, .bl-toaster:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.12); --bl-accent: #167f8f; } }
+:is(.bl-toaster, .bl-notices) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.12); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) :is(.bl-toaster, .bl-notices), :is(.bl-toaster, .bl-notices):where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.12); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) :is(.bl-toaster, .bl-notices), :where(.light, [data-theme="light"]) :is(.bl-toaster, .bl-notices):where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.12); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) :is(.bl-toaster, .bl-notices), :is(.bl-toaster, .bl-notices):where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.12); --bl-accent: #167f8f; } }
 /* theme tokens end */
 .bl-toaster { position: fixed; z-index: 1100; width: var(--bl-w); max-width: calc(100% - 32px); margin: 0; padding: 0; list-style: none; font-family: var(--bl-font); pointer-events: none; }
 .bl-toaster[data-contained] { position: absolute; }
@@ -36,8 +37,20 @@ const CSS = `
 .bl-toast:hover .bl-toast__close, .bl-toast:focus-within .bl-toast__close { opacity: 1; }
 .bl-toast button:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 2px; opacity: 1; }
 .bl-toast__spinner { width: 16px; height: 16px; border: 2px solid var(--bl-line); border-top-color: var(--bl-accent); border-radius: 50%; animation: bl-toast-spin 700ms linear infinite; }
+.bl-notices { width: min(var(--bl-w), 100%); color: var(--bl-ink); font-family: var(--bl-font); }
+.bl-notices__count { margin: 0 0 8px; color: var(--bl-muted); font-size: 12px; font-weight: 600; }
+.bl-notices__stack { display: grid; padding-bottom: calc(var(--bl-peek) * var(--bl-gap)); transition: padding-bottom 260ms ease; }
+.bl-notice { grid-area: 1 / 1; align-self: stretch; display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); opacity: calc(1 - var(--d) * 0.15); box-shadow: inset 0 0 0 1px var(--bl-line), 0 10px 30px -12px rgba(0,0,0,0.55); transform: translateY(calc(var(--d) * var(--bl-gap))) scale(calc(1 - var(--d) * 0.05)); transform-origin: 50% 100%; transition: transform 260ms cubic-bezier(.2,.9,.25,1), opacity 260ms; }
+.bl-notice[aria-hidden="true"] > * { visibility: hidden; }
+.bl-notice[data-hidden] { opacity: 0; }
+.bl-notice[data-leaving] { opacity: 0; transform: translateX(110%) rotate(6deg); pointer-events: none; }
+.bl-notice__close { flex: 0 0 auto; display: grid; place-items: center; width: 22px; height: 22px; border: 0; border-radius: 50%; background: transparent; color: var(--bl-muted); cursor: pointer; }
+.bl-notice__close:hover { background: var(--bl-line); color: var(--bl-ink); }
+.bl-notice button:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 2px; }
+.bl-notices__empty { grid-area: 1 / 1; margin: 0; padding: 18px 16px; border: 1px dashed var(--bl-line); border-radius: var(--bl-radius); color: var(--bl-muted); text-align: center; }
+.bl-notices__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @keyframes bl-toast-spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .bl-toast { transition: opacity 200ms; } .bl-toast__spinner { animation-duration: 2s; } }
+@media (prefers-reduced-motion: reduce) { .bl-notice, .bl-notices__stack { transition: none; } .bl-toast { transition: opacity 200ms; } .bl-toast__spinner { animation-duration: 2s; } }
 `;
 
 function useStyles() {
@@ -410,5 +423,164 @@ export default function Toaster({
         );
       })}
     </ol>
+  );
+}
+
+export interface Notice {
+  id: string | number;
+  title: ReactNode;
+  description?: ReactNode;
+  type?: ToastType;
+  icon?: ReactNode;
+  /** A button on the card; pressing it also dismisses the card. */
+  action?: { label: ReactNode; onClick?: () => void };
+}
+
+export interface NoticeStackProps {
+  notices?: Notice[];
+  onDismiss?: (id: string | number, notice: Notice) => void;
+  label?: string;
+  /** How many cards peek out behind the front one. */
+  peek?: number;
+  /** Offset of each card behind, in px. */
+  gap?: number;
+  width?: number;
+  radius?: number;
+  emptyMessage?: ReactNode;
+  backgroundColor?: string;
+  textColor?: string;
+  mutedColor?: string;
+  lineColor?: string;
+  accentColor?: string;
+  successColor?: string;
+  errorColor?: string;
+  infoColor?: string;
+  fontFamily?: string;
+  className?: string;
+  style?: CSSProperties;
+}
+
+// ---------- Inline notices ----------
+
+// Stacked notices in the page rather than a floating toaster: the front card is shown in full
+// with the next few peeking out behind it; dismissing it slides it away and the next one steps
+// forward. Pass notices; onDismiss says which one went. Only the front card is interactive
+// (the rest are inert), and each dismissal is announced.
+export function NoticeStack({
+  notices = [],
+  onDismiss,
+  label = 'Notices',
+  peek = 2,
+  gap = 10,
+  width = 380,
+  radius = 12,
+  emptyMessage = 'All caught up.',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
+  successColor = '#38b764',
+  errorColor = '#b13e53',
+  infoColor = '#41a6f6',
+  fontFamily = 'ui-sans-serif, system-ui, sans-serif',
+  className = '',
+  style
+}: NoticeStackProps) {
+  useStyles();
+  const [gone, setGone] = useState<Array<string | number>>([]);
+  const [leaving, setLeaving] = useState<string | number | null>(null);
+  const [said, setSaid] = useState('');
+  const timer = useRef<number | undefined>(undefined);
+
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const live = notices.filter(notice => !gone.includes(notice.id));
+  const queue = live.filter(notice => notice.id !== leaving);
+  const colors: Record<string, string> = { success: successColor, error: errorColor, info: infoColor };
+
+  const dismiss = (notice: Notice) => {
+    if (leaving !== null) return;
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const left = queue.length - 1;
+    setLeaving(notice.id);
+    setSaid(left ? `Dismissed. ${left} more.` : 'Dismissed. No more notices.');
+    timer.current = setTimeout(() => {
+      setGone(ids => [...ids, notice.id]);
+      setLeaving(null);
+      onDismiss?.(notice.id, notice);
+    }, reduced ? 0 : 260);
+  };
+
+  return (
+    <section
+      className={`bl-notices ${className}`}
+      aria-label={label}
+      style={{
+        '--bl-w': `${width}px`,
+        '--bl-radius': `${radius}px`,
+        '--bl-icon-radius': radius ? '50%' : '0',
+        '--bl-gap': `${gap}px`,
+        '--bl-peek': Math.min(peek, Math.max(0, queue.length - 1)),
+        '--bl-bg': backgroundColor,
+        '--bl-ink': textColor,
+        '--bl-muted': mutedColor,
+        '--bl-line': lineColor,
+        '--bl-accent': accentColor,
+        '--bl-font': fontFamily,
+        ...style
+      } as CSSVars}
+    >
+      {queue.length > 1 && <p className="bl-notices__count">{queue.length} notices</p>}
+      <div className="bl-notices__stack">
+        {live.map(notice => {
+          const depth = notice.id === leaving ? 0 : queue.indexOf(notice);
+          const front = depth === 0;
+          const accent = colors[notice.type ?? 'default'];
+          return (
+            <article
+              key={notice.id}
+              className="bl-notice"
+              data-leaving={notice.id === leaving || undefined}
+              data-hidden={depth > peek || undefined}
+              aria-hidden={front ? undefined : true}
+              inert={front ? undefined : true}
+              style={{ '--d': depth, zIndex: notice.id === leaving ? live.length + 1 : live.length - depth } as CSSVars}
+            >
+              {(accent || notice.icon) && (
+                <span className="bl-toast__icon" style={{ background: accent ?? 'var(--bl-line)' }} aria-hidden="true">
+                  {notice.icon ?? ICONS[notice.type as keyof typeof ICONS]}
+                </span>
+              )}
+              <div className="bl-toast__text">
+                <div className="bl-toast__title">{notice.title}</div>
+                {notice.description && <div className="bl-toast__desc">{notice.description}</div>}
+              </div>
+              {notice.action && (
+                <button
+                  type="button"
+                  className="bl-toast__action"
+                  onClick={() => {
+                    notice.action!.onClick?.();
+                    dismiss(notice);
+                  }}
+                >
+                  {notice.action.label}
+                </button>
+              )}
+              <button type="button" className="bl-notice__close" aria-label="Dismiss" onClick={() => dismiss(notice)}>
+                <svg width="10" height="10" viewBox="0 0 10 10" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                  <path d="M1 1l8 8M9 1 1 9" />
+                </svg>
+              </button>
+            </article>
+          );
+        })}
+        {live.length === 0 && <p className="bl-notices__empty">{emptyMessage}</p>}
+      </div>
+      <span className="bl-notices__sr" aria-live="polite">
+        {said}
+      </span>
+    </section>
   );
 }

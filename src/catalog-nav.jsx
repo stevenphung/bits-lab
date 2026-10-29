@@ -356,13 +356,14 @@ const DEMO_ENTRIES = {
 
   'slide-tabs': {
     source: slideTabsSource,
-    defaults: { stretch: true, duration: 380, activation: 'automatic', radius: 4, activeColor: '#f4f4f4', accentColor: '#73eff7' },
-    controls: [toggle('stretch', 'Stretch while moving'), slider('duration', 'Slide (ms)', 150, 900, 10), select('activation', 'Keyboard activation', ['automatic', 'manual']), slider('radius', 'Radius', 0, 24, 1), color('activeColor', 'Pill color'), color('accentColor', 'Underline / focus')],
+    defaults: { stretch: true, dragToSwitch: true, duration: 380, activation: 'automatic', radius: 4, activeColor: '#f4f4f4', accentColor: '#73eff7' },
+    controls: [toggle('stretch', 'Stretch while moving'), toggle('dragToSwitch', 'Drag the pill'), slider('duration', 'Slide (ms)', 150, 900, 10), select('activation', 'Keyboard activation', ['automatic', 'manual']), slider('radius', 'Radius', 0, 24, 1), color('activeColor', 'Pill color'), color('accentColor', 'Underline / focus')],
     docs: [
       ['items', '{ id, label, icon?, content? }[]', '[]', 'Tabs. Give items content to render a linked tab panel.'],
       ['value / defaultValue / onChange', 'string / string / (id, item) => void', 'first', 'Controlled or uncontrolled selection.'],
       ['variant', '"pill" | "underline"', '"pill"', 'Sliding pill on a track, or a sliding underline.'],
       ['stretch / duration', 'boolean / number', 'true / 380', 'The leading edge moves first and the trailing edge follows.'],
+      ['dragToSwitch', 'boolean', 'true', 'Pill style: drag the pill and let go over a tab to select it. Clicks and keys work as usual.'],
       ['activation', '"automatic" | "manual"', '"automatic"', 'Arrow keys select immediately, or only move focus until Enter/Space.'],
       ['label', 'string', '"Tabs"', 'Accessible name of the tab list.'],
       ['colors / radius / padding / gap / fontSize', 'various', 'dark', 'Styling. Overflowing rows scroll with edge fades and keep the active tab centered.']

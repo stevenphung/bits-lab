@@ -7,15 +7,16 @@ import { useEffect, useInsertionEffect, useLayoutEffect, useRef, useState, useSy
 //   toast('Saved'), toast.success(...), toast.error(...), toast.info(...)
 //   toast.promise(fetchThing(), { loading: 'Saving…', success: 'Saved', error: 'Failed' })
 // Toasts stack like cards and fan out on hover or focus, swipe sideways to dismiss, pause
-// their timers while you read, and are announced to screen readers.
+// their timers while you read, and are announced to screen readers. NoticeStack is the inline
+// version: a pile of notice cards in the page, dismissed one at a time.
 
 const STYLE_ID = 'bl-toast-stack-tw';
 const CSS = `
 /* theme tokens */
-.bl-toaster { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.12); --bl-accent: #73eff7; }
-:where(.light, [data-theme="light"]) .bl-toaster, .bl-toaster:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.12); --bl-accent: #167f8f; }
-:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-toaster, :where(.light, [data-theme="light"]) .bl-toaster:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.12); --bl-accent: #73eff7; }
-@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-toaster, .bl-toaster:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.12); --bl-accent: #167f8f; } }
+:is(.bl-toaster, .bl-notices) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.12); --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) :is(.bl-toaster, .bl-notices), :is(.bl-toaster, .bl-notices):where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.12); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) :is(.bl-toaster, .bl-notices), :where(.light, [data-theme="light"]) :is(.bl-toaster, .bl-notices):where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.12); --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) :is(.bl-toaster, .bl-notices), :is(.bl-toaster, .bl-notices):where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.12); --bl-accent: #167f8f; } }
 /* theme tokens end */
 @keyframes bl-toast-spin { to { transform: rotate(360deg); } }
 `;
@@ -313,5 +314,130 @@ export default function Toaster({
         );
       })}
     </ol>
+  );
+}
+
+// ---------- Inline notices ----------
+
+// Stacked notices in the page rather than a floating toaster: the front card is shown in full
+// with the next few peeking out behind it; dismissing it slides it away and the next one steps
+// forward. Pass notices; onDismiss says which one went. Only the front card is interactive
+// (the rest are inert), and each dismissal is announced.
+export function NoticeStack({
+  notices = [],
+  onDismiss,
+  label = 'Notices',
+  peek = 2,
+  gap = 10,
+  width = 380,
+  radius = 12,
+  emptyMessage = 'All caught up.',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
+  successColor = '#38b764',
+  errorColor = '#b13e53',
+  infoColor = '#41a6f6',
+  fontFamily = 'ui-sans-serif, system-ui, sans-serif',
+  className = '',
+  style
+}) {
+  useStyles();
+  const [gone, setGone] = useState([]);
+  const [leaving, setLeaving] = useState(null);
+  const [said, setSaid] = useState('');
+  const timer = useRef(undefined);
+
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const live = notices.filter(notice => !gone.includes(notice.id));
+  const queue = live.filter(notice => notice.id !== leaving);
+  const colors = { success: successColor, error: errorColor, info: infoColor };
+
+  const dismiss = (notice) => {
+    if (leaving !== null) return;
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const left = queue.length - 1;
+    setLeaving(notice.id);
+    setSaid(left ? `Dismissed. ${left} more.` : 'Dismissed. No more notices.');
+    timer.current = setTimeout(() => {
+      setGone(ids => [...ids, notice.id]);
+      setLeaving(null);
+      onDismiss?.(notice.id, notice);
+    }, reduced ? 0 : 260);
+  };
+
+  return (
+    <section
+      className={`bl-notices w-[min(var(--bl-w),100%)] font-(family-name:--bl-font) text-(--bl-ink) ${className}`}
+      aria-label={label}
+      style={{
+        '--bl-w': `${width}px`,
+        '--bl-radius': `${radius}px`,
+        '--bl-icon-radius': radius ? '50%' : '0',
+        '--bl-gap': `${gap}px`,
+        '--bl-peek': Math.min(peek, Math.max(0, queue.length - 1)),
+        '--bl-bg': backgroundColor,
+        '--bl-ink': textColor,
+        '--bl-muted': mutedColor,
+        '--bl-line': lineColor,
+        '--bl-accent': accentColor,
+        '--bl-font': fontFamily,
+        ...style
+      }}
+    >
+      {queue.length > 1 && <p className="m-0 mb-2 text-[12px] font-semibold text-(--bl-muted)">{queue.length} notices</p>}
+      <div className="grid pb-[calc(var(--bl-peek)*var(--bl-gap))] [transition:padding-bottom_260ms_ease] motion-reduce:[transition:none]">
+        {live.map(notice => {
+          const depth = notice.id === leaving ? 0 : queue.indexOf(notice);
+          const front = depth === 0;
+          const accent = colors[notice.type ?? 'default'];
+          return (
+            <article
+              key={notice.id}
+              className="group/notice flex items-start gap-3 self-stretch rounded-(--bl-radius) bg-(--bl-bg) px-4 py-3.5 text-(--bl-ink) opacity-[calc(1-var(--d)*0.15)] shadow-[inset_0_0_0_1px_var(--bl-line),0_10px_30px_-12px_rgba(0,0,0,0.55)] [grid-area:1/1] origin-[50%_100%] [transform:translateY(calc(var(--d)*var(--bl-gap)))_scale(calc(1-var(--d)*0.05))] [transition:transform_260ms_cubic-bezier(.2,.9,.25,1),opacity_260ms] aria-hidden:*:invisible data-[hidden]:opacity-0 data-[leaving]:pointer-events-none data-[leaving]:opacity-0 data-[leaving]:[transform:translateX(110%)_rotate(6deg)] motion-reduce:[transition:none]"
+              data-leaving={notice.id === leaving || undefined}
+              data-hidden={depth > peek || undefined}
+              aria-hidden={front ? undefined : true}
+              inert={front ? undefined : true}
+              style={{ '--d': depth, zIndex: notice.id === leaving ? live.length + 1 : live.length - depth }}
+            >
+              {(accent || notice.icon) && (
+                <span className="mt-px grid size-[22px] flex-none place-items-center rounded-(--bl-icon-radius) text-[13px] font-extrabold text-(--bl-bg)" style={{ background: accent ?? 'var(--bl-line)' }} aria-hidden="true">
+                  {notice.icon ?? ICONS[notice.type]}
+                </span>
+              )}
+              <div className="min-w-0 flex-1">
+                <div className="leading-[1.35] font-[650]">{notice.title}</div>
+                {notice.description && <div className="mt-[3px] text-[0.9em] leading-[1.4] text-(--bl-muted)">{notice.description}</div>}
+              </div>
+              {notice.action && (
+                <button
+                  type="button"
+                  className="flex-none cursor-pointer self-center rounded-[calc(var(--bl-radius)*0.6)] border-0 bg-(--bl-accent) px-2.5 py-1.5 text-[0.85em] font-bold text-(--bl-bg) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--bl-accent) focus-visible:outline-solid"
+                  onClick={() => {
+                    notice.action.onClick?.();
+                    dismiss(notice);
+                  }}
+                >
+                  {notice.action.label}
+                </button>
+              )}
+              <button type="button" className="grid size-[22px] flex-none cursor-pointer place-items-center rounded-[50%] border-0 bg-transparent text-(--bl-muted) hover:bg-(--bl-line) hover:text-(--bl-ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--bl-accent) focus-visible:outline-solid" aria-label="Dismiss" onClick={() => dismiss(notice)}>
+                <svg width="10" height="10" viewBox="0 0 10 10" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                  <path d="M1 1l8 8M9 1 1 9" />
+                </svg>
+              </button>
+            </article>
+          );
+        })}
+        {live.length === 0 && <p className="m-0 rounded-(--bl-radius) border border-dashed border-(--bl-line) px-4 py-[18px] text-center text-(--bl-muted) [grid-area:1/1]">{emptyMessage}</p>}
+      </div>
+      <span className="sr-only" aria-live="polite">
+        {said}
+      </span>
+    </section>
   );
 }

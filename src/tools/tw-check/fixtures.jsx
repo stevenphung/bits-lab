@@ -201,7 +201,10 @@ export const FIXTURES = {
     { label: 'frost', props: { children: <p>Glass</p> } },
     { label: 'pixel dither, no sheen', props: { pixel: true, sheen: false, children: <p>Glass</p> } }
   ],
-  WheelPicker: [{ label: 'middle option', height: 260, settle: 600, props: { options: ['a', 'b', 'c', 'd', 'e'], defaultValue: 'c' } }],
+  WheelPicker: [
+    { label: 'middle option', height: 260, settle: 600, props: { options: ['a', 'b', 'c', 'd', 'e'], defaultValue: 'c' } },
+    { label: 'drum', height: 260, settle: 600, props: { drum: true, options: ['a', 'b', 'c', 'd', 'e'], defaultValue: 'c' } }
+  ],
   AuroraBands: [{ label: 'canvas', props: { style: { height: 160 } } }],
   WarpField: [{ label: 'canvas', props: { style: { height: 160 } } }],
   LightShafts: [{ label: 'canvas', props: { style: { height: 160 } } }],
@@ -421,6 +424,7 @@ export const FIXTURES = {
   ScreenScroller: [{ label: 'laptop', height: 420, props: { stageHeight: '400px', intro: <h2 style={{ margin: 0 }}>Scroll</h2>, children: <img src="/pixel/biome-plains.png" alt="" /> } }],
   SlideTabs: [
     { label: 'pill', props: { items: ['Map', 'Bag', 'Quests'].map(t => ({ id: t, label: t, content: <p style={{ margin: 0 }}>{t} panel</p> })) } },
+    { label: 'no drag', props: { dragToSwitch: false, items: ['Map', 'Bag'].map(t => ({ id: t, label: t })) } },
     { label: 'underline', props: { variant: 'underline', defaultValue: 'Bag', items: ['Map', 'Bag', 'Quests'].map(t => ({ id: t, label: t, content: <p style={{ margin: 0 }}>{t} panel</p> })) } }
   ],
   SmartNavbar: [{ label: 'top', height: 200, props: { brand: 'Bits Lab', current: '/docs', links: [{ label: 'Docs', href: '/docs' }, { label: 'Blog', href: '/blog' }], actions: <button>Sign in</button> } }],
@@ -474,7 +478,11 @@ export const FIXTURES = {
     { label: 'active labels', props: { defaultValue: 'b', tabs: [{ id: 'a', label: 'Home', icon: <span>⌂</span> }, { id: 'b', label: 'Bag', icon: <span>▣</span>, badge: 3 }, { id: 'c', label: 'Map', icon: <span>✦</span> }] } },
     { label: 'floating, all labels', props: { floating: true, labels: 'all', defaultValue: 'a', tabs: [{ id: 'a', label: 'Home', icon: <span>⌂</span> }, { id: 'b', label: 'Bag', icon: <span>▣</span> }] } }
   ],
-  ToastStack: [{ label: 'three toasts', height: 420, settle: 1200, render: (C, mod) => <Toasts C={C} toast={mod.toast} /> }],
+  ToastStack: [
+    { label: 'three toasts', height: 420, settle: 1200, render: (C, mod) => <Toasts C={C} toast={mod.toast} /> },
+    { label: 'notices', settle: 400, render: (C, mod) => <mod.NoticeStack notices={[{ id: 1, title: 'Saved', description: 'All good', type: 'success', action: { label: 'Undo' } }, { id: 2, title: 'Second' }, { id: 3, title: 'Third' }]} /> },
+    { label: 'notices, empty', render: (C, mod) => <mod.NoticeStack notices={[]} /> }
+  ],
   DiffReveal: [{ label: 'done', settle: 400, props: { autoPlay: false, before: 'The quick fox.', after: 'The quick brown fox jumps.' } }],
   LinkPeek: [{ label: 'link', props: { href: 'https://example.com', preview: { title: 'Example', description: 'A page' }, children: 'a link' } }],
   PasswordMeter: [
@@ -502,6 +510,8 @@ export const FIXTURES = {
   GameOver: [{ label: 'stats', height: 520, settle: 2500, props: { subtitle: 'You fell in lava', stats: [{ label: 'Coins', value: 40 }, { label: 'Gems', value: 3 }], total: 4300, countdown: 0 } }],
   LightboxGallery: [{ label: 'thumbs', props: { images: ['plains', 'forest', 'desert'].map(b => ({ src: `/pixel/biome-${b}.png`, alt: b, caption: b })) } }],
   ThinkingShimmer: [
+    { label: 'pill, thinking', settle: 500, props: { variant: 'pill', showTimer: false, phases: ['Reading', 'Planning'], phaseInterval: 60000 } },
+    { label: 'pill, done', props: { variant: 'pill', thinking: false, startedAt: Date.now() - 4000 } },
     { label: 'thinking, open', settle: 800, props: { defaultOpen: true, startedAt: Date.now(), steps: [{ label: 'Read files', status: 'done', detail: '3 files' }, { label: 'Plan', status: 'active' }, { label: 'Write', status: 'pending' }] } },
     { label: 'done', props: { thinking: false, startedAt: Date.now() - 4000, steps: [{ label: 'Read files', status: 'done' }] } }
   ],
@@ -515,7 +525,11 @@ export const FIXTURES = {
     { label: 'lg, icon', props: { size: 'lg', variant: 'success', icon: <span>★</span>, children: 'Save' } },
     { label: 'disabled', props: { disabled: true, children: 'Locked' } },
     { label: 'loading', props: { loading: true, children: 'Saving' } },
-    { label: 'pressed', props: { 'data-pressed': true, children: 'Held' } }
+    { label: 'pressed', props: { 'data-pressed': true, children: 'Held' } },
+    { label: 'ghost', props: { variant: 'ghost', children: 'Settings' } },
+    { label: 'ghost, pressed', props: { variant: 'ghost', 'data-pressed': true, children: 'Settings' } },
+    { label: 'destructive', props: { variant: 'destructive', children: 'Delete' } },
+    { label: 'icon only', props: { size: 'lg', icon: <span>★</span>, 'aria-label': 'Star' } }
   ],
   SuggestionChips: [
     { label: 'centered', props: { suggestions: IDEAS } },

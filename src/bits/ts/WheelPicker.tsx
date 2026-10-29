@@ -4,7 +4,8 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 // A spinning drum of options, like a slot reel or a date picker. Flick it and it coasts, slows
 // and clicks into place on the nearest option; scroll it with a wheel; or focus it and use the
-// arrow keys, Page Up/Down, Home and End. Options curve away above and below the selection.
+// arrow keys, Page Up/Down, Home and End. Options curve away above and below the selection;
+// drum adds a real barrel look (slats, shading and side rails, with a deeper curve).
 // Screen readers get a spin button that says the current option. Reduced motion snaps without
 // coasting.
 
@@ -22,6 +23,13 @@ const CSS = `
 .bl-wheel__band { position: absolute; left: 6px; right: 6px; top: 50%; height: var(--bl-row); margin-top: calc(var(--bl-row) / -2); border-radius: 8px; background: var(--bl-band); box-shadow: inset 0 0 0 1px var(--bl-line); pointer-events: none; }
 .bl-wheel__drum { position: absolute; inset: 0; transform-style: preserve-3d; }
 .bl-wheel__opt { position: absolute; left: 0; right: 0; top: 50%; height: var(--bl-row); margin-top: calc(var(--bl-row) / -2); display: grid; place-items: center; color: var(--bl-muted); white-space: nowrap; backface-visibility: hidden; transform: rotateX(calc(var(--k) * var(--bl-step) * -1)) translateZ(var(--bl-radius-z)); opacity: calc(1 - var(--far) * 0.75); }
+.bl-wheel[data-drum] { perspective: 280px; }
+.bl-wheel[data-drum]::before, .bl-wheel[data-drum]::after { content: ""; position: absolute; top: 0; bottom: 0; z-index: 2; width: 8px; background: linear-gradient(var(--bl-line), var(--bl-muted) 50%, var(--bl-line)); pointer-events: none; }
+.bl-wheel[data-drum]::before { left: 0; }
+.bl-wheel[data-drum]::after { right: 0; }
+.bl-wheel[data-drum] .bl-wheel__opt { background: var(--bl-bg); box-shadow: inset 0 1px 0 var(--bl-line); }
+.bl-wheel[data-drum] .bl-wheel__band { z-index: 1; background: transparent; box-shadow: inset 0 0 0 2px var(--bl-accent); }
+.bl-wheel__shade { position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(0,0,0,0.5), transparent 32%, rgba(255,255,255,0.06) 50%, transparent 68%, rgba(0,0,0,0.5)); pointer-events: none; }
 .bl-wheel__opt[data-current] { color: var(--bl-ink); font-weight: 700; }
 .bl-wheel__fade { position: absolute; inset: 0; background: linear-gradient(var(--bl-bg), transparent 38%, transparent 62%, var(--bl-bg)); pointer-events: none; }
 `;
@@ -55,6 +63,8 @@ export interface WheelPickerProps {
   label?: string;
   fontSize?: number;
   radius?: number;
+  /** A barrel look: slats, shading, side rails and a deeper curve. */
+  drum?: boolean;
   backgroundColor?: string;
   bandColor?: string;
   textColor?: string;
@@ -77,6 +87,7 @@ export default function WheelPicker({
   label = 'Pick an option',
   fontSize = 18,
   radius = 14,
+  drum = false,
   backgroundColor,
   bandColor,
   textColor,
@@ -233,6 +244,7 @@ export default function WheelPicker({
       ref={rootRef}
       className={`bl-wheel ${className}`}
       role="spinbutton"
+      data-drum={drum || undefined}
       tabIndex={0}
       aria-label={label}
       aria-valuemin={0}
@@ -253,6 +265,7 @@ export default function WheelPicker({
           );
         })}
       </div>
+      {drum && <span className="bl-wheel__shade" aria-hidden="true" />}
       <span className="bl-wheel__fade" aria-hidden="true" />
     </div>
   );

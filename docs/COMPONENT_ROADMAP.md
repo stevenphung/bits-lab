@@ -10,7 +10,7 @@ Original goal: turn Bits Lab into the largest library of highly polished React c
 
 **Wave 4 complete (2026-10-28):** 37 more originals for effects, backgrounds, cards and micro-interactions, in six phases plus a launch phase. See section 6. All phases are done: 159 originals, published at bits-lab.vercel.app and on npm as `bits-lab`.
 
-**Wave 5 planned (2026-10-29):** fill the gaps found by comparing Bits Lab with affectUI: light mode and AI-tool docs across the library, 10 game-feel product components, a new Scenes & Mascots category of 8 pixel scenes, and 6 upgrades to existing components. See section 7. Phase B done (169 originals); A1 light mode done (109 components, follow-ups included); Phase C done (177 originals); A2 docs for AI tools done; Phase D next.
+**Wave 5 planned (2026-10-29):** fill the gaps found by comparing Bits Lab with affectUI: light mode and AI-tool docs across the library, 10 game-feel product components, a new Scenes & Mascots category of 8 pixel scenes, and 6 upgrades to existing components. See section 7. Phase B done (169 originals); A1 light mode done (109 components, follow-ups included); Phase C done (177 originals); A2 docs for AI tools done; Phase D upgrades done. Wave 5 complete.
 
 - **Pixel & game set (12 items):** shipped 2026-10-26. They live in the Pixel & Game UI category, at `/pixel-game/<slug>`.
 - **Product showcase set (9 items, #21–25, 27–29, 34):** shipped 2026-10-26. They live in the Product Showcase category, at `/showcase/<slug>`.
@@ -559,14 +559,14 @@ Animated pixel vignettes for empty states, onboarding and feature explainers, bu
 | Side folder | **ChestReveal** | A chest swings open and items slide out on hover |
 | Logo cluster | **LogoBurst** | Logos burst out of a centre tile and settle around it |
 
-**Phase D: upgrades to existing components** (6)
+**Phase D: upgrades to existing components** (6) ✅ done 2026-10-29, in all four variants with demos, docs rows and parity fixtures (309 in total, all matching in both themes apart from the usual VoxelTiles timing case). Marquee also got a layout fix: its grid column grew with its own content, so lanes kept widening.
 
 - **PixelButton:** ghost and destructive variants, icon-only buttons, a shimmering loading state.
 - **SlideTabs:** drag the pill to switch.
 - **ThinkingShimmer:** a compact pill mode whose label rolls through phases.
-- **ToastStack:** an inline "stacked notices" mode, dismissing the front card to reveal the next.
+- **ToastStack:** an inline "stacked notices" mode, dismissing the front card to reveal the next. (Shipped as the `NoticeStack` export.)
 - **Marquee:** drag to scrub with momentum, easing to a stop on hover.
-- **WheelPicker:** a curved drum look.
+- **WheelPicker:** a curved drum look. (`drum` prop.)
 
 ### 7.4 Order and outcome
 

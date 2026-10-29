@@ -3,7 +3,7 @@ import Sprite from './pixel/Sprite';
 import PixelButton from './bits/PixelButton';
 import MorphDialog from './bits/MorphDialog';
 import MorphPopover from './bits/MorphPopover';
-import Toaster, { toast } from './bits/ToastStack';
+import Toaster, { NoticeStack, toast } from './bits/ToastStack';
 import SpringDrawer from './bits/SpringDrawer';
 import Confetti, { confetti } from './bits/Confetti';
 import morphDialogSource from './bits/MorphDialog.jsx?raw';
@@ -147,9 +147,17 @@ function MorphPopoverDemo(props) {
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+const NOTICES = [
+  { id: 'update', title: 'Update 1.4 is out', description: 'Cherry groves and a new boss.', type: 'info', action: { label: 'Read notes' } },
+  { id: 'backup', title: 'Backup finished', description: 'Your three worlds are safe.', type: 'success' },
+  { id: 'storage', title: 'Storage almost full', description: '92% of 5 GB used.', type: 'error' },
+  { id: 'invite', title: 'Mira invited you', description: 'Join her realm “Lantern Bay”.' }
+];
+
 function ToastDemo(props) {
+  const [round, setRound] = useState(0);
   return (
-    <div style={{ position: 'relative', width: '100%', height: 440, overflow: 'hidden', background: `url(${biome('plains')}) center / cover`, ...pixelated }}>
+    <div style={{ position: 'relative', width: '100%', height: 660, overflow: 'hidden', background: `url(${biome('plains')}) center / cover`, ...pixelated }}>
       <div style={{ position: 'absolute', inset: 0, background: 'rgba(26,28,44,0.55)' }} />
       <div style={{ position: 'relative', display: 'grid', gap: 12, justifyItems: 'center', padding: '28px 16px' }}>
         <div style={row}>
@@ -188,6 +196,10 @@ function ToastDemo(props) {
           </PixelButton>
         </div>
         <p style={{ ...hint, color: 'var(--demo-ink, #f4f4f4)' }}>Hover the stack to fan it out. Swipe a toast sideways to dismiss.</p>
+        <NoticeStack key={round} notices={NOTICES} radius={props.radius} width={props.width} fontFamily={PIXEL_FONT} label="Inline notices" />
+        <PixelButton size="sm" variant="ghost" onPress={() => setRound(r => r + 1)}>
+          Bring the notices back
+        </PixelButton>
       </div>
       <Toaster {...props} contained fontFamily={PIXEL_FONT} />
     </div>
@@ -356,6 +368,7 @@ const DEMO_ENTRIES = {
       ['toast.success / error / info / loading', 'function', 'export', 'Typed toasts. Errors are announced assertively.'],
       ['toast.promise(promise, { loading, success, error })', 'function', 'export', 'One toast that follows a promise. success and error can be functions of the result.'],
       ['toast.dismiss(id?)', 'function', 'export', 'Dismiss one toast, or all of them.'],
+      ['<NoticeStack notices onDismiss />', 'component', 'export', 'Inline stacked notices in the page: the front card shows in full, the next ones peek behind, and dismissing one brings the next forward. Props: notices { id, title, description?, type?, icon?, action? }[], onDismiss(id, notice), peek, gap, width, emptyMessage.'],
       ['position', 'string', '"bottom-right"', 'top/bottom × left/center/right.'],
       ['duration / visibleToasts / expand', 'number / number / boolean', '4000 / 3 / false', 'Auto-dismiss time, how many show when stacked, and whether to always fan out.'],
       ['contained', 'boolean', 'false', 'Position inside the nearest positioned parent instead of the window.'],
