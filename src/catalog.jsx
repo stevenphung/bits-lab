@@ -28,6 +28,7 @@ import { BACKGROUNDS_MORE_DEMOS } from './catalog-backgrounds-more';
 import { WAVE3_DEMOS } from './catalog-wave3';
 import { WAVE4_DEMOS } from './catalog-wave4';
 import { WAVE5_DEMOS } from './catalog-wave5';
+import { SCENES_DEMOS } from './catalog-scenes';
 
 // One entry per component page: defaults drive the URL state, controls drive the
 // Customize panel, docs drive the prop table and usage is the snippet props get injected into.
@@ -133,7 +134,7 @@ const TW_SOURCES = import.meta.glob('./bits/tw/*.jsx', { query: '?raw', import: 
 const TW_TS_SOURCES = import.meta.glob('./bits/tw-ts/*.tsx', { query: '?raw', import: 'default' });
 
 export const CATALOG = COMPONENTS.map(meta => {
-  const demo = DEMOS[meta.slug] ?? PIXEL_DEMOS[meta.slug] ?? SHOWCASE_DEMOS[meta.slug] ?? SCROLL_DEMOS[meta.slug] ?? OVERLAY_DEMOS[meta.slug] ?? NAV_DEMOS[meta.slug] ?? INPUT_DEMOS[meta.slug] ?? DATA_DEMOS[meta.slug] ?? CONTENT_DEMOS[meta.slug] ?? FOUNDATION_DEMOS[meta.slug] ?? ARCADE_DEMOS[meta.slug] ?? SHOWCASE_MORE_DEMOS[meta.slug] ?? SCROLL_MORE_DEMOS[meta.slug] ?? OVERLAY_MORE_DEMOS[meta.slug] ?? NAV_MORE_DEMOS[meta.slug] ?? INPUT_MORE_DEMOS[meta.slug] ?? DATA_MORE_DEMOS[meta.slug] ?? CARDS_MORE_DEMOS[meta.slug] ?? TEXT_MORE_DEMOS[meta.slug] ?? PLAYFUL_MORE_DEMOS[meta.slug] ?? BACKGROUNDS_MORE_DEMOS[meta.slug] ?? WAVE3_DEMOS[meta.slug] ?? WAVE4_DEMOS[meta.slug] ?? WAVE5_DEMOS[meta.slug];
+  const demo = DEMOS[meta.slug] ?? PIXEL_DEMOS[meta.slug] ?? SHOWCASE_DEMOS[meta.slug] ?? SCROLL_DEMOS[meta.slug] ?? OVERLAY_DEMOS[meta.slug] ?? NAV_DEMOS[meta.slug] ?? INPUT_DEMOS[meta.slug] ?? DATA_DEMOS[meta.slug] ?? CONTENT_DEMOS[meta.slug] ?? FOUNDATION_DEMOS[meta.slug] ?? ARCADE_DEMOS[meta.slug] ?? SHOWCASE_MORE_DEMOS[meta.slug] ?? SCROLL_MORE_DEMOS[meta.slug] ?? OVERLAY_MORE_DEMOS[meta.slug] ?? NAV_MORE_DEMOS[meta.slug] ?? INPUT_MORE_DEMOS[meta.slug] ?? DATA_MORE_DEMOS[meta.slug] ?? CARDS_MORE_DEMOS[meta.slug] ?? TEXT_MORE_DEMOS[meta.slug] ?? PLAYFUL_MORE_DEMOS[meta.slug] ?? BACKGROUNDS_MORE_DEMOS[meta.slug] ?? WAVE3_DEMOS[meta.slug] ?? WAVE4_DEMOS[meta.slug] ?? WAVE5_DEMOS[meta.slug] ?? SCENES_DEMOS[meta.slug];
   return {
     ...meta,
     ...demo,

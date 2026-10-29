@@ -140,6 +140,13 @@ const clickFirstButton = el => el.querySelector('button:not(:disabled)')?.click(
 const clickLabelled = label => el => el.querySelector(`button[aria-label="${label}"]`)?.click();
 const clickToggle = el => el.querySelector('button[aria-expanded]')?.click();
 
+const W5C_PEOPLE = [{ id: 'm', name: 'Mira', role: 'Design', color: '#73eff7' }];
+const W5C_BENCH = [{ id: 's', name: 'Sam Lee', color: '#ffcd75' }, { id: 'a', name: 'Ava' }];
+const W5C_AGENTS = [{ id: 'p', name: 'Planner', role: 'Lead', status: 'Splits tasks.', gear: ['Brief'] }, { id: 'b', name: 'Builder', role: 'Code', gear: ['Code', 'Browser'], color: '#a7f070' }];
+const W5C_LAYERS = [{ id: 'a', label: 'App', description: 'Screens.', color: '#73eff7' }, { id: 'b', label: 'Library' }, { id: 'c', label: 'Browser', color: '#ffcd75' }];
+const W5C_WINDOWS = [{ id: 'a', title: 'Inbox' }, { id: 'b', title: 'Roadmap', body: 'Q3 plan' }, { id: 'c', title: 'Notes' }];
+const W5C_ITEMS = [{ id: 'a', label: 'Gem', icon: '◆' }, { id: 'b', label: 'Coin', icon: '●' }, { id: 'c', label: 'Star', icon: '★' }];
+
 export const FIXTURES = {
   HoldToConfirm: [
     { label: 'idle', props: { children: 'Hold' } },
@@ -551,5 +558,42 @@ export const FIXTURES = {
   AdvisorCard: [
     { label: 'options', props: { suggestion: { id: 'a', title: 'Thursday', body: 'Busier day.', confidence: 0.8 }, alternatives: [{ id: 'b', title: 'Friday', confidence: 0.4 }] } },
     { label: 'accepted', settle: 300, render: C => <After run={el => [...el.querySelectorAll('button')].pop()?.click()}><C suggestion={{ id: 'a', title: 'Thursday', confidence: 0.3 }} undoWindow={60000} /></After> }
+  ],
+  PixelPet: [
+    { label: 'idle', props: { follow: false } },
+    { label: 'happy', props: { mood: 'happy', say: 'Yay!' } },
+    { label: 'thinking', props: { mood: 'thinking' } },
+    { label: 'sad', props: { mood: 'sad', onPet: () => {} } }
+  ],
+  EmptyScenes: [
+    { label: 'chest', props: { actionLabel: 'Browse' } },
+    { label: 'campfire', props: { scene: 'campfire' } },
+    { label: 'shop', props: { scene: 'shop', title: 'Nothing found' } },
+    { label: 'offline', props: { scene: 'offline' } },
+    { label: 'lost', props: { scene: 'lost' } }
+  ],
+  PartyInvite: [
+    { label: 'bench', props: { members: W5C_PEOPLE, candidates: W5C_BENCH, slots: 3 } },
+    { label: 'invited', settle: 600, render: C => <After run={clickFirstButton}><C members={W5C_PEOPLE} candidates={W5C_BENCH} slots={3} /></After> }
+  ],
+  PartyFormation: [
+    { label: 'waiting', props: { members: W5C_AGENTS } },
+    { label: 'formed', settle: 900, props: { members: W5C_AGENTS, defaultFormed: true } }
+  ],
+  LayerTower: [
+    { label: 'first', settle: 300, props: { layers: W5C_LAYERS } },
+    { label: 'third', settle: 300, props: { layers: W5C_LAYERS, defaultActive: 'c' } }
+  ],
+  WindowPile: [
+    { label: 'pile', props: { windows: W5C_WINDOWS } },
+    { label: 'focused', settle: 300, render: C => <After run={el => el.querySelectorAll('button')[1]?.focus()}><C windows={W5C_WINDOWS} /></After> }
+  ],
+  ChestReveal: [
+    { label: 'shut', props: { items: W5C_ITEMS, caption: 'Perks' } },
+    { label: 'open', settle: 900, props: { items: W5C_ITEMS, defaultOpen: true, trigger: 'click' } }
+  ],
+  LogoBurst: [
+    { label: 'burst', settle: 1200, props: { logos: W5C_ITEMS, trigger: 'mount', radius: 90 } },
+    { label: 'waiting', props: { logos: W5C_ITEMS, trigger: 'hover', radius: 90 } }
   ]
 };

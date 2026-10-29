@@ -6,7 +6,7 @@
 
 **Game feel for real products.**
 
-Games solved feedback, progress and reward decades ago. Bits Lab brings those tricks to everyday software: **169 original React components** where onboarding becomes a quest, milestones become achievements, progress has a health bar, waiting comes with tips and risky actions burn a fuse. Everything around them is here too (inputs, overlays, navigation, data, text effects and backgrounds), all in a playful 8-bit style.
+Games solved feedback, progress and reward decades ago. Bits Lab brings those tricks to everyday software: **177 original React components** where onboarding becomes a quest, milestones become achievements, progress has a health bar, waiting comes with tips and risky actions burn a fuse. Everything around them is here too (inputs, overlays, navigation, data, text effects, backgrounds and pixel scenes for empty states), all in a playful 8-bit style.
 
 Every component brings its own styles, works with the keyboard, respects reduced motion and comes in four flavours: JavaScript or TypeScript, styled with plain CSS or Tailwind. Play with them and copy the code at **[bits-lab.vercel.app](https://bits-lab.vercel.app)**.
 
@@ -78,7 +78,7 @@ export function Onboarding({ onDeleteDraft }) {
 
 ### Light mode
 
-89 components switch to a light palette when they sit inside an element with the `light` class or `data-theme="light"`. Put it on `<html>` to theme the whole app, or on any wrapper to theme one area:
+97 components switch to a light palette when they sit inside an element with the `light` class or `data-theme="light"`. Put it on `<html>` to theme the whole app, or on any wrapper to theme one area:
 
 ```html
 <html data-theme="light">        <!-- whole app light -->
@@ -119,6 +119,7 @@ The site shows the right command for each component and variant, for pnpm, npm, 
 | Cards & Media | 15 | TradingCard, CardDeck, StoryViewer, SwipeActions, Discard |
 | Physics & Playful | 10 | GravityBox, ReactionCombo, StickerBoard, PointerKit, JellyBlob |
 | AI Surfaces | 10 | ChatBubbles, ThinkingShimmer, AgentCard, ReplyActions, DraftScroll, ThreadTrail, AdvisorCard |
+| Scenes & Mascots | 8 | PixelPet, EmptyScenes, PartyInvite, PartyFormation, LayerTower, ChestReveal, LogoBurst |
 | Primitives | 4 | Accordion, OverlayKit, ToggleKit, GlassPanel |
 
 ## Screenshots

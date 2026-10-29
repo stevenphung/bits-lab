@@ -1,7 +1,7 @@
 {
   "name": "bits-lab",
   "version": "0.1.2",
-  "description": "Game feel for real products: 169 original React components for quests, achievements, progress, combos, streaks and hold-to-confirm, in a playful 8-bit style. Zero dependencies, styles included.",
+  "description": "Game feel for real products: 177 original React components for quests, achievements, progress, combos, streaks and hold-to-confirm, in a playful 8-bit style. Zero dependencies, styles included.",
   "license": "MIT",
   "author": "Steven Phung",
   "homepage": "https://bits-lab.vercel.app",

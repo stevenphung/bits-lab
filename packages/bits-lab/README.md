@@ -1,6 +1,6 @@
 # Bits Lab
 
-**Game feel for real products.** 169 original React components that bring game design to everyday software: onboarding as a quest, milestones as achievements, progress bars, combos, streaks, loading screens with tips and hold-to-confirm for risky actions, plus everything around them (inputs, overlays, navigation, data and motion), in a playful 8-bit style. Every component brings its own styles, so there is nothing else to import or configure.
+**Game feel for real products.** 177 original React components that bring game design to everyday software: onboarding as a quest, milestones as achievements, progress bars, combos, streaks, loading screens with tips and hold-to-confirm for risky actions, plus everything around them (inputs, overlays, navigation, data and motion), in a playful 8-bit style. Every component brings its own styles, so there is nothing else to import or configure.
 
 Play with them all, tweak their props and copy the code at **https://bits-lab.vercel.app**.
 

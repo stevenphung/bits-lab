@@ -13,6 +13,7 @@ export const CATEGORIES = [
   { slug: 'cards', name: 'Cards & Media' },
   { slug: 'playful', name: 'Physics & Playful' },
   { slug: 'ai', name: 'AI Surfaces' },
+  { slug: 'scenes', name: 'Scenes & Mascots' },
   { slug: 'primitives', name: 'Primitives' }
 ];
 
@@ -1368,5 +1369,69 @@ export const COMPONENTS = [
     file: 'src/bits/AdvisorCard.jsx',
     dependencies: [],
     description: 'A suggestion with pixel confidence bars, alternatives to switch to, and accept with a timed undo.'
+  },
+  {
+    slug: 'pixel-pet',
+    name: 'PixelPet',
+    category: 'scenes',
+    file: 'src/bits/PixelPet.jsx',
+    dependencies: [],
+    description: 'A pixel mascot that floats, blinks, follows the pointer and shows a mood: idle, happy, thinking or sad.'
+  },
+  {
+    slug: 'empty-scenes',
+    name: 'EmptyScenes',
+    category: 'scenes',
+    file: 'src/bits/EmptyScenes.jsx',
+    dependencies: [],
+    description: 'Empty states as tiny looping pixel scenes: empty chest, quiet campfire, closed shop, unplugged cable, lost map.'
+  },
+  {
+    slug: 'party-invite',
+    name: 'PartyInvite',
+    category: 'scenes',
+    file: 'src/bits/PartyInvite.jsx',
+    dependencies: [],
+    description: 'Team invites as a game party: drag someone into the open slot and the link turns solid as they come online.'
+  },
+  {
+    slug: 'party-formation',
+    name: 'PartyFormation',
+    category: 'scenes',
+    file: 'src/bits/PartyFormation.jsx',
+    dependencies: [],
+    description: 'An agent team as a party: the quest splits into members with roles, status and gear.'
+  },
+  {
+    slug: 'layer-tower',
+    name: 'LayerTower',
+    category: 'scenes',
+    file: 'src/bits/LayerTower.jsx',
+    dependencies: [],
+    description: 'An isometric voxel stack beside a list; the chosen layer slides out in colour.'
+  },
+  {
+    slug: 'window-pile',
+    name: 'WindowPile',
+    category: 'scenes',
+    file: 'src/bits/WindowPile.jsx',
+    dependencies: [],
+    description: 'A pile of overlapping retro windows for tab overload; the highlight follows the pointer.'
+  },
+  {
+    slug: 'chest-reveal',
+    name: 'ChestReveal',
+    category: 'scenes',
+    file: 'src/bits/ChestReveal.jsx',
+    dependencies: [],
+    description: 'A treasure chest that swings open on hover as its items fan out above it.'
+  },
+  {
+    slug: 'logo-burst',
+    name: 'LogoBurst',
+    category: 'scenes',
+    file: 'src/bits/LogoBurst.jsx',
+    dependencies: [],
+    description: 'Integration logos burst out of a centre tile and settle into a ring.'
   }
 ];

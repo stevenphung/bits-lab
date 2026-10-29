@@ -10,7 +10,7 @@ Original goal: turn Bits Lab into the largest library of highly polished React c
 
 **Wave 4 complete (2026-10-28):** 37 more originals for effects, backgrounds, cards and micro-interactions, in six phases plus a launch phase. See section 6. All phases are done: 159 originals, published at bits-lab.vercel.app and on npm as `bits-lab`.
 
-**Wave 5 planned (2026-10-29):** fill the gaps found by comparing Bits Lab with affectUI: light mode and AI-tool docs across the library, 10 game-feel product components, a new Scenes & Mascots category of 8 pixel scenes, and 6 upgrades to existing components. See section 7. Phase B done (169 originals); A1 light mode done (89 components); A2, C and D next.
+**Wave 5 planned (2026-10-29):** fill the gaps found by comparing Bits Lab with affectUI: light mode and AI-tool docs across the library, 10 game-feel product components, a new Scenes & Mascots category of 8 pixel scenes, and 6 upgrades to existing components. See section 7. Phase B done (169 originals); A1 light mode done (89 components); Phase C done (177 originals, 97 with light mode); A2 and D next.
 
 - **Pixel & game set (12 items):** shipped 2026-10-26. They live in the Pixel & Game UI category, at `/pixel-game/<slug>`.
 - **Product showcase set (9 items, #21–25, 27–29, 34):** shipped 2026-10-26. They live in the Product Showcase category, at `/showcase/<slug>`.
@@ -543,7 +543,7 @@ About 37 new originals take Bits Lab from 123 to about 160. Phases 1–5 are eac
 | Comment thread | **ThreadTrail** | A comment with replies, @mentions and folded "what I did" details |
 | Recommendation | **AdvisorCard** | A suggestion with a confidence meter, alternatives to switch to, and accept with undo |
 
-**Phase C: Scenes & Mascots, a new category** (8)
+**Phase C: Scenes & Mascots, a new category** (8) ✅ done 2026-10-29, each with JS, TS, CSS and Tailwind variants, light mode from day one, a catalog demo and parity fixtures (21/21 match in dark and light). The pixel art is drawn inside each component (rect lists or row maps), so they stay copy-paste friendly instead of importing `src/pixel/art.js`.
 
 Animated pixel vignettes for empty states, onboarding and feature explainers, built on the pixel-art kit (`src/pixel/art.js`).
 
