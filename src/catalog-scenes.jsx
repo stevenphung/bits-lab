@@ -24,7 +24,7 @@ const color = (name, label) => ({ name, type: 'color', label });
 const toggle = (name, label) => ({ name, type: 'switch', label });
 const select = (name, label, options) => ({ name, type: 'select', label, options });
 
-const ghost = { padding: '6px 10px', border: 0, background: '#262b44', color: '#f4f4f4', font: 'inherit', fontSize: 12, fontWeight: 800, cursor: 'pointer' };
+const ghost = { padding: '6px 10px', border: 0, background: 'var(--demo-chip, #262b44)', color: 'var(--demo-ink, #f4f4f4)', font: 'inherit', fontSize: 12, fontWeight: 800, cursor: 'pointer' };
 
 const SAY = {
   idle: 'Hi! Point somewhere and I’ll look.',

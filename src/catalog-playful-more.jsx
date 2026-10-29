@@ -20,7 +20,7 @@ const select = (name, label, options) => ({ name, type: 'select', label, options
 
 const PIXEL_FONT = '"Pixelify Sans", system-ui, sans-serif';
 const stack = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 22, justifyItems: 'center', width: '100%', padding: '28px 16px', boxSizing: 'border-box' };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
 
 // ---------- ElasticString ----------
 
@@ -172,7 +172,7 @@ function ChipsDemo({ withIcons, ...props }) {
   const items = withIcons ? IDEAS.map((text, i) => ({ text, icon: <PixelAvatar seed={text} size={18} variant={i % 2 ? 'identicon' : 'creature'} decorative /> })) : IDEAS;
   return (
     <div style={{ ...stack, maxWidth: 640, margin: '0 auto' }}>
-      <h3 style={{ margin: 0, color: '#f4f4f4', font: `24px ${PIXEL_FONT}`, textAlign: 'center' }}>What shall we make today?</h3>
+      <h3 style={{ margin: 0, color: 'var(--demo-ink, #f4f4f4)', font: `24px ${PIXEL_FONT}`, textAlign: 'center' }}>What shall we make today?</h3>
       <SuggestionChips
         key={String(withIcons)}
         {...props}
@@ -189,7 +189,7 @@ function ChipsDemo({ withIcons, ...props }) {
         onChange={event => setValue(event.target.value)}
         placeholder="Ask anything…"
         aria-label="Message"
-        style={{ width: '100%', maxWidth: 520, boxSizing: 'border-box', padding: '12px 16px', border: 0, borderRadius: 14, background: '#262b44', color: '#f4f4f4', font: `16px ${PIXEL_FONT}`, boxShadow: '0 0 0 1px #333c57' }}
+        style={{ width: '100%', maxWidth: 520, boxSizing: 'border-box', padding: '12px 16px', border: 0, borderRadius: 14, background: 'var(--demo-chip, #262b44)', color: 'var(--demo-ink, #f4f4f4)', font: `16px ${PIXEL_FONT}`, boxShadow: '0 0 0 1px var(--demo-line, #333c57)' }}
       />
     </div>
   );

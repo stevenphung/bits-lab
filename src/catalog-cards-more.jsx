@@ -23,7 +23,7 @@ const PIXEL_FONT = '"Pixelify Sans", system-ui, sans-serif';
 const TITLE_FONT = '"Press Start 2P", monospace';
 const pixelated = { imageRendering: 'pixelated' };
 const stack = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 18, justifyItems: 'center', width: '100%', padding: '28px 16px', boxSizing: 'border-box' };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
 const biome = id => `/pixel/biome-${id}.png`;
 
 const BIOMES = [
@@ -41,7 +41,7 @@ const BIOMES = [
   ['void', 'The void', 'Floating islands over nothing.']
 ];
 const img = (id, extra = {}) => <img src={biome(id)} alt="" style={{ display: 'block', width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', ...pixelated, ...extra }} />;
-const cardTitle = { margin: 0, font: `12px/1.6 ${TITLE_FONT}`, color: '#ffcd75' };
+const cardTitle = { margin: 0, font: `12px/1.6 ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' };
 
 // ---------- DirectionHover ----------
 
@@ -56,8 +56,8 @@ function DirectionDemo(props) {
             overlay={
               <div style={{ display: 'grid', gap: 6, font: `14px/1.4 ${PIXEL_FONT}` }}>
                 <h3 style={cardTitle}>{name}</h3>
-                <span style={{ color: '#94b0c2' }}>{text}</span>
-                <a href={`#${id}`} style={{ color: '#73eff7' }} onClick={event => event.preventDefault()}>
+                <span style={{ color: 'var(--demo-muted, #94b0c2)' }}>{text}</span>
+                <a href={`#${id}`} style={{ color: 'var(--demo-accent, #73eff7)' }} onClick={event => event.preventDefault()}>
                   Explore {name.toLowerCase()} →
                 </a>
               </div>
@@ -86,7 +86,7 @@ function PinDemo(props) {
             {img(id)}
             <div style={{ display: 'grid', gap: 6, padding: 14, font: `14px/1.4 ${PIXEL_FONT}` }}>
               <h3 style={cardTitle}>{name}</h3>
-              <span style={{ color: '#94b0c2' }}>{text}</span>
+              <span style={{ color: 'var(--demo-muted, #94b0c2)' }}>{text}</span>
             </div>
           </PinCard>
         </div>
@@ -109,7 +109,7 @@ function CipherDemo({ palette, ...props }) {
       <CipherCard {...props} gradient={GRADIENTS[palette]} fontFamily={PIXEL_FONT}>
         <div style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
           <Sprite name="gem" size={40} />
-          <span style={{ font: `10px/1.6 ${TITLE_FONT}`, color: '#f4f4f4' }}>SECRET</span>
+          <span style={{ font: `10px/1.6 ${TITLE_FONT}`, color: 'var(--demo-ink, #f4f4f4)' }}>SECRET</span>
         </div>
       </CipherCard>
       <p style={hint}>Move the pointer over the card.</p>
@@ -124,11 +124,11 @@ function FocusDemo(props) {
     <div style={{ ...stack, maxWidth: 820, margin: '0 auto' }}>
       <FocusGrid {...props} label="Biomes">
         {BIOMES.slice(0, 8).map(([id, name, text]) => (
-          <a key={id} href={`#${id}`} onClick={event => event.preventDefault()} style={{ display: 'block', overflow: 'hidden', borderRadius: 14, background: '#1a1c2c', boxShadow: '0 0 0 1px #333c57', color: '#f4f4f4', textDecoration: 'none' }}>
+          <a key={id} href={`#${id}`} onClick={event => event.preventDefault()} style={{ display: 'block', overflow: 'hidden', borderRadius: 14, background: 'var(--demo-bg, #1a1c2c)', boxShadow: '0 0 0 1px var(--demo-line, #333c57)', color: 'var(--demo-ink, #f4f4f4)', textDecoration: 'none' }}>
             {img(id)}
             <div style={{ display: 'grid', gap: 4, padding: 12, font: `14px/1.4 ${PIXEL_FONT}` }}>
               <h3 style={cardTitle}>{name}</h3>
-              <span style={{ color: '#94b0c2' }}>{text}</span>
+              <span style={{ color: 'var(--demo-muted, #94b0c2)' }}>{text}</span>
             </div>
           </a>
         ))}
@@ -180,7 +180,7 @@ function StoryDemo(props) {
               setEnded(false);
               setRun(n => n + 1);
             }}
-            style={{ font: 'inherit', color: '#73eff7', background: 'none', border: 0, cursor: 'pointer' }}
+            style={{ font: 'inherit', color: 'var(--demo-accent, #73eff7)', background: 'none', border: 0, cursor: 'pointer' }}
           >
             Watch again
           </button>

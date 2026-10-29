@@ -46,10 +46,10 @@ export interface ContextOrbProps {
 const STYLE_ID = 'bl-context-orb';
 const CSS = `
 /* theme tokens */
-.bl-corb-area { --bl-accent: #73eff7; }
-:where(.light, [data-theme="light"]) .bl-corb-area, .bl-corb-area:where(.light, [data-theme="light"]) { --bl-accent: #167f8f; }
-:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-corb-area, :where(.light, [data-theme="light"]) .bl-corb-area:where(.dark, [data-theme="dark"]) { --bl-accent: #73eff7; }
-@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-corb-area, .bl-corb-area:where([data-theme="system"]) { --bl-accent: #167f8f; } }
+:is(.bl-corb-area, .bl-corb) { --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) :is(.bl-corb-area, .bl-corb), :is(.bl-corb-area, .bl-corb):where(.light, [data-theme="light"]) { --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) :is(.bl-corb-area, .bl-corb), :where(.light, [data-theme="light"]) :is(.bl-corb-area, .bl-corb):where(.dark, [data-theme="dark"]) { --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) :is(.bl-corb-area, .bl-corb), :is(.bl-corb-area, .bl-corb):where([data-theme="system"]) { --bl-accent: #167f8f; } }
 /* theme tokens end */
 .bl-corb-area { position: relative; outline: none; -webkit-touch-callout: none; }
 .bl-corb-area:focus-visible { outline: 2px dashed var(--bl-accent); outline-offset: 4px; }
@@ -291,7 +291,7 @@ export default function ContextOrb({
               '--bl-bg': backgroundColor,
               '--bl-ink': textColor,
               '--bl-line': lineColor,
-              '--bl-accent': accentColor ?? 'var(--bl-accent)',
+              '--bl-accent': accentColor,
               '--bl-danger': dangerColor,
               '--bl-font': fontFamily
             } as CSSVars}

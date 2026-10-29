@@ -1,15 +1,26 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type KeyboardEvent } from 'react';
+import { useEffect, useId, useInsertionEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type KeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// A card that grows into a dialog. The card's box animates (position, size, corner radius)
-// into the dialog's box and back, so shared media at the top looks continuous. A real modal:
-// focus moves in and is trapped, Esc and the backdrop close it, page scroll is locked, and
-// focus returns to the card. Under reduced motion it simply fades.
+const STYLE_ID = 'bl-morph-dialog-tw';
+const CSS = `
+/* theme tokens */
+.bl-morph-theme { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-line: rgba(255,255,255,0.1); --bl-accent: #73eff7; --bl-backdrop: rgba(10,10,20,0.6); }
+:where(.light, [data-theme="light"]) .bl-morph-theme, .bl-morph-theme:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-line: rgba(26,28,44,0.1); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-morph-theme, :where(.light, [data-theme="light"]) .bl-morph-theme:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-line: rgba(255,255,255,0.1); --bl-accent: #73eff7; --bl-backdrop: rgba(10,10,20,0.6); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-morph-theme, .bl-morph-theme:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-line: rgba(26,28,44,0.1); --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
@@ -77,17 +88,17 @@ export default function MorphDialog({
   duration = 480,
   open: controlledOpen,
   onOpenChange,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  lineColor = 'rgba(255,255,255,0.1)',
-  accentColor = '#73eff7',
-  backdropColor = 'rgba(10,10,20,0.6)',
+  backgroundColor,
+  textColor,
+  lineColor,
+  accentColor,
+  backdropColor,
   backdropBlur = 6,
   fontFamily,
   className = '',
   style
 }: MorphDialogProps) {
-  
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const cardRef = useRef<HTMLButtonElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
@@ -204,14 +215,14 @@ export default function MorphDialog({
   };
 
   return (
-    <div className={className} style={{ ...vars, ...style }}>
+    <div className={`bl-morph-theme ${className}`} style={{ ...vars, ...style }}>
       <button ref={cardRef} type="button" className="block w-full cursor-pointer overflow-hidden rounded-(--bl-radius) border-0 bg-(--bl-bg) p-0 text-left [font-family:var(--bl-font,inherit)] text-(--bl-ink) shadow-[inset_0_0_0_1px_var(--bl-line)] [transition:transform_200ms,box-shadow_200ms] hover:[transform:translateY(-2px)] hover:shadow-[inset_0_0_0_1px_var(--bl-line),0_12px_30px_-16px_rgba(0,0,0,0.6)] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-(--bl-accent) data-[hidden]:invisible" aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpen(true)}>
         {media && <div className="h-(--bl-card-media) overflow-hidden [&>img]:block [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&>video]:block [&>video]:h-full [&>video]:w-full [&>video]:object-cover">{media}</div>}
         {card}
       </button>
       {mounted &&
         createPortal(
-          <div style={vars}>
+          <div className="bl-morph-theme" style={vars}>
             <div ref={backdropRef} className="fixed inset-0 z-1000 bg-(--bl-backdrop) backdrop-blur-(--bl-blur)" onClick={() => setOpen(false)} />
             <div
               ref={shellRef}

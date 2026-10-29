@@ -1,5 +1,24 @@
-import { createContext, useContext, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useId, useInsertionEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+
+const STYLE_ID = 'bl-spring-drawer-tw';
+const CSS = `
+/* theme tokens */
+.bl-drawer { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.1); --bl-accent: #73eff7; --bl-backdrop: rgba(8,8,16,0.6); }
+:where(.light, [data-theme="light"]) .bl-drawer, .bl-drawer:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.1); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-drawer, :where(.light, [data-theme="light"]) .bl-drawer:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.1); --bl-accent: #73eff7; --bl-backdrop: rgba(8,8,16,0.6); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-drawer, .bl-drawer:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.1); --bl-accent: #167f8f; } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 // Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
 // styles as utility classes.
@@ -28,15 +47,16 @@ export default function SpringDrawer({
   stiffness = 520,
   damping = 0.82,
   radius = 20,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = 'rgba(255,255,255,0.1)',
-  accentColor = '#73eff7',
-  backdropColor = 'rgba(8,8,16,0.6)',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
+  backdropColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = ''
 }) {
+  useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const parent = useContext(DrawerContext);
   const anchorRef = useRef(null);
@@ -288,7 +308,7 @@ export default function SpringDrawer({
   const snapCount = bottom ? snapPoints.length : 1;
   const content = mounted && host && (
     <div
-      className={`group/drawer ${className}`}
+      className={`bl-drawer group/drawer ${className}`}
       data-side={side}
       data-contained={isContained || undefined}
       style={{

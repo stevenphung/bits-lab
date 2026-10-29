@@ -9,6 +9,12 @@ import { createPortal } from 'react-dom';
 
 const STYLE_ID = 'bl-overlay-menu';
 const CSS = `
+/* theme tokens */
+:is(.bl-omenu__toggle, .bl-omenu) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-chip: rgba(255,255,255,0.08); --bl-accent: #ffcd75; }
+:where(.light, [data-theme="light"]) :is(.bl-omenu__toggle, .bl-omenu), :is(.bl-omenu__toggle, .bl-omenu):where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-chip: rgba(26,28,44,0.08); --bl-accent: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) :is(.bl-omenu__toggle, .bl-omenu), :where(.light, [data-theme="light"]) :is(.bl-omenu__toggle, .bl-omenu):where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-chip: rgba(255,255,255,0.08); --bl-accent: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) :is(.bl-omenu__toggle, .bl-omenu), :is(.bl-omenu__toggle, .bl-omenu):where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-chip: rgba(26,28,44,0.08); --bl-accent: #a86a12; } }
+/* theme tokens end */
 .bl-omenu__toggle { position: relative; z-index: 1801; display: inline-grid; place-items: center; width: 46px; height: 46px; padding: 0; border: 0; border-radius: 10px; background: var(--bl-chip); color: var(--bl-ink); cursor: pointer; }
 .bl-omenu__toggle:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 2px; }
 .bl-omenu__bars { position: relative; width: 20px; height: 14px; }
@@ -61,12 +67,12 @@ export default function OverlayMenu({
   label = 'Menu',
   numbered = true,
   fontSize = 44,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  chipColor = 'rgba(255,255,255,0.08)',
-  accentColor = '#ffcd75',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  chipColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style

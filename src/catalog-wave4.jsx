@@ -82,7 +82,7 @@ const PIXEL_FONT = '"Pixelify Sans", system-ui, sans-serif';
 const TITLE_FONT = '"Press Start 2P", ui-monospace, monospace';
 const FLEX_FONT = '"Roboto Flex", system-ui, sans-serif';
 const stack = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 22, justifyItems: 'center', width: '100%', padding: '40px 16px', boxSizing: 'border-box', textAlign: 'center' };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}` };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}` };
 const sprite = (name, size = 24) => <img src={`/pixel/sprite-${name}.png`} alt="" width={size} height={size} style={{ imageRendering: 'pixelated', display: 'block' }} />;
 
 // ---------- SignalText ----------
@@ -169,14 +169,14 @@ function MarqueeDemo(props) {
 
 // ---------- Phase 2 helpers ----------
 
-const panel = { width: '100%', boxSizing: 'border-box', borderRadius: 16, background: '#1a1c2c', boxShadow: 'inset 0 0 0 2px #333c57' };
-const pixelBtn = { padding: '10px 16px', border: 0, borderRadius: 8, background: '#333c57', color: '#f4f4f4', font: `15px ${PIXEL_FONT}`, cursor: 'pointer' };
+const panel = { width: '100%', boxSizing: 'border-box', borderRadius: 16, background: 'var(--demo-bg, #1a1c2c)', boxShadow: 'inset 0 0 0 2px var(--demo-line, #333c57)' };
+const pixelBtn = { padding: '10px 16px', border: 0, borderRadius: 8, background: 'var(--demo-line, #333c57)', color: 'var(--demo-ink, #f4f4f4)', font: `15px ${PIXEL_FONT}`, cursor: 'pointer' };
 const BIOMES = ['plains', 'forest', 'desert', 'snowy', 'cherry', 'ocean', 'cave', 'mesa'];
 const card = (title, body, biome) => (
-  <div style={{ display: 'grid', gap: 10, padding: 18, color: '#f4f4f4', font: `15px/1.45 ${PIXEL_FONT}`, textAlign: 'left' }}>
+  <div style={{ display: 'grid', gap: 10, padding: 18, color: 'var(--demo-ink, #f4f4f4)', font: `15px/1.45 ${PIXEL_FONT}`, textAlign: 'left' }}>
     {biome && <img src={`/pixel/biome-${biome}.png`} alt="" style={{ width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', borderRadius: 8, imageRendering: 'pixelated' }} />}
-    <strong style={{ font: `12px ${TITLE_FONT}`, color: '#ffcd75' }}>{title}</strong>
-    <span style={{ color: '#94b0c2' }}>{body}</span>
+    <strong style={{ font: `12px ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>{title}</strong>
+    <span style={{ color: 'var(--demo-muted, #94b0c2)' }}>{body}</span>
   </div>
 );
 
@@ -186,7 +186,7 @@ function PointerDemo({ modes, ...props }) {
   return (
     <div style={{ ...stack, maxWidth: 820, margin: '0 auto' }}>
       <PointerKit key={modes} {...props} mode={modes.split('+')} style={{ ...panel, height: 360, display: 'grid', placeItems: 'center', alignContent: 'center', gap: 16 }}>
-        <span style={{ font: `14px ${TITLE_FONT}`, color: '#f4f4f4' }}>MOVE · CLICK · HOVER</span>
+        <span style={{ font: `14px ${TITLE_FONT}`, color: 'var(--demo-ink, #f4f4f4)' }}>MOVE · CLICK · HOVER</span>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
           <button type="button" style={pixelBtn}>New game</button>
           <button type="button" style={pixelBtn}>Continue</button>
@@ -235,7 +235,7 @@ function RevealDemo({ replay, ...props }) {
     <div style={{ ...stack, maxWidth: 820, margin: '0 auto' }}>
       <Reveal key={`${props.effect}-${props.cascade}-${replay}`} {...props} coverColor="#0b0b14" style={{ ...panel, padding: 22, display: 'grid', gap: 14 }}>
         {props.cascade
-          ? ['Chapter 1: The first torch', 'Chapter 2: Into the caves', 'Chapter 3: The gem of light'].map(t => <div key={t} style={{ padding: 14, borderRadius: 10, background: '#262b44', color: '#f4f4f4', font: `16px ${PIXEL_FONT}`, textAlign: 'left' }}>{t}</div>)
+          ? ['Chapter 1: The first torch', 'Chapter 2: Into the caves', 'Chapter 3: The gem of light'].map(t => <div key={t} style={{ padding: 14, borderRadius: 10, background: 'var(--demo-chip, #262b44)', color: 'var(--demo-ink, #f4f4f4)', font: `16px ${PIXEL_FONT}`, textAlign: 'left' }}>{t}</div>)
           : card('Cherry Grove', 'Pink canopies, calm rivers and the best sunsets in the world.', 'cherry')}
       </Reveal>
       <p style={hint}>Change the effect (or toggle Replay) to watch it again.</p>
@@ -246,9 +246,9 @@ function RevealDemo({ replay, ...props }) {
 // ---------- Marquee ----------
 
 const WALL = BIOMES.map(b => (
-  <div key={b} style={{ width: 180, borderRadius: 12, overflow: 'hidden', background: '#262b44', boxShadow: '0 0 0 2px #333c57' }}>
+  <div key={b} style={{ width: 180, borderRadius: 12, overflow: 'hidden', background: 'var(--demo-chip, #262b44)', boxShadow: '0 0 0 2px var(--demo-line, #333c57)' }}>
     <img src={`/pixel/biome-${b}.png`} alt="" style={{ display: 'block', width: '100%', aspectRatio: '16 / 10', objectFit: 'cover', imageRendering: 'pixelated' }} />
-    <div style={{ padding: '8px 10px', color: '#f4f4f4', font: `14px ${PIXEL_FONT}`, textTransform: 'capitalize' }}>{b}</div>
+    <div style={{ padding: '8px 10px', color: 'var(--demo-ink, #f4f4f4)', font: `14px ${PIXEL_FONT}`, textTransform: 'capitalize' }}>{b}</div>
   </div>
 ));
 
@@ -283,7 +283,7 @@ const Scene = ({ children, title, sub }) => (
     {title && (
       <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', alignContent: 'center', gap: 10, padding: 16, pointerEvents: 'none', textAlign: 'center', color: '#f4f4f4', textShadow: '0 2px 0 #0b0b14' }}>
         <span style={{ font: `clamp(16px, 3vw, 26px)/1.4 ${TITLE_FONT}` }}>{title}</span>
-        {sub && <span style={{ font: `15px ${PIXEL_FONT}`, color: '#94b0c2' }}>{sub}</span>}
+        {sub && <span style={{ font: `15px ${PIXEL_FONT}`, color: 'var(--demo-muted, #94b0c2)' }}>{sub}</span>}
       </div>
     )}
   </div>
@@ -300,10 +300,10 @@ const bg = (Component, title, sub) => props => (
 // ---------- Phase 4: UI components ----------
 
 const biomeCard = (b, i) => (
-  <div key={b} style={{ display: 'grid', gridTemplateRows: '1fr auto', height: '100%', background: '#262b44', borderRadius: 'inherit', overflow: 'hidden' }}>
+  <div key={b} style={{ display: 'grid', gridTemplateRows: '1fr auto', height: '100%', background: 'var(--demo-chip, #262b44)', borderRadius: 'inherit', overflow: 'hidden' }}>
     <img src={`/pixel/biome-${b}.png`} alt="" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'cover', imageRendering: 'pixelated' }} />
-    <div style={{ padding: '10px 14px', color: '#f4f4f4', font: `16px ${PIXEL_FONT}`, textTransform: 'capitalize', textAlign: 'left' }}>
-      {b} <span style={{ color: '#94b0c2', fontSize: 13 }}>· level {i + 1}</span>
+    <div style={{ padding: '10px 14px', color: 'var(--demo-ink, #f4f4f4)', font: `16px ${PIXEL_FONT}`, textTransform: 'capitalize', textAlign: 'left' }}>
+      {b} <span style={{ color: 'var(--demo-muted, #94b0c2)', fontSize: 13 }}>· level {i + 1}</span>
     </div>
   </div>
 );
@@ -359,10 +359,10 @@ function MasonryDemo({ shuffle, ...props }) {
         {[...order.map(i => ({ i, k: `n${i}` })), ...Array.from({ length: extra }, (_, j) => ({ i: j % NOTES.length, k: `x${j}` }))].map(({ i, k }) => {
           const [title, body, icon, pad] = NOTES[i];
           return (
-            <div key={k} style={{ display: 'grid', gap: 8, padding: 16, paddingBottom: 16 + pad / 4, borderRadius: 12, background: '#262b44', boxShadow: 'inset 0 0 0 2px #333c57', color: '#f4f4f4', font: `15px/1.45 ${PIXEL_FONT}`, textAlign: 'left' }}>
+            <div key={k} style={{ display: 'grid', gap: 8, padding: 16, paddingBottom: 16 + pad / 4, borderRadius: 12, background: 'var(--demo-chip, #262b44)', boxShadow: 'inset 0 0 0 2px var(--demo-line, #333c57)', color: 'var(--demo-ink, #f4f4f4)', font: `15px/1.45 ${PIXEL_FONT}`, textAlign: 'left' }}>
               {sprite(icon, 28)}
-              <strong style={{ font: `11px ${TITLE_FONT}`, color: '#ffcd75' }}>{title}</strong>
-              <span style={{ color: '#94b0c2' }}>{body}</span>
+              <strong style={{ font: `11px ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>{title}</strong>
+              <span style={{ color: 'var(--demo-muted, #94b0c2)' }}>{body}</span>
             </div>
           );
         })}
@@ -445,7 +445,7 @@ function CardsDemo({ flippable, ...props }) {
     <div style={{ ...stack, maxWidth: 900, margin: '0 auto' }}>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 28, justifyContent: 'center' }}>
         {CARDS.map(c => (
-          <TradingCard key={c.name} {...props} {...c} fontFamily={PIXEL_FONT} back={flippable ? <span style={{ display: 'grid', gap: 8, justifyItems: 'center', font: `11px ${TITLE_FONT}`, color: '#ffcd75' }}>{sprite('gem', 48)}BITS LAB</span> : undefined} />
+          <TradingCard key={c.name} {...props} {...c} fontFamily={PIXEL_FONT} back={flippable ? <span style={{ display: 'grid', gap: 8, justifyItems: 'center', font: `11px ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>{sprite('gem', 48)}BITS LAB</span> : undefined} />
         ))}
       </div>
       <p style={hint}>Tilt the cards with the pointer{flippable ? '; click one to flip it' : ''}.</p>
@@ -458,9 +458,9 @@ function GlassDemo(props) {
     <div style={{ position: 'relative', display: 'grid', placeItems: 'center', width: '100%', height: '100%', minHeight: 380, padding: 24, boxSizing: 'border-box', background: 'url(/pixel/biome-cherry.png) center / cover', imageRendering: 'pixelated' }}>
       <GlassPanel {...props} style={{ maxWidth: 420 }}>
         <div style={{ display: 'grid', gap: 10, font: `16px/1.5 ${PIXEL_FONT}`, textAlign: 'left' }}>
-          <strong style={{ font: `13px ${TITLE_FONT}`, color: '#ffcd75' }}>CHERRY GROVE</strong>
+          <strong style={{ font: `13px ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>CHERRY GROVE</strong>
           <span>Pink canopies, calm rivers and the best sunsets in the world. Bring a fishing rod.</span>
-          <span style={{ color: '#94b0c2', fontSize: 14 }}>Level 4 · 12 quests</span>
+          <span style={{ color: 'var(--demo-muted, #94b0c2)', fontSize: 14 }}>Level 4 · 12 quests</span>
         </div>
       </GlassPanel>
     </div>
@@ -527,7 +527,7 @@ function SwipeDemo(props) {
         >
           <div style={{ display: 'grid', gap: 2, padding: '12px 16px', textAlign: 'left' }}>
             <strong style={{ fontSize: 15 }}>{row.from}</strong>
-            <span style={{ color: '#94b0c2', fontSize: 14 }}>{row.text}</span>
+            <span style={{ color: 'var(--demo-muted, #94b0c2)', fontSize: 14 }}>{row.text}</span>
           </div>
         </SwipeActions>
       ))}

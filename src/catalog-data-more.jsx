@@ -17,7 +17,7 @@ const select = (name, label, options) => ({ name, type: 'select', label, options
 const PIXEL_FONT = '"Pixelify Sans", system-ui, sans-serif';
 const stack = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 18, justifyItems: 'center', width: '100%', padding: '28px 16px', boxSizing: 'border-box' };
 const row = { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12 };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
 
 function random(seed) {
   let a = seed;

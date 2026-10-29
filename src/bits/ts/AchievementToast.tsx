@@ -46,6 +46,29 @@ const CSS = `
   .bl-ach__icon > *, .bl-ach__spark { animation: none !important; }
   @keyframes bl-ach-fade { from { opacity: 0; } }
 }
+/* light overrides */
+:where(.light, [data-theme="light"]) .bl-ach, .bl-ach:where(.light, [data-theme="light"]) { background: #f4f1e8; color: #1a1c2c; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ach, :where(.light, [data-theme="light"]) .bl-ach:where(.dark, [data-theme="dark"]) { background: #1a1c2c; color: #f4f4f4; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ach, .bl-ach:where([data-theme="system"]) { background: #f4f1e8; color: #1a1c2c; } }
+:where(.light, [data-theme="light"]) .bl-ach__icon, .bl-ach__icon:where(.light, [data-theme="light"]) { background: #e2dacb; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ach__icon, :where(.light, [data-theme="light"]) .bl-ach__icon:where(.dark, [data-theme="dark"]) { background: #0b0b14; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ach__icon, .bl-ach__icon:where([data-theme="system"]) { background: #e2dacb; } }
+:where(.light, [data-theme="light"]) .bl-ach__label, .bl-ach__label:where(.light, [data-theme="light"]) { color: color-mix(in srgb, var(--bl-tier) 55%, #1a1c2c); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ach__label, :where(.light, [data-theme="light"]) .bl-ach__label:where(.dark, [data-theme="dark"]) { color: var(--bl-tier); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ach__label, .bl-ach__label:where([data-theme="system"]) { color: color-mix(in srgb, var(--bl-tier) 55%, #1a1c2c); } }
+:where(.light, [data-theme="light"]) .bl-ach__desc, .bl-ach__desc:where(.light, [data-theme="light"]) { color: #566c86; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ach__desc, :where(.light, [data-theme="light"]) .bl-ach__desc:where(.dark, [data-theme="dark"]) { color: #94b0c2; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ach__desc, .bl-ach__desc:where([data-theme="system"]) { color: #566c86; } }
+:where(.light, [data-theme="light"]) .bl-ach__close, .bl-ach__close:where(.light, [data-theme="light"]) { color: #566c86; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ach__close, :where(.light, [data-theme="light"]) .bl-ach__close:where(.dark, [data-theme="dark"]) { color: #94b0c2; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ach__close, .bl-ach__close:where([data-theme="system"]) { color: #566c86; } }
+:where(.light, [data-theme="light"]) .bl-ach__close:hover, .bl-ach__close:where(.light, [data-theme="light"]):hover { color: #1a1c2c; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ach__close:hover, :where(.light, [data-theme="light"]) .bl-ach__close:where(.dark, [data-theme="dark"]):hover { color: #f4f4f4; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ach__close:hover, .bl-ach__close:where([data-theme="system"]):hover { color: #1a1c2c; } }
+:where(.light, [data-theme="light"]) .bl-ach__close:focus-visible, .bl-ach__close:where(.light, [data-theme="light"]):focus-visible { color: #1a1c2c; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ach__close:focus-visible, :where(.light, [data-theme="light"]) .bl-ach__close:where(.dark, [data-theme="dark"]):focus-visible { color: #f4f4f4; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ach__close:focus-visible, .bl-ach__close:where([data-theme="system"]):focus-visible { color: #1a1c2c; } }
+/* light overrides end */
 `;
 
 function useStyles() {

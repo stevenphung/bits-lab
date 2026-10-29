@@ -20,7 +20,7 @@ const TITLE_FONT = '"Press Start 2P", monospace';
 const pixelated = { imageRendering: 'pixelated' };
 const biome = id => `/pixel/biome-${id}.png`;
 const row = { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10 };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
 
 // ---------- DynamicIsland ----------
 
@@ -78,7 +78,7 @@ function IslandDemo(props) {
             </span>
             <span style={{ flex: 1, minWidth: 0 }}>
               <span style={{ display: 'block', font: `9px/1.6 ${TITLE_FONT}` }}>Overworld Theme</span>
-              <span style={{ display: 'block', color: '#94b0c2', fontSize: 13 }}>8-Bit Orchestra</span>
+              <span style={{ display: 'block', color: 'var(--demo-muted, #94b0c2)', fontSize: 13 }}>8-Bit Orchestra</span>
             </span>
             <Bars />
           </span>
@@ -99,11 +99,11 @@ function IslandDemo(props) {
       label: 'Incoming call from Pip',
       content: (
         <span style={{ display: 'flex', alignItems: 'center', gap: 10, width: '100%', padding: '0 12px' }}>
-          <span style={{ display: 'grid', placeItems: 'center', width: 40, height: 40, borderRadius: '50%', background: '#29366f' }}>
+          <span style={{ display: 'grid', placeItems: 'center', width: 40, height: 40, borderRadius: '50%', background: 'var(--demo-panel, #29366f)' }}>
             <Sprite name="heart" size={24} />
           </span>
           <span style={{ flex: 1, minWidth: 0 }}>
-            <span style={{ display: 'block', color: '#94b0c2', fontSize: 12 }}>Village call · {pad(Math.floor(callTime / 60))}:{pad(callTime % 60)}</span>
+            <span style={{ display: 'block', color: 'var(--demo-muted, #94b0c2)', fontSize: 12 }}>Village call · {pad(Math.floor(callTime / 60))}:{pad(callTime % 60)}</span>
             <span style={{ display: 'block', fontWeight: 700 }}>Pip</span>
           </span>
           <button type="button" aria-label="Decline" style={roundBtn('#b13e53')} onClick={() => setView('idle')}>
@@ -122,7 +122,7 @@ function IslandDemo(props) {
       content: (
         <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 12px' }}>
           <Sprite name="star" size={18} />
-          <span style={{ color: '#ffcd75', font: `10px ${TITLE_FONT}` }}>
+          <span style={{ color: 'var(--demo-gold, #ffcd75)', font: `10px ${TITLE_FONT}` }}>
             {pad(Math.floor(seconds / 60))}:{pad(seconds % 60)}
           </span>
         </span>
@@ -137,7 +137,7 @@ function IslandDemo(props) {
         <span style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%', padding: '0 16px' }}>
           <Sprite name="gem" size={34} />
           <span>
-            <span style={{ display: 'block', color: '#ffcd75', font: `8px/1.8 ${TITLE_FONT}` }}>ACHIEVEMENT UNLOCKED</span>
+            <span style={{ display: 'block', color: 'var(--demo-gold, #ffcd75)', font: `8px/1.8 ${TITLE_FONT}` }}>ACHIEVEMENT UNLOCKED</span>
             <span style={{ display: 'block', fontWeight: 700 }}>Diamonds!</span>
           </span>
         </span>
@@ -180,7 +180,7 @@ const PANELS = [
 const BIOME_TABS = ['Plains', 'Forest', 'Desert', 'Snowy Peaks', 'Ocean', 'Jungle', 'Mesa', 'Night Plains', 'Underworld', 'Void Isles', 'Deep Cave', 'Blossom Hills'];
 
 function TabsDemo(props) {
-  const items = PANELS.map(panel => ({ ...panel, content: <p style={{ margin: 0, color: '#94b0c2', font: `16px ${PIXEL_FONT}` }}>{panel.text}</p> }));
+  const items = PANELS.map(panel => ({ ...panel, content: <p style={{ margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `16px ${PIXEL_FONT}` }}>{panel.text}</p> }));
   return (
     <div style={{ display: 'grid', gap: 40, width: '100%', maxWidth: 640, margin: '0 auto', padding: '28px 0' }}>
       <SlideTabs {...props} items={items} label="Player menu" fontFamily={PIXEL_FONT} />
@@ -267,7 +267,7 @@ function PaletteDemo(props) {
         Open palette · ⌘K
       </PixelButton>
       <p style={hint}>
-        Last command: <span style={{ color: '#ffcd75' }}>{last}</span>
+        Last command: <span style={{ color: 'var(--demo-gold, #ffcd75)' }}>{last}</span>
       </p>
       <p style={hint}>Try "tp", "craft" then "dia", or Backspace to go back a page.</p>
       <CommandPalette {...props} groups={groups} open={open} onOpenChange={setOpen} fontFamily={PIXEL_FONT} recentKey="bitslab-demo-palette" />
@@ -286,9 +286,9 @@ const NAV_LINKS = [
 
 function NavDemo(props) {
   const [current, setCurrent] = useState('#worlds');
-  const section = { padding: '0 24px 48px', color: '#94b0c2', font: `16px/1.6 ${PIXEL_FONT}` };
+  const section = { padding: '0 24px 48px', color: 'var(--demo-muted, #94b0c2)', font: `16px/1.6 ${PIXEL_FONT}` };
   return (
-    <div style={{ width: '100%', height: 560, overflowY: 'auto', overflowX: 'hidden', background: '#1a1c2c' }}>
+    <div style={{ width: '100%', height: 560, overflowY: 'auto', overflowX: 'hidden', background: 'var(--demo-bg, #1a1c2c)' }}>
       <SmartNavbar
         {...props}
         current={current}
@@ -312,13 +312,13 @@ function NavDemo(props) {
         <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', textAlign: 'center', background: 'linear-gradient(rgba(26,28,44,0.1), #1a1c2c)' }}>
           <div style={{ font: `clamp(12px, 3vw, 20px)/1.5 ${TITLE_FONT}`, color: '#fff', textShadow: '3px 3px 0 #1a1c2c' }}>
             SCROLL DOWN
-            <div style={{ marginTop: 8, font: `15px ${PIXEL_FONT}`, color: '#ffcd75' }}>Watch the navbar become a pill, hide, and come back.</div>
+            <div style={{ marginTop: 8, font: `15px ${PIXEL_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>Watch the navbar become a pill, hide, and come back.</div>
           </div>
         </div>
       </div>
       {['forest', 'snowy', 'underworld', 'void'].map(id => (
         <div key={id} style={section}>
-          <h3 style={{ margin: '0 0 12px', font: `12px/1.5 ${TITLE_FONT}`, color: '#ffcd75' }}>{id.toUpperCase()}</h3>
+          <h3 style={{ margin: '0 0 12px', font: `12px/1.5 ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>{id.toUpperCase()}</h3>
           <img src={biome(id)} alt="" style={{ ...pixelated, width: '100%', display: 'block', marginBottom: 12 }} />
           <p style={{ margin: 0 }}>Scroll up at any point and the navbar slides back in. Tab to a link and it reappears too.</p>
         </div>

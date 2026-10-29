@@ -1,13 +1,25 @@
-import { useRef, type CSSProperties, type ReactNode, type PointerEvent, type MouseEvent } from 'react';
+import { useInsertionEffect, useRef, type CSSProperties, type ReactNode, type PointerEvent, type MouseEvent } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// Responsive bento grid. Cards span columns and rows, light their border where the cursor is
-// (neighbouring cards catch the glow too), lift their content on hover or focus to reveal a
-// call to action. Layout collapses with container queries, so it fits any parent width.
+const STYLE_ID = 'bl-bento-tw';
+const CSS = `
+/* theme tokens */
+.bl-bento { --bl-card: #1a1c2c; --bl-line: rgba(255,255,255,0.08); --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-chip: rgba(115,239,247,0.12); --bl-spot: rgba(115,239,247,0.85); --bl-wash: rgba(115,239,247,0.08); }
+:where(.light, [data-theme="light"]) .bl-bento, .bl-bento:where(.light, [data-theme="light"]) { --bl-card: #f4f1e8; --bl-line: rgba(26,28,44,0.08); --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-chip: rgba(22,127,143,0.12); --bl-spot: rgba(22,127,143,0.85); --bl-wash: rgba(22,127,143,0.08); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-bento, :where(.light, [data-theme="light"]) .bl-bento:where(.dark, [data-theme="dark"]) { --bl-card: #1a1c2c; --bl-line: rgba(255,255,255,0.08); --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-chip: rgba(115,239,247,0.12); --bl-spot: rgba(115,239,247,0.85); --bl-wash: rgba(115,239,247,0.08); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-bento, .bl-bento:where([data-theme="system"]) { --bl-card: #f4f1e8; --bl-line: rgba(26,28,44,0.08); --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-chip: rgba(22,127,143,0.12); --bl-spot: rgba(22,127,143,0.85); --bl-wash: rgba(22,127,143,0.08); } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 export interface BentoCardProps {
   /** Columns the card covers. */
@@ -101,14 +113,14 @@ export default function BentoGrid({
   rowHeight = 200,
   gap = 14,
   radius = 18,
-  cardColor = '#1a1c2c',
-  lineColor = 'rgba(255,255,255,0.08)',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
-  chipColor = 'rgba(115,239,247,0.12)',
-  spotlightColor = 'rgba(115,239,247,0.85)',
-  washColor = 'rgba(115,239,247,0.08)',
+  cardColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  accentColor,
+  chipColor,
+  spotlightColor,
+  washColor,
   spotlightSize = 320,
   titleSize = 18,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
@@ -116,7 +128,7 @@ export default function BentoGrid({
   className = '',
   style
 }: BentoGridProps) {
-  
+  useStyles();
   const ref = useRef<HTMLDivElement>(null);
 
   // One listener on the grid positions the light in every card, so neighbours glow too.
@@ -138,7 +150,7 @@ export default function BentoGrid({
     <div className={`@container w-full ${className}`} style={style}>
       <div
         ref={ref}
-        className="grid auto-rows-(--bl-row) grid-cols-[repeat(var(--bl-cols),minmax(0,1fr))] gap-(--bl-gap) [@container(560px<width<=860px)]:grid-cols-[repeat(min(var(--bl-cols),2),minmax(0,1fr))] [@container(max-width:560px)]:auto-rows-[minmax(var(--bl-row),auto)] [@container(max-width:560px)]:grid-cols-[minmax(0,1fr)]"
+        className="bl-bento grid auto-rows-(--bl-row) grid-cols-[repeat(var(--bl-cols),minmax(0,1fr))] gap-(--bl-gap) [@container(560px<width<=860px)]:grid-cols-[repeat(min(var(--bl-cols),2),minmax(0,1fr))] [@container(max-width:560px)]:auto-rows-[minmax(var(--bl-row),auto)] [@container(max-width:560px)]:grid-cols-[minmax(0,1fr)]"
         onPointerMove={onPointerMove}
         onPointerLeave={onPointerLeave}
         style={{

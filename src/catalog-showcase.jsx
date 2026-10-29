@@ -43,7 +43,7 @@ const QUESTS = [
 
 function PixelAppScreen({ scene = 'plains', compact = false }) {
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%', background: '#1a1c2c', color: '#f4f4f4', font: `14px/1.3 ${PIXEL_FONT}`, overflow: 'hidden' }}>
+    <div style={{ position: 'relative', width: '100%', height: '100%', background: 'var(--demo-bg, #1a1c2c)', color: 'var(--demo-ink, #f4f4f4)', font: `14px/1.3 ${PIXEL_FONT}`, overflow: 'hidden' }}>
       <img src={biome(scene)} alt="" style={{ ...pixelated, position: 'absolute', inset: 0, width: '100%', height: compact ? '100%' : '46%', objectFit: 'cover' }} />
       <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: compact ? '12% 10% 0' : '15% 7% 0' }}>
         <Sprite name="heart" size={compact ? 16 : 22} />
@@ -52,14 +52,14 @@ function PixelAppScreen({ scene = 'plains', compact = false }) {
       </div>
       {compact ? (
         <div style={{ position: 'absolute', left: '10%', right: '10%', bottom: '14%', padding: '8px 10px', background: 'rgba(26,28,44,0.85)', boxShadow: '0 0 0 2px #ffcd75', textAlign: 'center' }}>
-          <div style={{ font: `8px ${TITLE_FONT}`, color: '#ffcd75' }}>12:00</div>
+          <div style={{ font: `8px ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>12:00</div>
           <div style={{ fontSize: 12, marginTop: 4 }}>Day 37 · Sunny</div>
         </div>
       ) : (
-        <div style={{ position: 'absolute', left: 0, right: 0, top: '42%', bottom: 0, padding: '6% 6% 0', background: '#1a1c2c', borderTop: '3px solid #333c57' }}>
-          <div style={{ font: `8px ${TITLE_FONT}`, color: '#94b0c2', marginBottom: 10 }}>TODAY'S QUESTS</div>
+        <div style={{ position: 'absolute', left: 0, right: 0, top: '42%', bottom: 0, padding: '6% 6% 0', background: 'var(--demo-bg, #1a1c2c)', borderTop: '3px solid #333c57' }}>
+          <div style={{ font: `8px ${TITLE_FONT}`, color: 'var(--demo-muted, #94b0c2)', marginBottom: 10 }}>TODAY'S QUESTS</div>
           {QUESTS.map(([icon, title, tag]) => (
-            <div key={title} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', marginBottom: 7, background: '#29366f', boxShadow: 'inset 0 -3px 0 #1a1c2c' }}>
+            <div key={title} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', marginBottom: 7, background: 'var(--demo-panel, #29366f)', boxShadow: 'inset 0 -3px 0 #1a1c2c' }}>
               <Sprite name={icon} size={20} />
               <span style={{ flex: 1, minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</span>
               <span style={{ fontSize: 12, color: '#a7f070' }}>{tag}</span>
@@ -72,16 +72,16 @@ function PixelAppScreen({ scene = 'plains', compact = false }) {
 }
 
 function PixelWebsite({ scene = 'plains' }) {
-  const section = { padding: '28px 6%', color: '#f4f4f4', font: `15px/1.5 ${PIXEL_FONT}` };
-  const heading = { margin: '0 0 12px', font: `14px/1.5 ${TITLE_FONT}`, color: '#ffcd75' };
+  const section = { padding: '28px 6%', color: 'var(--demo-ink, #f4f4f4)', font: `15px/1.5 ${PIXEL_FONT}` };
+  const heading = { margin: '0 0 12px', font: `14px/1.5 ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' };
   return (
-    <div style={{ background: '#1a1c2c' }}>
+    <div style={{ background: 'var(--demo-bg, #1a1c2c)' }}>
       <div style={{ position: 'relative', aspectRatio: '16 / 9' }}>
         <img src={biome(scene)} alt="" style={{ ...pixelated, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', textAlign: 'center', background: 'linear-gradient(transparent 40%, rgba(26,28,44,0.85))' }}>
           <div>
             <div style={{ font: `clamp(12px, 3vw, 22px)/1.4 ${TITLE_FONT}`, color: '#fff', textShadow: '3px 3px 0 #1a1c2c' }}>BLOCK QUEST</div>
-            <div style={{ marginTop: 10, font: `16px ${PIXEL_FONT}`, color: '#ffcd75' }}>Build. Explore. Survive the night.</div>
+            <div style={{ marginTop: 10, font: `16px ${PIXEL_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>Build. Explore. Survive the night.</div>
           </div>
         </div>
       </div>
@@ -91,10 +91,10 @@ function PixelWebsite({ scene = 'plains' }) {
           ['sword', 'Fight', 'Defend your base.'],
           ['potion', 'Brew', 'Mix strange potions.']
         ].map(([icon, title, body]) => (
-          <div key={title} style={{ padding: 14, background: '#29366f', boxShadow: 'inset 0 -4px 0 #1a1c2c', textAlign: 'center' }}>
+          <div key={title} style={{ padding: 14, background: 'var(--demo-panel, #29366f)', boxShadow: 'inset 0 -4px 0 #1a1c2c', textAlign: 'center' }}>
             <Sprite name={icon} size={36} />
             <div style={{ font: `10px ${TITLE_FONT}`, margin: '10px 0 6px' }}>{title}</div>
-            <div style={{ fontSize: 13, color: '#94b0c2' }}>{body}</div>
+            <div style={{ fontSize: 13, color: 'var(--demo-muted, #94b0c2)' }}>{body}</div>
           </div>
         ))}
       </div>
@@ -103,7 +103,7 @@ function PixelWebsite({ scene = 'plains' }) {
           {i % 2 ? null : <img src={biome(id)} alt="" style={{ ...pixelated, width: '100%', display: 'block', boxShadow: '0 0 0 3px #333c57' }} />}
           <div>
             <h4 style={heading}>{['Endless forests', 'Frozen peaks', 'The underworld'][i]}</h4>
-            <p style={{ margin: 0, color: '#94b0c2' }}>{['Every seed grows a new world to wander.', 'Climb above the clouds for rare gems.', 'Brave the heat for the rarest loot.'][i]}</p>
+            <p style={{ margin: 0, color: 'var(--demo-muted, #94b0c2)' }}>{['Every seed grows a new world to wander.', 'Climb above the clouds for rare gems.', 'Brave the heat for the rarest loot.'][i]}</p>
           </div>
           {i % 2 ? <img src={biome(id)} alt="" style={{ ...pixelated, width: '100%', display: 'block', boxShadow: '0 0 0 3px #333c57' }} /> : null}
         </div>
@@ -111,7 +111,7 @@ function PixelWebsite({ scene = 'plains' }) {
       <div style={{ ...section, textAlign: 'center', paddingBottom: 48 }}>
         <Sprite name="star" size={40} />
         <h4 style={{ ...heading, marginTop: 14 }}>PRESS START</h4>
-        <p style={{ margin: 0, color: '#94b0c2' }}>Free on every platform. No account needed.</p>
+        <p style={{ margin: 0, color: 'var(--demo-muted, #94b0c2)' }}>Free on every platform. No account needed.</p>
       </div>
     </div>
   );
@@ -121,21 +121,21 @@ function PixelWebsite({ scene = 'plains' }) {
 
 function ScrollerDemo(props) {
   return (
-    <div style={{ width: '100%', height: 560, overflowY: 'auto', background: 'linear-gradient(#1a1c2c, #29366f)', borderRadius: 4 }}>
-      <div style={{ height: 120, display: 'grid', placeItems: 'center', color: '#94b0c2', font: `14px ${PIXEL_FONT}` }}>Scroll inside this box ↓</div>
+    <div style={{ width: '100%', height: 560, overflowY: 'auto', background: 'var(--demo-scroll, linear-gradient(#1a1c2c, #29366f))', borderRadius: 4 }}>
+      <div style={{ height: 120, display: 'grid', placeItems: 'center', color: 'var(--demo-muted, #94b0c2)', font: `14px ${PIXEL_FONT}` }}>Scroll inside this box ↓</div>
       <ScreenScroller
         {...props}
         stageHeight="560px"
         intro={
           <>
-            <div style={{ font: `clamp(11px, 2.4vw, 16px)/1.5 ${TITLE_FONT}`, color: '#ffcd75' }}>A WORLD IN YOUR POCKET</div>
-            <div style={{ marginTop: 8, font: `15px ${PIXEL_FONT}`, color: '#94b0c2' }}>Keep scrolling to tour the site.</div>
+            <div style={{ font: `clamp(11px, 2.4vw, 16px)/1.5 ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>A WORLD IN YOUR POCKET</div>
+            <div style={{ marginTop: 8, font: `15px ${PIXEL_FONT}`, color: 'var(--demo-muted, #94b0c2)' }}>Keep scrolling to tour the site.</div>
           </>
         }
       >
         <PixelWebsite scene={props.scene} />
       </ScreenScroller>
-      <div style={{ height: 200, display: 'grid', placeItems: 'center', color: '#94b0c2', font: `14px ${PIXEL_FONT}` }}>The end. Scroll back up ↑</div>
+      <div style={{ height: 200, display: 'grid', placeItems: 'center', color: 'var(--demo-muted, #94b0c2)', font: `14px ${PIXEL_FONT}` }}>The end. Scroll back up ↑</div>
     </div>
   );
 }
@@ -155,7 +155,7 @@ function BeamsDemo(props) {
       <div style={{ display: 'grid', placeItems: 'center', width: big ? 88 : 60, height: big ? 88 : 60, background: big ? '#29366f' : '#1a1c2c', boxShadow: `0 0 0 3px ${big ? '#ffcd75' : '#333c57'}, 0 8px 0 rgba(0,0,0,0.35)` }}>
         <Sprite name={icon} size={big ? 52 : 34} />
       </div>
-      <span style={{ font: `13px ${PIXEL_FONT}`, color: '#94b0c2' }}>{name}</span>
+      <span style={{ font: `13px ${PIXEL_FONT}`, color: 'var(--demo-muted, #94b0c2)' }}>{name}</span>
     </div>
   );
   return (

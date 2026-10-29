@@ -8,6 +8,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-bento';
 const CSS = `
+/* theme tokens */
+.bl-bento { --bl-card: #1a1c2c; --bl-line: rgba(255,255,255,0.08); --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-chip: rgba(115,239,247,0.12); --bl-spot: rgba(115,239,247,0.85); --bl-wash: rgba(115,239,247,0.08); }
+:where(.light, [data-theme="light"]) .bl-bento, .bl-bento:where(.light, [data-theme="light"]) { --bl-card: #f4f1e8; --bl-line: rgba(26,28,44,0.08); --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-chip: rgba(22,127,143,0.12); --bl-spot: rgba(22,127,143,0.85); --bl-wash: rgba(22,127,143,0.08); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-bento, :where(.light, [data-theme="light"]) .bl-bento:where(.dark, [data-theme="dark"]) { --bl-card: #1a1c2c; --bl-line: rgba(255,255,255,0.08); --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-chip: rgba(115,239,247,0.12); --bl-spot: rgba(115,239,247,0.85); --bl-wash: rgba(115,239,247,0.08); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-bento, .bl-bento:where([data-theme="system"]) { --bl-card: #f4f1e8; --bl-line: rgba(26,28,44,0.08); --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-chip: rgba(22,127,143,0.12); --bl-spot: rgba(22,127,143,0.85); --bl-wash: rgba(22,127,143,0.08); } }
+/* theme tokens end */
 .bl-bento-wrap { container-type: inline-size; width: 100%; }
 .bl-bento { display: grid; grid-template-columns: repeat(var(--bl-cols), minmax(0, 1fr)); grid-auto-rows: var(--bl-row); gap: var(--bl-gap); }
 .bl-bento__card { --bl-mx: -999px; --bl-my: -999px; position: relative; grid-column: span var(--bl-cs, 1); grid-row: span var(--bl-rs, 1); display: flex; flex-direction: column; justify-content: flex-end; min-width: 0; overflow: hidden; padding: 22px; border-radius: var(--bl-radius); background: var(--bl-card); color: var(--bl-ink); isolation: isolate; text-decoration: none; outline: none; box-shadow: inset 0 0 0 1px var(--bl-line); transition: transform 240ms cubic-bezier(.2,.8,.2,1); }
@@ -144,14 +150,14 @@ export default function BentoGrid({
   rowHeight = 200,
   gap = 14,
   radius = 18,
-  cardColor = '#1a1c2c',
-  lineColor = 'rgba(255,255,255,0.08)',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
-  chipColor = 'rgba(115,239,247,0.12)',
-  spotlightColor = 'rgba(115,239,247,0.85)',
-  washColor = 'rgba(115,239,247,0.08)',
+  cardColor,
+  lineColor,
+  textColor,
+  mutedColor,
+  accentColor,
+  chipColor,
+  spotlightColor,
+  washColor,
   spotlightSize = 320,
   titleSize = 18,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',

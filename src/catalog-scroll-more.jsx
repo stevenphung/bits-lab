@@ -16,12 +16,12 @@ const TITLE_FONT = '"Press Start 2P", monospace';
 const pixelated = { imageRendering: 'pixelated' };
 const biome = id => `/pixel/biome-${id}.png`;
 const BOX_HEIGHT = 560;
-const note = height => ({ height, display: 'grid', placeItems: 'center', color: '#94b0c2', font: `14px ${PIXEL_FONT}`, textAlign: 'center', padding: '0 16px' });
+const note = height => ({ height, display: 'grid', placeItems: 'center', color: 'var(--demo-muted, #94b0c2)', font: `14px ${PIXEL_FONT}`, textAlign: 'center', padding: '0 16px' });
 
 // Every demo scrolls inside its own box, so the effect can be tried without leaving the page.
 function ScrollBox({ children, top = 'Scroll inside this box ↓', bottom = 'The end. Scroll back up ↑', topHeight = 160, bottomHeight = 240 }) {
   return (
-    <div style={{ width: '100%', height: BOX_HEIGHT, overflowY: 'auto', overflowX: 'hidden', background: 'linear-gradient(#1a1c2c, #202640)', borderRadius: 4 }}>
+    <div style={{ width: '100%', height: BOX_HEIGHT, overflowY: 'auto', overflowX: 'hidden', background: 'var(--demo-scroll, linear-gradient(#1a1c2c, #202640))', borderRadius: 4 }}>
       <div style={note(topHeight)}>{top}</div>
       {children}
       <div style={note(bottomHeight)}>{bottom}</div>
@@ -40,17 +40,17 @@ function ZoomDemo(props) {
         alt="A pixel-art cherry blossom grove"
         mediaStyle={pixelated}
         fontFamily={PIXEL_FONT}
-        heading={<span style={{ font: `clamp(12px, 2.4vw, 18px)/1.6 ${TITLE_FONT}`, color: '#ffcd75' }}>The cherry grove</span>}
+        heading={<span style={{ font: `clamp(12px, 2.4vw, 18px)/1.6 ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>The cherry grove</span>}
       >
         <div style={{ display: 'grid', gap: 14, justifyItems: 'center', maxWidth: 420 }}>
           <Sprite name="heart" size={44} />
           <h3 style={{ margin: 0, font: `clamp(14px, 3vw, 22px)/1.5 ${TITLE_FONT}` }}>Petals all year</h3>
-          <p style={{ margin: 0, font: `17px/1.5 ${PIXEL_FONT}`, color: '#f4f4f4' }}>A new biome where the blossoms never fall and the bees hum in chiptune.</p>
+          <p style={{ margin: 0, font: `17px/1.5 ${PIXEL_FONT}`, color: 'var(--demo-ink, #f4f4f4)' }}>A new biome where the blossoms never fall and the bees hum in chiptune.</p>
         </div>
       </ScrollZoom>
-      <section style={{ padding: '56px 24px', color: '#f4f4f4', font: `16px/1.6 ${PIXEL_FONT}`, textAlign: 'center' }}>
-        <h3 style={{ margin: '0 0 10px', font: `13px/1.6 ${TITLE_FONT}`, color: '#73eff7' }}>The next section</h3>
-        <p style={{ margin: 0, color: '#94b0c2' }}>Once the zoom has played, the page carries on as normal.</p>
+      <section style={{ padding: '56px 24px', color: 'var(--demo-ink, #f4f4f4)', font: `16px/1.6 ${PIXEL_FONT}`, textAlign: 'center' }}>
+        <h3 style={{ margin: '0 0 10px', font: `13px/1.6 ${TITLE_FONT}`, color: 'var(--demo-accent, #73eff7)' }}>The next section</h3>
+        <p style={{ margin: 0, color: 'var(--demo-muted, #94b0c2)' }}>Once the zoom has played, the page carries on as normal.</p>
       </section>
     </ScrollBox>
   );
@@ -79,8 +79,8 @@ function CollageDemo(props) {
     <ScrollBox top="Scroll to move through the collage ↓" topHeight={200} bottomHeight={260}>
       <ParallaxCollage {...props} pieces={PIECES} height={520} fontFamily={PIXEL_FONT} label="Biomes collage">
         <div style={{ display: 'grid', gap: 12, justifyItems: 'center', padding: '18px 22px', background: 'rgba(11,11,20,0.78)', borderRadius: 12 }}>
-          <h3 style={{ margin: 0, font: `clamp(12px, 2.6vw, 18px)/1.6 ${TITLE_FONT}`, color: '#ffcd75' }}>Twelve biomes</h3>
-          <p style={{ margin: 0, font: `16px/1.5 ${PIXEL_FONT}`, color: '#f4f4f4' }}>One world. Move your pointer to lean in.</p>
+          <h3 style={{ margin: 0, font: `clamp(12px, 2.6vw, 18px)/1.6 ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>Twelve biomes</h3>
+          <p style={{ margin: 0, font: `16px/1.5 ${PIXEL_FONT}`, color: 'var(--demo-ink, #f4f4f4)' }}>One world. Move your pointer to lean in.</p>
         </div>
       </ParallaxCollage>
     </ScrollBox>
@@ -100,18 +100,18 @@ const CHAPTERS = [
 function ChapterDemo(props) {
   const ref = useRef(null);
   return (
-    <div style={{ width: '100%', height: BOX_HEIGHT, overflowY: 'auto', overflowX: 'hidden', background: 'linear-gradient(#1a1c2c, #202640)', borderRadius: 4 }}>
+    <div style={{ width: '100%', height: BOX_HEIGHT, overflowY: 'auto', overflowX: 'hidden', background: 'var(--demo-scroll, linear-gradient(#1a1c2c, #202640))', borderRadius: 4 }}>
       <div style={{ position: 'sticky', top: 0, zIndex: 5 }}>
         <ChapterProgress {...props} target={ref} fontFamily={PIXEL_FONT} />
       </div>
-      <article ref={ref} style={{ maxWidth: 620, margin: '0 auto', padding: '24px 20px 200px', color: '#f4f4f4', font: `17px/1.7 ${PIXEL_FONT}` }}>
-        <p style={{ color: '#94b0c2' }}>A short guide to the five places every adventurer passes through. Scroll, or jump with the chapter list.</p>
+      <article ref={ref} style={{ maxWidth: 620, margin: '0 auto', padding: '24px 20px 200px', color: 'var(--demo-ink, #f4f4f4)', font: `17px/1.7 ${PIXEL_FONT}` }}>
+        <p style={{ color: 'var(--demo-muted, #94b0c2)' }}>A short guide to the five places every adventurer passes through. Scroll, or jump with the chapter list.</p>
         {CHAPTERS.map(([title, body], i) => (
           <section key={title}>
-            <h2 style={{ margin: '36px 0 12px', font: `13px/1.6 ${TITLE_FONT}`, color: '#ffcd75', outlineOffset: 4 }}>{title}</h2>
+            <h2 style={{ margin: '36px 0 12px', font: `13px/1.6 ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)', outlineOffset: 4 }}>{title}</h2>
             <Sprite name={['grass', 'pickaxe', 'gem', 'potion', 'star'][i]} size={40} />
             {[0, 1, 2].map(k => (
-              <p key={k} style={{ color: k ? '#94b0c2' : '#f4f4f4' }}>
+              <p key={k} style={{ color: k ? 'var(--demo-muted, #94b0c2)' : 'var(--demo-ink, #f4f4f4)' }}>
                 {body}
               </p>
             ))}

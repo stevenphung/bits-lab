@@ -19,7 +19,7 @@ const PIXEL_FONT = '"Pixelify Sans", system-ui, sans-serif';
 const TITLE_FONT = '"Press Start 2P", monospace';
 // One shrinkable column, so wide rows (8-cell codes, long toggle groups) fit narrow screens.
 const stack = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 18, justifyItems: 'center', width: '100%', padding: '32px 0' };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
 
 // ---------- OTPInput ----------
 
@@ -30,7 +30,7 @@ function OTPDemo(props) {
   const messages = { idle: `Enter the code from your pager. (Psst: ${secret})`, error: 'That code is wrong. Try again.', success: 'Vault unlocked!' };
   return (
     <div style={stack}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#ffcd75', font: `10px ${TITLE_FONT}` }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--demo-gold, #ffcd75)', font: `10px ${TITLE_FONT}` }}>
         <Sprite name="chest" size={28} /> VAULT CODE
       </div>
       <OTPInput
@@ -131,7 +131,7 @@ function DropDemo({ failRate, ...props }) {
 function ToggleDemo(props) {
   const [view, setView] = useState('grid');
   const [filters, setFilters] = useState(['weapons', 'gems']);
-  const label = { display: 'block', marginBottom: 8, color: '#94b0c2', font: `9px ${TITLE_FONT}` };
+  const label = { display: 'block', marginBottom: 8, color: 'var(--demo-muted, #94b0c2)', font: `9px ${TITLE_FONT}` };
   return (
     <div style={{ ...stack, gap: 26, justifyItems: 'stretch', maxWidth: 520, margin: '0 auto', padding: '32px 16px' }}>
       <div>

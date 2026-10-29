@@ -48,7 +48,7 @@ export const BACKGROUNDS_MORE_DEMOS = {
         <InteractiveGrid {...props} />
         <div style={overlay}>
           <span style={{ font: `clamp(14px, 3vw, 26px) ${TITLE_FONT}`, color: '#f4f4f4', textShadow: '3px 3px 0 #3b5dc9' }}>MOVE TO PAINT</span>
-          <span style={{ font: `16px ${PIXEL_FONT}`, color: '#94b0c2' }}>Click for a ripple</span>
+          <span style={{ font: `16px ${PIXEL_FONT}`, color: 'var(--demo-muted, #94b0c2)' }}>Click for a ripple</span>
         </div>
       </div>
     )

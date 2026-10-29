@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-morph-dialog';
 const CSS = `
+/* theme tokens */
+.bl-morph-theme { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-line: rgba(255,255,255,0.1); --bl-accent: #73eff7; --bl-backdrop: rgba(10,10,20,0.6); }
+:where(.light, [data-theme="light"]) .bl-morph-theme, .bl-morph-theme:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-line: rgba(26,28,44,0.1); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-morph-theme, :where(.light, [data-theme="light"]) .bl-morph-theme:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-line: rgba(255,255,255,0.1); --bl-accent: #73eff7; --bl-backdrop: rgba(10,10,20,0.6); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-morph-theme, .bl-morph-theme:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-line: rgba(26,28,44,0.1); --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-md__card { display: block; width: 100%; padding: 0; border: 0; overflow: hidden; border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); font: inherit; font-family: var(--bl-font, inherit); text-align: left; cursor: pointer; box-shadow: inset 0 0 0 1px var(--bl-line); transition: transform 200ms, box-shadow 200ms; }
 .bl-md__card:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px var(--bl-line), 0 12px 30px -16px rgba(0,0,0,0.6); }
 .bl-md__card:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 3px; }
@@ -100,11 +106,11 @@ export default function MorphDialog({
   duration = 480,
   open: controlledOpen,
   onOpenChange,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  lineColor = 'rgba(255,255,255,0.1)',
-  accentColor = '#73eff7',
-  backdropColor = 'rgba(10,10,20,0.6)',
+  backgroundColor,
+  textColor,
+  lineColor,
+  accentColor,
+  backdropColor,
   backdropBlur = 6,
   fontFamily,
   className = '',
@@ -227,14 +233,14 @@ export default function MorphDialog({
   };
 
   return (
-    <div className={className} style={{ ...vars, ...style }}>
+    <div className={`bl-morph-theme ${className}`} style={{ ...vars, ...style }}>
       <button ref={cardRef} type="button" className="bl-md__card" aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpen(true)}>
         {media && <div className="bl-md__media">{media}</div>}
         {card}
       </button>
       {mounted &&
         createPortal(
-          <div style={vars}>
+          <div className="bl-morph-theme" style={vars}>
             <div ref={backdropRef} className="bl-md__backdrop" onClick={() => setOpen(false)} />
             <div
               ref={shellRef}

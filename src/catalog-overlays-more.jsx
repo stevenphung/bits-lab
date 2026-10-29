@@ -24,8 +24,8 @@ const TITLE_FONT = '"Press Start 2P", monospace';
 const pixelated = { imageRendering: 'pixelated' };
 const stack = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 20, justifyItems: 'center', width: '100%', padding: '28px 16px', boxSizing: 'border-box' };
 const row = { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12 };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
-const panel = { width: '100%', maxWidth: 520, padding: 18, boxSizing: 'border-box', background: '#1a1c2c', boxShadow: '0 0 0 2px #333c57', borderRadius: 10, color: '#f4f4f4', font: `16px/1.6 ${PIXEL_FONT}` };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const panel = { width: '100%', maxWidth: 520, padding: 18, boxSizing: 'border-box', background: 'var(--demo-bg, #1a1c2c)', boxShadow: '0 0 0 2px var(--demo-line, #333c57)', borderRadius: 10, color: 'var(--demo-ink, #f4f4f4)', font: `16px/1.6 ${PIXEL_FONT}` };
 
 // ---------- LinkPeek ----------
 
@@ -80,7 +80,7 @@ function OrbDemo(props) {
         <div style={{ ...panel, maxWidth: 'none', display: 'grid', placeItems: 'center', gap: 12, minHeight: 220, textAlign: 'center' }}>
           <Sprite name="chest" size={56} />
           <span>Right-click (or long-press) anywhere in this box.</span>
-          <span style={{ color: '#94b0c2', fontSize: 14 }}>Hold the button, flick toward an action and let go, or click one. Keyboard: Tab here, then Shift+F10.</span>
+          <span style={{ color: 'var(--demo-muted, #94b0c2)', fontSize: 14 }}>Hold the button, flick toward an action and let go, or click one. Keyboard: Tab here, then Shift+F10.</span>
         </div>
       </ContextOrb>
       <p style={hint} aria-live="polite">
@@ -150,8 +150,8 @@ function ProfileCard({ data }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
         <PixelAvatar seed={data.seed} size={56} title={data.name} />
         <div style={{ minWidth: 0 }}>
-          <div style={{ font: `13px/1.6 ${TITLE_FONT}`, color: '#ffcd75' }}>{data.name}</div>
-          <div style={{ color: '#94b0c2' }}>{data.role}</div>
+          <div style={{ font: `13px/1.6 ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>{data.name}</div>
+          <div style={{ color: 'var(--demo-muted, #94b0c2)' }}>{data.role}</div>
         </div>
       </div>
       <img src={data.image} alt="" style={{ width: '100%', aspectRatio: '8 / 3', objectFit: 'cover', borderRadius: 8, ...pixelated }} />
@@ -160,7 +160,7 @@ function ProfileCard({ data }) {
         <button type="button" style={{ padding: '8px 14px', border: 0, borderRadius: 8, background: '#73eff7', color: '#0b0b14', font: 'inherit', fontWeight: 700 }}>
           Follow
         </button>
-        <button type="button" style={{ padding: '8px 14px', border: 0, borderRadius: 8, background: '#333c57', color: '#f4f4f4', font: 'inherit' }}>
+        <button type="button" style={{ padding: '8px 14px', border: 0, borderRadius: 8, background: 'var(--demo-line, #333c57)', color: 'var(--demo-ink, #f4f4f4)', font: 'inherit' }}>
           Message
         </button>
       </div>
@@ -213,12 +213,12 @@ function TourDemo(props) {
     { target: refs.craft, title: 'Craft something', body: 'Press Craft to make your first item. That completes the tour quest.' },
     { target: refs.me, title: 'Your profile', body: 'Settings, sounds and your avatar live behind this face.' }
   ];
-  const chip = { padding: '6px 10px', borderRadius: 6, background: '#262b44' };
+  const chip = { padding: '6px 10px', borderRadius: 6, background: 'var(--demo-chip, #262b44)' };
   return (
     <div style={stack}>
       <div style={{ ...panel, padding: 0, overflow: 'hidden', maxWidth: 560 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: '#0b0b14' }}>
-          <span ref={refs.logo} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, font: `11px ${TITLE_FONT}`, color: '#73eff7' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'var(--demo-field, #0b0b14)' }}>
+          <span ref={refs.logo} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, font: `11px ${TITLE_FONT}`, color: 'var(--demo-accent, #73eff7)' }}>
             <Sprite name="gem" size={20} /> BITS
           </span>
           <span ref={refs.search} style={{ ...chip, flex: 1, minWidth: 0, color: '#566c86' }}>
@@ -236,7 +236,7 @@ function TourDemo(props) {
               </span>
             ))}
           </div>
-          <div style={{ display: 'grid', placeItems: 'center', gap: 10, flex: '1 1 160px', padding: 12, background: '#262b44', borderRadius: 8 }}>
+          <div style={{ display: 'grid', placeItems: 'center', gap: 10, flex: '1 1 160px', padding: 12, background: 'var(--demo-chip, #262b44)', borderRadius: 8 }}>
             <Sprite name="pickaxe" size={40} />
             <span ref={refs.craft} style={{ display: 'inline-flex' }}>
               <PixelButton size="sm" variant="success" onPress={() => setNote('Crafted a pickaxe!')}>

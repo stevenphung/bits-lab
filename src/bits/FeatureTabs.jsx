@@ -6,6 +6,12 @@ import { useId, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-feature-tabs';
 const CSS = `
+/* theme tokens */
+.bl-ft { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-hover: rgba(255,255,255,0.04); --bl-active: rgba(255,255,255,0.07); --bl-track: rgba(255,255,255,0.12); --bl-stage: #1a1c2c; --bl-line: rgba(255,255,255,0.08); }
+:where(.light, [data-theme="light"]) .bl-ft, .bl-ft:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-hover: rgba(26,28,44,0.04); --bl-active: rgba(26,28,44,0.07); --bl-track: rgba(26,28,44,0.12); --bl-stage: #f4f1e8; --bl-line: rgba(26,28,44,0.08); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ft, :where(.light, [data-theme="light"]) .bl-ft:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #73eff7; --bl-hover: rgba(255,255,255,0.04); --bl-active: rgba(255,255,255,0.07); --bl-track: rgba(255,255,255,0.12); --bl-stage: #1a1c2c; --bl-line: rgba(255,255,255,0.08); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ft, .bl-ft:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #167f8f; --bl-hover: rgba(26,28,44,0.04); --bl-active: rgba(26,28,44,0.07); --bl-track: rgba(26,28,44,0.12); --bl-stage: #f4f1e8; --bl-line: rgba(26,28,44,0.08); } }
+/* theme tokens end */
 .bl-ft-wrap { container-type: inline-size; width: 100%; }
 .bl-ft { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--bl-gap); align-items: center; color: var(--bl-ink); font-family: var(--bl-font); }
 .bl-ft__list { display: flex; flex-direction: column; gap: 6px; }
@@ -65,14 +71,14 @@ export default function FeatureTabs({
   mediaAspect = '4 / 3',
   gap = 32,
   radius = 14,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#73eff7',
-  hoverColor = 'rgba(255,255,255,0.04)',
-  activeColor = 'rgba(255,255,255,0.07)',
-  trackColor = 'rgba(255,255,255,0.12)',
-  stageColor = '#1a1c2c',
-  lineColor = 'rgba(255,255,255,0.08)',
+  textColor,
+  mutedColor,
+  accentColor,
+  hoverColor,
+  activeColor,
+  trackColor,
+  stageColor,
+  lineColor,
   titleSize = 17,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',

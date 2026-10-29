@@ -507,6 +507,18 @@ h1 {
 }
 
 .lab-stage[data-theme='light'] {
+  /* Demo wrappers use these, falling back to the dark values elsewhere. */
+  --demo-bg: #ebe5d8;
+  --demo-chip: #e2dacb;
+  --demo-panel: #ddd4c0;
+  --demo-line: #cfc4ad;
+  --demo-ink: #1a1c2c;
+  --demo-muted: #566c86;
+  --demo-field: #fbf9f4;
+  --demo-gold: #a86a12;
+  --demo-accent: #167f8f;
+  --demo-hair: rgba(26,28,44,0.1);
+  --demo-scroll: linear-gradient(#ebe5d8, #e2dacb);
   background: #f4f1e8;
   color: #1a1c2c;
   color-scheme: light;

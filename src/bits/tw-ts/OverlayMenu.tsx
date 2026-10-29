@@ -14,6 +14,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-overlay-menu-tw';
 const CSS = `
+/* theme tokens */
+:is(.bl-omenu__toggle, .bl-omenu) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-chip: rgba(255,255,255,0.08); --bl-accent: #ffcd75; }
+:where(.light, [data-theme="light"]) :is(.bl-omenu__toggle, .bl-omenu), :is(.bl-omenu__toggle, .bl-omenu):where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-chip: rgba(26,28,44,0.08); --bl-accent: #a86a12; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) :is(.bl-omenu__toggle, .bl-omenu), :where(.light, [data-theme="light"]) :is(.bl-omenu__toggle, .bl-omenu):where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-chip: rgba(255,255,255,0.08); --bl-accent: #ffcd75; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) :is(.bl-omenu__toggle, .bl-omenu), :is(.bl-omenu__toggle, .bl-omenu):where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-chip: rgba(26,28,44,0.08); --bl-accent: #a86a12; } }
+/* theme tokens end */
 @keyframes bl-omenu-wipe { from { clip-path: inset(0 0 100% 0); } }
 @keyframes bl-omenu-drop { to { opacity: 1; transform: none; } }
 `;
@@ -77,12 +83,12 @@ export default function OverlayMenu({
   label = 'Menu',
   numbered = true,
   fontSize = 44,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  chipColor = 'rgba(255,255,255,0.08)',
-  accentColor = '#ffcd75',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  chipColor,
+  accentColor,
   fontFamily = 'inherit',
   className = '',
   style
@@ -164,13 +170,13 @@ export default function OverlayMenu({
 
   return (
     <>
-      <button ref={toggleRef} type="button" className={`group/tog relative z-1801 inline-grid size-[46px] cursor-pointer place-items-center rounded-[10px] border-0 bg-(--bl-chip) p-0 text-(--bl-ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--bl-accent) focus-visible:outline-solid ${className}`} aria-expanded={open} aria-controls={`${uid}-menu`} aria-label={open ? `Close ${label}` : `Open ${label}`} onClick={() => setOpen(!open)} style={{ ...vars, ...style }}>
+      <button ref={toggleRef} type="button" className={`bl-omenu__toggle group/tog relative z-1801 inline-grid size-[46px] cursor-pointer place-items-center rounded-[10px] border-0 bg-(--bl-chip) p-0 text-(--bl-ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--bl-accent) focus-visible:outline-solid ${className}`} aria-expanded={open} aria-controls={`${uid}-menu`} aria-label={open ? `Close ${label}` : `Open ${label}`} onClick={() => setOpen(!open)} style={{ ...vars, ...style }}>
         <Bars />
       </button>
       {mounted &&
         typeof document !== 'undefined' &&
         createPortal(
-          <div ref={panelRef} id={`${uid}-menu`} className="fixed inset-0 z-1800 grid animate-[bl-omenu-wipe_420ms_steps(8)_both] grid-rows-[1fr_auto] overflow-y-auto bg-(--bl-bg) px-[max(24px,6vw)] pt-[88px] pb-8 font-(family-name:--bl-font) text-(--bl-ink) [clip-path:inset(0_0_0_0)] data-[closing]:animate-[bl-omenu-wipe_300ms_steps(6)_reverse_both] motion-reduce:animate-none!" role="dialog" aria-modal="true" aria-label={label} data-closing={closing || undefined} style={{ ...vars, '--n': items.length } as CSSVars}>
+          <div ref={panelRef} id={`${uid}-menu`} className="bl-omenu fixed inset-0 z-1800 grid animate-[bl-omenu-wipe_420ms_steps(8)_both] grid-rows-[1fr_auto] overflow-y-auto bg-(--bl-bg) px-[max(24px,6vw)] pt-[88px] pb-8 font-(family-name:--bl-font) text-(--bl-ink) [clip-path:inset(0_0_0_0)] data-[closing]:animate-[bl-omenu-wipe_300ms_steps(6)_reverse_both] motion-reduce:animate-none!" role="dialog" aria-modal="true" aria-label={label} data-closing={closing || undefined} style={{ ...vars, '--n': items.length } as CSSVars}>
             <button type="button" className="group/tog absolute top-5 right-[max(20px,5vw)] z-1801 inline-grid size-[46px] cursor-pointer place-items-center rounded-[10px] border-0 bg-(--bl-chip) p-0 text-(--bl-ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--bl-accent) focus-visible:outline-solid" aria-expanded="true" aria-label={`Close ${label}`} onClick={() => {
               setOpen(false);
               toggleRef.current?.focus();

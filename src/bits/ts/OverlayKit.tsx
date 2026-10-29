@@ -160,6 +160,17 @@ const CSS = `
 @media (prefers-reduced-motion: reduce) {
   .bl-ok-dialog[data-state], .bl-ok-sheet[data-state], .bl-ok-float[data-state] { animation-name: bl-ok-fade; }
 }
+/* light overrides */
+:where(.light, [data-theme="light"]) .bl-ok-layer, .bl-ok-layer:where(.light, [data-theme="light"]) { --ok-bg: var(--bl-ok-bg, #f4f1e8); --ok-ink: var(--bl-ok-ink, #1a1c2c); --ok-muted: var(--bl-ok-muted, #566c86); --ok-line: var(--bl-ok-line, rgba(26,28,44,0.14)); --ok-accent: var(--bl-ok-accent, #167f8f); --ok-hover: var(--bl-ok-hover, rgba(26,28,44,0.07)); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ok-layer, :where(.light, [data-theme="light"]) .bl-ok-layer:where(.dark, [data-theme="dark"]) { --ok-bg: var(--bl-ok-bg, #1a1c2c); --ok-ink: var(--bl-ok-ink, #f4f4f4); --ok-muted: var(--bl-ok-muted, #94b0c2); --ok-line: var(--bl-ok-line, rgba(255,255,255,0.12)); --ok-accent: var(--bl-ok-accent, #73eff7); --ok-hover: var(--bl-ok-hover, rgba(255,255,255,0.07)); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ok-layer, .bl-ok-layer:where([data-theme="system"]) { --ok-bg: var(--bl-ok-bg, #f4f1e8); --ok-ink: var(--bl-ok-ink, #1a1c2c); --ok-muted: var(--bl-ok-muted, #566c86); --ok-line: var(--bl-ok-line, rgba(26,28,44,0.14)); --ok-accent: var(--bl-ok-accent, #167f8f); --ok-hover: var(--bl-ok-hover, rgba(26,28,44,0.07)); } }
+:where(.light, [data-theme="light"]) .bl-ok-tooltip, .bl-ok-tooltip:where(.light, [data-theme="light"]) { background: var(--bl-ok-tooltip-bg, #1a1c2c); color: var(--bl-ok-tooltip-ink, #f4f4f4); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ok-tooltip, :where(.light, [data-theme="light"]) .bl-ok-tooltip:where(.dark, [data-theme="dark"]) { background: var(--bl-ok-tooltip-bg, #f4f4f4); color: var(--bl-ok-tooltip-ink, #1a1c2c); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ok-tooltip, .bl-ok-tooltip:where([data-theme="system"]) { background: var(--bl-ok-tooltip-bg, #1a1c2c); color: var(--bl-ok-tooltip-ink, #f4f4f4); } }
+:where(.light, [data-theme="light"]) .bl-ok-item[data-danger], .bl-ok-item:where(.light, [data-theme="light"])[data-danger] { color: var(--bl-ok-danger, #c4502a); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ok-item[data-danger], :where(.light, [data-theme="light"]) .bl-ok-item:where(.dark, [data-theme="dark"])[data-danger] { color: var(--bl-ok-danger, #ef7d57); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ok-item[data-danger], .bl-ok-item:where([data-theme="system"])[data-danger] { color: var(--bl-ok-danger, #c4502a); } }
+/* light overrides end */
 `;
 
 function useStyles() {

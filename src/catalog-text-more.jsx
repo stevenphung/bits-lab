@@ -16,15 +16,15 @@ const text = (name, label) => ({ name, type: 'text', label });
 const PIXEL_FONT = '"Pixelify Sans", system-ui, sans-serif';
 const TITLE_FONT = '"Press Start 2P", monospace';
 const stack = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 22, justifyItems: 'center', width: '100%', padding: '28px 16px', boxSizing: 'border-box' };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
 
 // ---------- LetterSwap ----------
 
 function SwapDemo({ text: label, swapText, ...props }) {
   return (
     <div style={stack}>
-      <LetterSwap {...props} text={label} swapText={swapText || undefined} style={{ font: `clamp(20px, 5vw, 40px) ${TITLE_FONT}`, color: '#f4f4f4' }} />
-      <nav aria-label="Demo menu" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 22, font: `20px ${PIXEL_FONT}`, color: '#94b0c2' }}>
+      <LetterSwap {...props} text={label} swapText={swapText || undefined} style={{ font: `clamp(20px, 5vw, 40px) ${TITLE_FONT}`, color: 'var(--demo-ink, #f4f4f4)' }} />
+      <nav aria-label="Demo menu" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 22, font: `20px ${PIXEL_FONT}`, color: 'var(--demo-muted, #94b0c2)' }}>
         {['Play', 'Inventory', 'Map', 'Settings'].map(item => (
           <LetterSwap key={item} {...props} text={item} href={`#${item.toLowerCase()}`} onClick={event => event.preventDefault()} />
         ))}
@@ -42,8 +42,8 @@ function CutDemo(props) {
   const [run, setRun] = useState(0);
   return (
     <div style={{ ...stack, maxWidth: 640, margin: '0 auto' }}>
-      <CutReveal {...props} as="h3" text="The first torch" replayKey={`h-${run}`} style={{ margin: 0, font: `clamp(16px, 3.4vw, 26px)/1.5 ${TITLE_FONT}`, color: '#ffcd75', textAlign: 'center' }} />
-      <CutReveal {...props} text={STORY} replayKey={`p-${run}`} style={{ margin: 0, font: `clamp(16px, 2.6vw, 20px)/1.7 ${PIXEL_FONT}`, color: '#f4f4f4' }} />
+      <CutReveal {...props} as="h3" text="The first torch" replayKey={`h-${run}`} style={{ margin: 0, font: `clamp(16px, 3.4vw, 26px)/1.5 ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)', textAlign: 'center' }} />
+      <CutReveal {...props} text={STORY} replayKey={`p-${run}`} style={{ margin: 0, font: `clamp(16px, 2.6vw, 20px)/1.7 ${PIXEL_FONT}`, color: 'var(--demo-ink, #f4f4f4)' }} />
       <PixelButton size="sm" variant="secondary" onPress={() => setRun(n => n + 1)}>
         Replay
       </PixelButton>
@@ -57,14 +57,14 @@ function SpoilerDemo(props) {
   const [count, setCount] = useState(0);
   return (
     <div style={{ ...stack, maxWidth: 560, margin: '0 auto' }}>
-      <p style={{ margin: 0, color: '#f4f4f4', font: `18px/1.8 ${PIXEL_FONT}` }}>
+      <p style={{ margin: 0, color: 'var(--demo-ink, #f4f4f4)', font: `18px/1.8 ${PIXEL_FONT}` }}>
         The final boss is not a dragon at all. It turns out the boss is{' '}
         <Spoiler {...props} onReveal={shown => shown && setCount(c => c + 1)}>
           your own reflection in the obsidian mirror, wearing the crown you dropped in chapter two
         </Spoiler>
         , which explains why it always knew your next move.
       </p>
-      <p style={{ margin: 0, color: '#f4f4f4', font: `18px/1.8 ${PIXEL_FONT}` }}>
+      <p style={{ margin: 0, color: 'var(--demo-ink, #f4f4f4)', font: `18px/1.8 ${PIXEL_FONT}` }}>
         Secret password for the vault: <Spoiler {...props} onReveal={shown => shown && setCount(c => c + 1)}>pickaxe-4-ever</Spoiler>
       </p>
       <p style={hint}>{count ? `Spoilers revealed: ${count}` : 'Click a spoiler, or Tab to it and press Enter.'}</p>

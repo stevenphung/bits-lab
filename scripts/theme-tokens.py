@@ -16,17 +16,22 @@ import json, os, re, sys
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src', 'bits')
 MARK = '/* theme tokens */'
 
-# Objects that stay dark in both themes (screens, terminals, hardware, photo viewers), and three
-# overlays that set their variables through a shared object (a follow-up).
+# Objects that stay dark in both themes (screens, terminals, hardware, photo viewers).
 EXCLUDE = {
     'BootSequence', 'CRTPower', 'CodeShowcase', 'TerminalDemo', 'GameOver', 'Screensaver', 'DynamicIsland',
     'StoryViewer', 'Minimap', 'CipherCard', 'PressStart', 'VideoHero', 'ScreenScroller', 'Polaroids',
     'StickerBoard', 'DraftScroll', 'CompareSlider', 'ScrollTilt', 'LightboxGallery', 'ArcadeButtons',
     'JellyBlob', 'VoxelTiles', 'ParallaxCollage', 'DirectionHover',
-    'CommandPalette', 'MorphDialog',
-    # Text drawn on a canvas, or text that must stay light over media: a follow-up.
-    'WebcamPixels', 'ScrollZoom', 'VanishInput',
+    # A camera effect, and text that must stay light over a zooming image.
+    'WebcamPixels', 'ScrollZoom',
 }
+
+# Components that set their colour variables on an inner element: the class of that element.
+HOSTS = {'BentoGrid': 'bl-bento', 'FeatureTabs': None, 'SpringDrawer': None, 'StickyReveal': None, 'CommandPalette': 'bl-cmdk-theme'}
+
+# Components that also render part of themselves in a portal: the class of that part, which needs
+# the tokens too (it does not inherit them from the root). The Tailwind file needs the class by hand.
+PORTALS = {'OverlayMenu': 'bl-omenu', 'LinkPeek': 'bl-peek', 'ContextOrb': 'bl-corb'}
 
 PAPER, SUNKEN, CHIP, HOVER, LINE = '#f4f1e8', '#e2dacb', '#ebe5d8', '#e0d8c6', '#cfc4ad'
 TEXT, MUTED, DIM = '#1a1c2c', '#566c86', '#8a96a3'
@@ -137,6 +142,23 @@ def style_objects(src):
     return out
 
 
+def tag_start(src, k):
+    # The last element opening before k (Tailwind classes can contain '<' themselves).
+    return [mo.start() for mo in re.finditer(r'(?<![\w\])])<[A-Za-z]', src[:k])][-1]
+
+
+def host_objects(src, name):
+    """Style objects on the element whose class is HOSTS[name] (static className), with that class."""
+    host = HOSTS.get(name)
+    out = []
+    for k, m, t in style_objects(src):
+        tag = src[tag_start(src, k):k]
+        cm = re.search(r'className="(bl-[\w-]+)[^"]*"', tag) or re.search(r"className=\{`(bl-[\w-]+)", tag)
+        if cm and (host is None or cm.group(1) == host) and re.search(r"'--bl-[\w-]+':\s*\w*[cC]olor\b", t):
+            out.append((k, m, t, cm.group(1)))
+    return out
+
+
 def plan(name):
     """What to theme in a component: [(prop, var, dark, light)], root class and style id."""
     src = open(f'{ROOT}/{name}.jsx').read()
@@ -147,6 +169,9 @@ def plan(name):
     params = src[a:b]
     colors = dict(re.findall(r"\b(\w*[cC]olor)\s*=\s*'(#[0-9a-fA-F]{3,8}|rgba?\([^']*\))'", params))
     roots = [t for _, _, t in style_objects(src) if '...style' in t]
+    hosts = host_objects(src, name) if name in HOSTS else []
+    if hosts:
+        roots = [t for _, _, t, _ in hosts]
     # Some components build their variables in a `vars` object first (style={vars}).
     vars_obj = re.search(r'\n  const vars = (\{.*?\n  \});', src, re.S)
     if vars_obj:
@@ -167,19 +192,22 @@ def plan(name):
         if uses != 1 + mapped:
             continue  # read by JavaScript too (canvas, SVG): leave it alone
         rows.append((prop, root_map[prop], dark, light(prop, dark)))
+    if hosts:
+        return rows, hosts[0][3], re.search(r"const STYLE_ID = '([\w-]+)';", src).group(1)
     root = re.search(r"className=\{`(bl-[\w-]+) \$\{className\}`\}", src) or re.search(r'className="(bl-[\w-]+)" style=\{vars\}', src)
     sid = re.search(r"const STYLE_ID = '([\w-]+)';", src)
     return rows, root.group(1) if root else None, sid.group(1) if sid else None
 
 
-def token_css(cls, rows):
+def token_css(sel, rows):
+    """sel is the selector of the element(s) that get the tokens, e.g. '.bl-card'."""
     decl = lambda pairs: ' '.join(f'{v}: {c};' for v, c in pairs)
     dark = [(v, d) for _, v, d, _ in rows]
     lite = [(v, l) for _, v, d, l in rows if l != d]
-    on = f':where(.light, [data-theme="light"]) .{cls}, .{cls}:where(.light, [data-theme="light"])'
-    back = f':where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .{cls}, :where(.light, [data-theme="light"]) .{cls}:where(.dark, [data-theme="dark"])'
-    system = f':where([data-theme="system"]) .{cls}, .{cls}:where([data-theme="system"])'
-    css = f'{MARK}\n.{cls} {{ {decl(dark)} }}\n'
+    on = f':where(.light, [data-theme="light"]) {sel}, {sel}:where(.light, [data-theme="light"])'
+    back = f':where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) {sel}, :where(.light, [data-theme="light"]) {sel}:where(.dark, [data-theme="dark"])'
+    system = f':where([data-theme="system"]) {sel}, {sel}:where([data-theme="system"])'
+    css = f'{MARK}\n{sel} {{ {decl(dark)} }}\n'
     if lite:
         css += f'{on} {{ {decl(lite)} }}\n{back} {{ {decl(dark)} }}\n@media (prefers-color-scheme: light) {{ {system} {{ {decl(lite)} }} }}\n'
     return css + f'{MARK.replace("tokens", "tokens end")}\n'
@@ -195,9 +223,14 @@ def edit_logic(src, name, rows):
     src = src[:a] + params + src[b:]
     # Style objects other than the root: fall back to the root's token.
     objs = style_objects(src)
+    host_vars = rows[0][1]
     for k, m, t in reversed(objs):
-        if '...style' in t:
+        if '...style' in t and name not in HOSTS:
             continue
+        if name in HOSTS and re.search(r"'" + host_vars + r"':\s*" + rows[0][0] + r"\b", t):
+            continue
+        if name in PORTALS and PORTALS[name] in src[tag_start(src, k):k]:
+            continue  # the portal part carries the tokens itself
         new = t
         for prop, var, _, _ in rows:
             new = re.sub(r"('--[\w-]+':\s*)" + prop + r"\b(?![.(\[?])", lambda mo: f"{mo.group(1)}{prop} ?? 'var({var})'", new)
@@ -261,14 +294,26 @@ def convert(name):
     rows, cls, sid = plan(name)
     if not rows or not cls:
         return None
-    css = token_css(cls, rows)
+    css = token_css(f':is(.{cls}, .{PORTALS[name]})' if name in PORTALS else f'.{cls}', rows)
     for path, tw in ((f'{ROOT}/{name}.jsx', False), (f'{ROOT}/ts/{name}.tsx', False), (f'{ROOT}/tw/{name}.jsx', True)):
         src = open(path).read()
         if re.search(r'\b' + rows[0][0] + r" = '", src) is None and MARK in src:
             continue  # already converted
         src = edit_logic(src, name, rows)
         src = add_css(src, css, sid)
-        if tw:
+        if tw and name in HOSTS:
+            src = add_use_styles(src, name)
+            # Hook class on the element that holds the variables.
+            k = next(k for k, m, t in style_objects(src) if re.search(r"'" + rows[0][1] + r"':\s*" + rows[0][0] + r"\b", t))
+            lt = tag_start(src, k)
+            tag = src[lt:k]
+            if cls not in tag:
+                tag2, n = re.subn(r'className="', f'className="{cls} ', tag, count=1)
+                if not n:
+                    tag2, n = re.subn(r'className=\{`', f'className={{`{cls} ', tag, count=1)
+                assert n, (name, 'tw host')
+                src = src[:lt] + tag2 + src[k:]
+        elif tw:
             src = add_use_styles(src, name)
             # Hook class for the tokens on the Tailwind root.
             src, n = re.subn(r"className=\{`(?!" + cls + r" )([^`]*?)\$\{className\}`\}", lambda mo: f"className={{`{cls} {mo.group(1)}${{className}}`}}", src)

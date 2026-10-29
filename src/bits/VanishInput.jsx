@@ -6,6 +6,12 @@ import { useEffect, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-vanish';
 const CSS = `
+/* theme tokens */
+.bl-vanish { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.12); --bl-accent: #73eff7; --bl-accent-ink: #0b0b14; }
+:where(.light, [data-theme="light"]) .bl-vanish, .bl-vanish:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.12); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-vanish, :where(.light, [data-theme="light"]) .bl-vanish:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.12); --bl-accent: #73eff7; --bl-accent-ink: #0b0b14; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-vanish, .bl-vanish:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.12); --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-vanish { position: relative; display: flex; align-items: center; width: 100%; max-width: var(--bl-w); height: var(--bl-h); border-radius: var(--bl-radius); background: var(--bl-bg); box-shadow: inset 0 0 0 1px var(--bl-line), 0 10px 30px -18px rgba(0,0,0,0.6); font-family: var(--bl-font); transition: box-shadow 160ms; }
 .bl-vanish:focus-within { box-shadow: inset 0 0 0 1.5px var(--bl-accent), 0 0 0 4px var(--bl-ring); }
 .bl-vanish__field { position: relative; flex: 1; min-width: 0; height: 100%; overflow: hidden; }
@@ -46,12 +52,12 @@ export default function VanishInput({
   radius = 26,
   fontSize = 16,
   padding = 20,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = 'rgba(255,255,255,0.12)',
-  accentColor = '#73eff7',
-  accentTextColor = '#0b0b14',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
+  accentTextColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = '',
   style
@@ -86,7 +92,7 @@ export default function VanishInput({
     const computed = getComputedStyle(input);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.font = `${computed.fontWeight} ${computed.fontSize} ${computed.fontFamily}`;
-    ctx.fillStyle = textColor;
+    ctx.fillStyle = computed.color;
     ctx.textBaseline = 'middle';
     ctx.fillText(text, parseFloat(computed.paddingLeft) - input.scrollLeft, h / 2);
 
@@ -168,7 +174,7 @@ export default function VanishInput({
         '--bl-line': lineColor,
         '--bl-accent': accentColor,
         '--bl-accent-ink': accentTextColor,
-        '--bl-ring': `color-mix(in srgb, ${accentColor} 22%, transparent)`,
+        '--bl-ring': 'color-mix(in srgb, var(--bl-accent) 22%, transparent)',
         '--bl-font': fontFamily,
         ...style
       }}

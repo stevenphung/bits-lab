@@ -6,6 +6,12 @@ import { useEffect, useInsertionEffect, useRef, useState } from 'react';
 
 const STYLE_ID = 'bl-sticky-reveal';
 const CSS = `
+/* theme tokens */
+.bl-sreveal { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #ffcd75; --bl-stage-bg: #1a1c2c; --bl-line: rgba(255,255,255,0.08); }
+:where(.light, [data-theme="light"]) .bl-sreveal, .bl-sreveal:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #a86a12; --bl-stage-bg: #f4f1e8; --bl-line: rgba(26,28,44,0.08); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-sreveal, :where(.light, [data-theme="light"]) .bl-sreveal:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #ffcd75; --bl-stage-bg: #1a1c2c; --bl-line: rgba(255,255,255,0.08); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-sreveal, .bl-sreveal:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #a86a12; --bl-stage-bg: #f4f1e8; --bl-line: rgba(26,28,44,0.08); } }
+/* theme tokens end */
 .bl-sreveal-wrap { container-type: inline-size; width: 100%; }
 .bl-sreveal { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: var(--bl-gap); color: var(--bl-ink); font-family: var(--bl-font); }
 .bl-sreveal[data-side="left"] .bl-sreveal__media { order: -1; }
@@ -70,11 +76,11 @@ export default function StickyReveal({
   showDots = true,
   gap = 48,
   radius = 16,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#ffcd75',
-  stageColor = '#1a1c2c',
-  lineColor = 'rgba(255,255,255,0.08)',
+  textColor,
+  mutedColor,
+  accentColor,
+  stageColor,
+  lineColor,
   titleSize = 26,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   titleFontFamily,

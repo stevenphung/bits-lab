@@ -9,6 +9,12 @@ import { createPortal } from 'react-dom';
 
 const STYLE_ID = 'bl-link-peek';
 const CSS = `
+/* theme tokens */
+:is(.bl-peek-link, .bl-peek) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) :is(.bl-peek-link, .bl-peek), :is(.bl-peek-link, .bl-peek):where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) :is(.bl-peek-link, .bl-peek), :where(.light, [data-theme="light"]) :is(.bl-peek-link, .bl-peek):where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) :is(.bl-peek-link, .bl-peek), :is(.bl-peek-link, .bl-peek):where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-peek-link { color: var(--bl-link, inherit); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .bl-peek-link:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 2px; border-radius: 2px; }
 .bl-peek { position: fixed; top: 0; left: 0; z-index: 1700; width: var(--bl-w); pointer-events: none; font-family: var(--bl-font); }
@@ -58,11 +64,11 @@ export default function LinkPeek({
   tilt = 4,
   target,
   rel,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
   linkColor,
   radius = 12,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',

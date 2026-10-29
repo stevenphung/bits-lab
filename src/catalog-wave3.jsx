@@ -34,7 +34,7 @@ const select = (name, label, options) => ({ name, type: 'select', label, options
 const PIXEL_FONT = '"Pixelify Sans", system-ui, sans-serif';
 const TITLE_FONT = '"Press Start 2P", ui-monospace, monospace';
 const stack = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 22, justifyItems: 'center', width: '100%', padding: '28px 16px', boxSizing: 'border-box' };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
 const sprite = (name, size = 32) => <img src={`/pixel/sprite-${name}.png`} alt="" width={size} height={size} style={{ imageRendering: 'pixelated', display: 'block' }} />;
 
 // ---------- WobbleCard ----------
@@ -47,7 +47,7 @@ function WobbleDemo(props) {
           <PixelAvatar seed="slime" size={56} decorative />
           <div>
             <div style={{ font: `12px ${TITLE_FONT}`, color: '#a7f070' }}>SLIME</div>
-            <div style={{ color: '#94b0c2', fontSize: 14, marginTop: 6 }}>Common · Lv 3</div>
+            <div style={{ color: 'var(--demo-muted, #94b0c2)', fontSize: 14, marginTop: 6 }}>Common · Lv 3</div>
           </div>
         </div>
         <p style={{ margin: 0, lineHeight: 1.5 }}>Bounces when poked. Mostly harmless, slightly sticky, extremely jiggly.</p>
@@ -64,9 +64,9 @@ const LOOT = ['gem', 'coin', 'heart', 'star', 'potion', 'chest', 'sword', 'picka
 function AttractDemo(props) {
   return (
     <div style={{ ...stack, maxWidth: 680, margin: '0 auto' }}>
-      <CursorAttractor {...props} style={{ width: '100%', boxSizing: 'border-box', borderRadius: 16, background: '#1a1c2c', boxShadow: 'inset 0 0 0 2px #333c57' }}>
+      <CursorAttractor {...props} style={{ width: '100%', boxSizing: 'border-box', borderRadius: 16, background: 'var(--demo-bg, #1a1c2c)', boxShadow: 'inset 0 0 0 2px var(--demo-line, #333c57)' }}>
         {LOOT.map(name => (
-          <span key={name} style={{ display: 'grid', placeItems: 'center', width: 64, height: 64, borderRadius: 12, background: '#262b44' }}>
+          <span key={name} style={{ display: 'grid', placeItems: 'center', width: 64, height: 64, borderRadius: 12, background: 'var(--demo-chip, #262b44)' }}>
             {sprite(name, 36)}
           </span>
         ))}
@@ -117,8 +117,8 @@ function SaverDemo({ idleMode, ...props }) {
         }
         onCornerHit={setLast}
       >
-        <div style={{ display: 'grid', height: '100%', placeItems: 'center', alignContent: 'center', gap: 10, padding: 24, boxSizing: 'border-box', color: '#f4f4f4', font: `16px/1.5 ${PIXEL_FONT}`, textAlign: 'center' }}>
-          <span style={{ font: `12px ${TITLE_FONT}`, color: '#ffcd75' }}>YOUR APP</span>
+        <div style={{ display: 'grid', height: '100%', placeItems: 'center', alignContent: 'center', gap: 10, padding: 24, boxSizing: 'border-box', color: 'var(--demo-ink, #f4f4f4)', font: `16px/1.5 ${PIXEL_FONT}`, textAlign: 'center' }}>
+          <span style={{ font: `12px ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>YOUR APP</span>
           Stop moving for three seconds and the screensaver fades in. Any input brings this back.
         </div>
       </Screensaver>
@@ -163,10 +163,10 @@ function CrumbsDemo({ trailWidth, ...props }) {
   const items = TRAIL.slice(0, depth);
   return (
     <div style={{ ...stack, maxWidth: 760, margin: '0 auto' }}>
-      <div style={{ width: `${trailWidth}%`, minWidth: 0, padding: '10px 12px', borderRadius: 12, background: '#1a1c2c', boxShadow: 'inset 0 0 0 2px #333c57', boxSizing: 'border-box' }}>
+      <div style={{ width: `${trailWidth}%`, minWidth: 0, padding: '10px 12px', borderRadius: 12, background: 'var(--demo-bg, #1a1c2c)', boxShadow: 'inset 0 0 0 2px var(--demo-line, #333c57)', boxSizing: 'border-box' }}>
         <BreadcrumbTrail {...props} items={items} fontFamily={PIXEL_FONT} onNavigate={(item, i, event) => { event.preventDefault(); setDepth(i + 1); }} />
       </div>
-      <button type="button" onClick={() => setDepth(TRAIL.length)} style={{ padding: '7px 14px', border: 0, borderRadius: 8, background: '#333c57', color: '#f4f4f4', font: `14px ${PIXEL_FONT}`, cursor: 'pointer' }}>
+      <button type="button" onClick={() => setDepth(TRAIL.length)} style={{ padding: '7px 14px', border: 0, borderRadius: 8, background: 'var(--demo-line, #333c57)', color: 'var(--demo-ink, #f4f4f4)', font: `14px ${PIXEL_FONT}`, cursor: 'pointer' }}>
         Go deep again
       </button>
       <p style={hint}>Narrow the trail width to fold the middle crumbs into “…”. Clicking a crumb navigates up to it.</p>
@@ -181,7 +181,7 @@ function InlineDemo({ slowSave, ...props }) {
   const wait = ms => new Promise(r => setTimeout(r, ms));
   return (
     <div style={{ ...stack, maxWidth: 560, margin: '0 auto', justifyItems: 'start' }}>
-      <div style={{ display: 'grid', gap: 18, width: '100%', padding: 20, borderRadius: 14, background: '#1a1c2c', boxShadow: 'inset 0 0 0 2px #333c57', boxSizing: 'border-box', color: '#94b0c2', font: `14px ${PIXEL_FONT}` }}>
+      <div style={{ display: 'grid', gap: 18, width: '100%', padding: 20, borderRadius: 14, background: 'var(--demo-bg, #1a1c2c)', boxShadow: 'inset 0 0 0 2px var(--demo-line, #333c57)', boxSizing: 'border-box', color: 'var(--demo-muted, #94b0c2)', font: `14px ${PIXEL_FONT}` }}>
         <label style={{ display: 'grid', gap: 4 }}>
           World name
           <InlineEdit
@@ -246,7 +246,7 @@ function ScrollTypeDemo({ pixelFont, ...props }) {
   const font = pixelFont ? PIXEL_FONT : FLEX_FONT;
   return (
     <div style={{ ...stack, maxWidth: 820, margin: '0 auto' }}>
-      <div style={{ width: '100%', height: 420, overflowY: 'auto', borderRadius: 16, background: '#1a1c2c', boxShadow: 'inset 0 0 0 2px #333c57' }}>
+      <div style={{ width: '100%', height: 420, overflowY: 'auto', borderRadius: 16, background: 'var(--demo-bg, #1a1c2c)', boxShadow: 'inset 0 0 0 2px var(--demo-line, #333c57)' }}>
         <div style={{ display: 'grid', gap: 120, padding: '160px 24px' }}>
           {filler('Scroll this box. Flick it fast, then stop.')}
           <ScrollTypography {...props} as="h3" text="Speed changes everything" fontFamily={font} minWeight={pixelFont ? 400 : props.minWeight} maxWeight={pixelFont ? 700 : props.maxWeight} style={{ textAlign: 'center' }} />

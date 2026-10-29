@@ -15,6 +15,14 @@ const CSS = `
 @keyframes bl-tk-pop-off { 40% { transform: scale(0.88); } }
 @keyframes bl-tk-ring { 12% { transform: rotate(18deg); } 25% { transform: rotate(-16deg); } 38% { transform: rotate(12deg); } 50% { transform: rotate(-8deg); } 62% { transform: rotate(4deg); } 75% { transform: none; } }
 @keyframes bl-tk-waves { 15%, 60% { opacity: 1; } }
+/* light overrides */
+:where(.light, [data-theme="light"]) .bl-tk, .bl-tk:where(.light, [data-theme="light"]) { --tk-accent: var(--bl-tk-accent, #167f8f); --tk-ink: var(--bl-tk-ink, #1a1c2c); --tk-muted: var(--bl-tk-muted, #566c86); --tk-track: var(--bl-tk-track, #cfc4ad); --tk-on-ink: var(--bl-tk-on-ink, #f4f1e8); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tk, :where(.light, [data-theme="light"]) .bl-tk:where(.dark, [data-theme="dark"]) { --tk-accent: var(--bl-tk-accent, #73eff7); --tk-ink: var(--bl-tk-ink, #f4f4f4); --tk-muted: var(--bl-tk-muted, #94b0c2); --tk-track: var(--bl-tk-track, #333c57); --tk-on-ink: var(--bl-tk-on-ink, #1a1c2c); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tk, .bl-tk:where([data-theme="system"]) { --tk-accent: var(--bl-tk-accent, #167f8f); --tk-ink: var(--bl-tk-ink, #1a1c2c); --tk-muted: var(--bl-tk-muted, #566c86); --tk-track: var(--bl-tk-track, #cfc4ad); --tk-on-ink: var(--bl-tk-on-ink, #f4f1e8); } }
+:where(.light, [data-theme="light"]) .bl-tk-group legend, .bl-tk-group:where(.light, [data-theme="light"]) legend { color: var(--bl-tk-muted, #566c86); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tk-group legend, :where(.light, [data-theme="light"]) .bl-tk-group:where(.dark, [data-theme="dark"]) legend { color: var(--bl-tk-muted, #94b0c2); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tk-group legend, .bl-tk-group:where([data-theme="system"]) legend { color: var(--bl-tk-muted, #566c86); } }
+/* light overrides end */
 `;
 
 function useStyles() {
@@ -57,7 +65,7 @@ export function Switch({ checked, defaultChecked, onCheckedChange, label, descri
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const [on, setOn] = useChecked(checked, defaultChecked, onCheckedChange);
   return (
-    <label className={`group/tk relative inline-flex cursor-pointer items-start gap-2.5 [font-family:var(--bl-tk-font,ui-sans-serif,system-ui,sans-serif)] text-[14px] leading-[1.4] text-(--tk-ink) [-webkit-tap-highlight-color:transparent] [--tk-accent:var(--bl-tk-accent,#73eff7)] [--tk-ink:var(--bl-tk-ink,#f4f4f4)] [--tk-muted:var(--bl-tk-muted,#94b0c2)] [--tk-track:var(--bl-tk-track,#333c57)] [--tk-on-ink:var(--bl-tk-on-ink,#1a1c2c)] [--tk-size:22px] data-[size=sm]:text-[13px] data-[size=sm]:[--tk-size:18px] data-[size=lg]:text-[15px] data-[size=lg]:[--tk-size:26px] data-[disabled]:cursor-not-allowed data-[disabled]:opacity-45 ${className}`} data-size={size} data-disabled={disabled || undefined} style={{ ...accentVars(color), ...style }}>
+    <label className={`bl-tk group/tk relative inline-flex cursor-pointer items-start gap-2.5 [font-family:var(--bl-tk-font,ui-sans-serif,system-ui,sans-serif)] text-[14px] leading-[1.4] text-(--tk-ink) [-webkit-tap-highlight-color:transparent] [--tk-accent:var(--bl-tk-accent,#73eff7)] [--tk-ink:var(--bl-tk-ink,#f4f4f4)] [--tk-muted:var(--bl-tk-muted,#94b0c2)] [--tk-track:var(--bl-tk-track,#333c57)] [--tk-on-ink:var(--bl-tk-on-ink,#1a1c2c)] [--tk-size:22px] data-[size=sm]:text-[13px] data-[size=sm]:[--tk-size:18px] data-[size=lg]:text-[15px] data-[size=lg]:[--tk-size:26px] data-[disabled]:cursor-not-allowed data-[disabled]:opacity-45 ${className}`} data-size={size} data-disabled={disabled || undefined} style={{ ...accentVars(color), ...style }}>
       <input
         {...rest}
         type="checkbox"
@@ -88,7 +96,7 @@ export function Checkbox({ checked, defaultChecked, onCheckedChange, indetermina
     if (ref.current) ref.current.indeterminate = indeterminate;
   }, [indeterminate]);
   return (
-    <label className={`group/tk relative inline-flex cursor-pointer items-start gap-2.5 [font-family:var(--bl-tk-font,ui-sans-serif,system-ui,sans-serif)] text-[14px] leading-[1.4] text-(--tk-ink) [-webkit-tap-highlight-color:transparent] [--tk-accent:var(--bl-tk-accent,#73eff7)] [--tk-ink:var(--bl-tk-ink,#f4f4f4)] [--tk-muted:var(--bl-tk-muted,#94b0c2)] [--tk-track:var(--bl-tk-track,#333c57)] [--tk-on-ink:var(--bl-tk-on-ink,#1a1c2c)] [--tk-size:22px] data-[size=sm]:text-[13px] data-[size=sm]:[--tk-size:18px] data-[size=lg]:text-[15px] data-[size=lg]:[--tk-size:26px] data-[disabled]:cursor-not-allowed data-[disabled]:opacity-45 ${className}`} data-size={size} data-disabled={disabled || undefined} style={{ ...accentVars(color), ...style }}>
+    <label className={`bl-tk group/tk relative inline-flex cursor-pointer items-start gap-2.5 [font-family:var(--bl-tk-font,ui-sans-serif,system-ui,sans-serif)] text-[14px] leading-[1.4] text-(--tk-ink) [-webkit-tap-highlight-color:transparent] [--tk-accent:var(--bl-tk-accent,#73eff7)] [--tk-ink:var(--bl-tk-ink,#f4f4f4)] [--tk-muted:var(--bl-tk-muted,#94b0c2)] [--tk-track:var(--bl-tk-track,#333c57)] [--tk-on-ink:var(--bl-tk-on-ink,#1a1c2c)] [--tk-size:22px] data-[size=sm]:text-[13px] data-[size=sm]:[--tk-size:18px] data-[size=lg]:text-[15px] data-[size=lg]:[--tk-size:26px] data-[disabled]:cursor-not-allowed data-[disabled]:opacity-45 ${className}`} data-size={size} data-disabled={disabled || undefined} style={{ ...accentVars(color), ...style }}>
       <input
         {...rest}
         ref={ref}
@@ -116,7 +124,7 @@ export function Radio({ checked, onChange, label, description, disabled = false,
   useStyles();
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   return (
-    <label className={`group/tk relative inline-flex cursor-pointer items-start gap-2.5 [font-family:var(--bl-tk-font,ui-sans-serif,system-ui,sans-serif)] text-[14px] leading-[1.4] text-(--tk-ink) [-webkit-tap-highlight-color:transparent] [--tk-accent:var(--bl-tk-accent,#73eff7)] [--tk-ink:var(--bl-tk-ink,#f4f4f4)] [--tk-muted:var(--bl-tk-muted,#94b0c2)] [--tk-track:var(--bl-tk-track,#333c57)] [--tk-on-ink:var(--bl-tk-on-ink,#1a1c2c)] [--tk-size:22px] data-[size=sm]:text-[13px] data-[size=sm]:[--tk-size:18px] data-[size=lg]:text-[15px] data-[size=lg]:[--tk-size:26px] data-[disabled]:cursor-not-allowed data-[disabled]:opacity-45 ${className}`} data-size={size} data-disabled={disabled || undefined} style={{ ...accentVars(color), ...style }}>
+    <label className={`bl-tk group/tk relative inline-flex cursor-pointer items-start gap-2.5 [font-family:var(--bl-tk-font,ui-sans-serif,system-ui,sans-serif)] text-[14px] leading-[1.4] text-(--tk-ink) [-webkit-tap-highlight-color:transparent] [--tk-accent:var(--bl-tk-accent,#73eff7)] [--tk-ink:var(--bl-tk-ink,#f4f4f4)] [--tk-muted:var(--bl-tk-muted,#94b0c2)] [--tk-track:var(--bl-tk-track,#333c57)] [--tk-on-ink:var(--bl-tk-on-ink,#1a1c2c)] [--tk-size:22px] data-[size=sm]:text-[13px] data-[size=sm]:[--tk-size:18px] data-[size=lg]:text-[15px] data-[size=lg]:[--tk-size:26px] data-[disabled]:cursor-not-allowed data-[disabled]:opacity-45 ${className}`} data-size={size} data-disabled={disabled || undefined} style={{ ...accentVars(color), ...style }}>
       <input
         {...rest}
         type="radio"
@@ -142,7 +150,7 @@ export function RadioGroup({ options = [], value, defaultValue, onValueChange, l
   const [inner, setInner] = useState(defaultValue ?? null);
   const selected = value !== undefined ? value : inner;
   return (
-    <fieldset className={`group/tkg m-0 border-0 p-0 [font-family:var(--bl-tk-font,ui-sans-serif,system-ui,sans-serif)] [&_legend]:mb-2.5 [&_legend]:p-0 [&_legend]:text-[12px] [&_legend]:font-bold [&_legend]:tracking-[0.05em] [&_legend]:text-[var(--bl-tk-muted,#94b0c2)] [&_legend]:uppercase ${className}`} data-orientation={orientation} disabled={disabled} style={{ ...accentVars(color), ...style }}>
+    <fieldset className={`bl-tk-group group/tkg m-0 border-0 p-0 [font-family:var(--bl-tk-font,ui-sans-serif,system-ui,sans-serif)] [&_legend]:mb-2.5 [&_legend]:p-0 [&_legend]:text-[12px] [&_legend]:font-bold [&_legend]:tracking-[0.05em] [&_legend]:text-[var(--bl-tk-muted,#94b0c2)] [&_legend]:uppercase ${className}`} data-orientation={orientation} disabled={disabled} style={{ ...accentVars(color), ...style }}>
       {label && <legend>{label}</legend>}
       <div className="flex flex-col gap-3 group-data-[orientation=horizontal]/tkg:flex-row group-data-[orientation=horizontal]/tkg:flex-wrap group-data-[orientation=horizontal]/tkg:gap-[18px]">
         {options.map(option => (
@@ -181,7 +189,7 @@ export function NotifyBell({ pressed, defaultPressed, onPressedChange, label = '
     <button
       {...rest}
       type="button"
-      className={`group/bell relative inline-flex cursor-pointer items-start gap-2.5 [font-family:var(--bl-tk-font,ui-sans-serif,system-ui,sans-serif)] text-[14px] leading-[1.4] text-(--tk-ink) [-webkit-tap-highlight-color:transparent] [--tk-accent:var(--bl-tk-accent,#73eff7)] [--tk-ink:var(--bl-tk-ink,#f4f4f4)] [--tk-muted:var(--bl-tk-muted,#94b0c2)] [--tk-track:var(--bl-tk-track,#333c57)] [--tk-on-ink:var(--bl-tk-on-ink,#1a1c2c)] [--tk-size:22px] data-[size=sm]:text-[13px] data-[size=sm]:[--tk-size:18px] data-[size=lg]:text-[15px] data-[size=lg]:[--tk-size:26px] data-[disabled]:cursor-not-allowed data-[disabled]:opacity-45 m-0 rounded-[10px] border-0 bg-transparent py-1 pr-2.5 pl-1 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tk-accent) focus-visible:outline-solid ${className}`}
+      className={`bl-tk group/bell relative inline-flex cursor-pointer items-start gap-2.5 [font-family:var(--bl-tk-font,ui-sans-serif,system-ui,sans-serif)] text-[14px] leading-[1.4] text-(--tk-ink) [-webkit-tap-highlight-color:transparent] [--tk-accent:var(--bl-tk-accent,#73eff7)] [--tk-ink:var(--bl-tk-ink,#f4f4f4)] [--tk-muted:var(--bl-tk-muted,#94b0c2)] [--tk-track:var(--bl-tk-track,#333c57)] [--tk-on-ink:var(--bl-tk-on-ink,#1a1c2c)] [--tk-size:22px] data-[size=sm]:text-[13px] data-[size=sm]:[--tk-size:18px] data-[size=lg]:text-[15px] data-[size=lg]:[--tk-size:26px] data-[disabled]:cursor-not-allowed data-[disabled]:opacity-45 m-0 rounded-[10px] border-0 bg-transparent py-1 pr-2.5 pl-1 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--tk-accent) focus-visible:outline-solid ${className}`}
       aria-pressed={on}
       aria-label={showLabel ? undefined : label}
       disabled={disabled}

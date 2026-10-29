@@ -35,7 +35,7 @@ const pixelated = { imageRendering: 'pixelated' };
 const biome = id => `/pixel/biome-${id}.png`;
 const stack = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 18, justifyItems: 'center', width: '100%', padding: '32px 0' };
 const row = { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10 };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
 
 // ---------- ExpandCard ----------
 
@@ -96,7 +96,7 @@ function VideoDemo(props) {
 
 function SketchDemo(props) {
   const [run, setRun] = useState(0);
-  const p = { margin: 0, maxWidth: 560, color: '#f4f4f4', font: `20px/1.9 ${PIXEL_FONT}`, textAlign: 'center' };
+  const p = { margin: 0, maxWidth: 560, color: 'var(--demo-ink, #f4f4f4)', font: `20px/1.9 ${PIXEL_FONT}`, textAlign: 'center' };
   return (
     <div style={stack}>
       <p key={run} style={p}>
@@ -143,7 +143,7 @@ function StreamDemo(props) {
   return (
     <div style={{ ...stack, justifyItems: 'stretch', maxWidth: 640, margin: '0 auto', padding: '28px 16px' }}>
       <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-        <span style={{ flex: '0 0 auto', display: 'grid', placeItems: 'center', width: 34, height: 34, background: '#29366f' }}>
+        <span style={{ flex: '0 0 auto', display: 'grid', placeItems: 'center', width: 34, height: 34, background: 'var(--demo-panel, #29366f)' }}>
           <Sprite name="book" size={22} />
         </span>
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -188,9 +188,9 @@ function GravityDemo({ startOn, ...props }) {
   return (
     <div style={{ ...stack, padding: '20px 0' }}>
       <div style={{ width: '100%', maxWidth: 760 }}>
-        <GravityBox key={`${run}-${startOn}`} {...props} startOn={startOn} backgroundColor="#11131c" radius={4}>
+        <GravityBox key={`${run}-${startOn}`} {...props} startOn={startOn} backgroundColor="var(--demo-bg, #11131c)" radius={4}>
           {BLOCKS.map(([icon, name]) => (
-            <span key={name} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: '#29366f', color: '#f4f4f4', font: `16px ${PIXEL_FONT}`, boxShadow: 'inset 0 -4px 0 #1a1c2c', borderRadius: 4 }}>
+            <span key={name} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'var(--demo-panel, #29366f)', color: 'var(--demo-ink, #f4f4f4)', font: `16px ${PIXEL_FONT}`, boxShadow: 'inset 0 -4px 0 #1a1c2c', borderRadius: 4 }}>
               <Sprite name={icon} size={20} />
               {name}
             </span>
@@ -244,7 +244,7 @@ function ThinkingDemo(props) {
   return (
     <div style={{ ...stack, justifyItems: 'stretch', maxWidth: 560, margin: '0 auto', padding: '32px 16px' }}>
       <ThinkingShimmer key={run} {...props} thinking={thinking} steps={steps} defaultOpen fontFamily={PIXEL_FONT} />
-      {!thinking && <p style={{ ...hint, textAlign: 'left', color: '#f4f4f4' }}>You have 2 of 3 diamonds. Mine one more below height 16.</p>}
+      {!thinking && <p style={{ ...hint, textAlign: 'left', color: 'var(--demo-ink, #f4f4f4)' }}>You have 2 of 3 diamonds. Mine one more below height 16.</p>}
       <div style={row}>
         <PixelButton size="sm" variant="secondary" onPress={() => setRun(r => r + 1)}>
           Ask again
@@ -293,7 +293,7 @@ function ChatDemo(props) {
           onChange={e => setDraft(e.target.value)}
           aria-label="Message"
           placeholder="Say something…"
-          style={{ flex: 1, minWidth: 0, padding: '10px 12px', border: 0, background: '#29366f', color: '#f4f4f4', font: `15px ${PIXEL_FONT}`, outline: 'none', boxShadow: 'inset 0 -3px 0 #1a1c2c' }}
+          style={{ flex: 1, minWidth: 0, padding: '10px 12px', border: 0, background: 'var(--demo-panel, #29366f)', color: 'var(--demo-ink, #f4f4f4)', font: `15px ${PIXEL_FONT}`, outline: 'none', boxShadow: 'inset 0 -3px 0 #1a1c2c' }}
         />
         <PixelButton size="sm" variant="info" type="submit">
           Send
@@ -399,7 +399,7 @@ const DEMO_ENTRIES = {
     demoOnly: ['fontSize'],
     render: ({ fontSize, ...props }) => (
       <div style={{ ...stack, padding: '60px 16px' }}>
-        <h2 style={{ margin: 0, color: '#f4f4f4', font: `${fontSize}px/1.3 ${PIXEL_FONT}`, textAlign: 'center' }}>
+        <h2 style={{ margin: 0, color: 'var(--demo-ink, #f4f4f4)', font: `${fontSize}px/1.3 ${PIXEL_FONT}`, textAlign: 'center' }}>
           Build <MorphWords {...props} words={['worlds', 'quests', 'castles', 'legends']} color="#73eff7" /> one block at a time
         </h2>
       </div>

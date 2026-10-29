@@ -1,13 +1,25 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useInsertionEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 
 type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefined };
 
-// Tailwind variant (needs Tailwind CSS v4). Same component as the CSS version, with its
-// styles as utility classes.
-//
-// Scroll story with a sticky media column: as each text section passes the middle of the
-// viewport, the media beside it swaps (fade, slide or zoom). Works with the window or any
-// scroll box. In narrow containers each section shows its own media inline instead.
+const STYLE_ID = 'bl-sticky-reveal-tw';
+const CSS = `
+/* theme tokens */
+.bl-sreveal { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #ffcd75; --bl-stage-bg: #1a1c2c; --bl-line: rgba(255,255,255,0.08); }
+:where(.light, [data-theme="light"]) .bl-sreveal, .bl-sreveal:where(.light, [data-theme="light"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #a86a12; --bl-stage-bg: #f4f1e8; --bl-line: rgba(26,28,44,0.08); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-sreveal, :where(.light, [data-theme="light"]) .bl-sreveal:where(.dark, [data-theme="dark"]) { --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-accent: #ffcd75; --bl-stage-bg: #1a1c2c; --bl-line: rgba(255,255,255,0.08); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-sreveal, .bl-sreveal:where([data-theme="system"]) { --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-accent: #a86a12; --bl-stage-bg: #f4f1e8; --bl-line: rgba(26,28,44,0.08); } }
+/* theme tokens end */
+`;
+
+function useStyles() {
+  useInsertionEffect(() => {
+    if (typeof document === 'undefined') return;
+    const style = document.getElementById(STYLE_ID) ?? Object.assign(document.createElement('style'), { id: STYLE_ID });
+    style.textContent = CSS;
+    if (!style.isConnected) document.head.appendChild(style);
+  }, []);
+}
 
 function scrollParent(node: HTMLElement | null): HTMLElement | Window {
   for (let el = node?.parentElement; el; el = el.parentElement) {
@@ -70,11 +82,11 @@ export default function StickyReveal({
   showDots = true,
   gap = 48,
   radius = 16,
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  accentColor = '#ffcd75',
-  stageColor = '#1a1c2c',
-  lineColor = 'rgba(255,255,255,0.08)',
+  textColor,
+  mutedColor,
+  accentColor,
+  stageColor,
+  lineColor,
   titleSize = 26,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   titleFontFamily,
@@ -82,7 +94,7 @@ export default function StickyReveal({
   className = '',
   style
 }: StickyRevealProps) {
-  
+  useStyles();
   const rootRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
   const [active, setActive] = useState(0);
@@ -126,7 +138,7 @@ export default function StickyReveal({
     <div className={`@container w-full ${className}`} style={style}>
       <div
         ref={rootRef}
-        className="group/sr grid grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] gap-(--bl-gap) font-(family-name:--bl-font) text-(--bl-ink) [@container(max-width:640px)]:grid-cols-[minmax(0,1fr)]"
+        className="bl-sreveal group/sr grid grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] gap-(--bl-gap) font-(family-name:--bl-font) text-(--bl-ink) [@container(max-width:640px)]:grid-cols-[minmax(0,1fr)]"
         data-effect={effect}
         data-side={mediaSide}
         style={{

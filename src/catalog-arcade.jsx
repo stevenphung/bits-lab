@@ -28,7 +28,7 @@ const PIXEL_FONT = '"Pixelify Sans", system-ui, sans-serif';
 const TITLE_FONT = '"Press Start 2P", monospace';
 const stack = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 20, justifyItems: 'center', width: '100%', padding: '28px 0' };
 const row = { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12 };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
 
 // ---------- BootSequence ----------
 
@@ -37,9 +37,9 @@ function BootDemo(props) {
   return (
     <div style={{ width: '100%', height: 380 }}>
       <BootSequence {...props} replayKey={run} minHeight={380}>
-        <div style={{ display: 'grid', placeItems: 'center', alignContent: 'center', gap: 22, height: '100%', background: '#1a1c2c', padding: 16, textAlign: 'center' }}>
+        <div style={{ display: 'grid', placeItems: 'center', alignContent: 'center', gap: 22, height: '100%', background: 'var(--demo-bg, #1a1c2c)', padding: 16, textAlign: 'center' }}>
           <Sprite name="gem" size={56} />
-          <span style={{ font: `clamp(12px, 3vw, 18px) ${TITLE_FONT}`, color: '#73eff7' }}>READY.</span>
+          <span style={{ font: `clamp(12px, 3vw, 18px) ${TITLE_FONT}`, color: 'var(--demo-accent, #73eff7)' }}>READY.</span>
           <PixelButton size="sm" variant="secondary" onPress={() => setRun(n => n + 1)}>
             Reboot
           </PixelButton>
@@ -159,11 +159,11 @@ function ExplodeDemo(props) {
   return (
     <div style={stack}>
       <PixelExplode {...props} exploded={gone} onExploded={() => setBusy(false)} onReassembled={() => setBusy(false)}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, width: 'min(320px, calc(100vw - 64px))', padding: '14px 16px', background: '#333c57', boxShadow: '0 0 0 3px #566c86', color: '#f4f4f4', font: `16px ${PIXEL_FONT}` }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, width: 'min(320px, calc(100vw - 64px))', padding: '14px 16px', background: 'var(--demo-line, #333c57)', boxShadow: '0 0 0 3px #566c86', color: 'var(--demo-ink, #f4f4f4)', font: `16px ${PIXEL_FONT}` }}>
           <Sprite name="potion" size={40} />
           <div style={{ display: 'grid', gap: 4, minWidth: 0 }}>
             <strong>Potion of Leaping</strong>
-            <span style={{ color: '#94b0c2', fontSize: 14 }}>Jump twice as high for 3 minutes.</span>
+            <span style={{ color: 'var(--demo-muted, #94b0c2)', fontSize: 14 }}>Jump twice as high for 3 minutes.</span>
           </div>
         </div>
       </PixelExplode>
@@ -201,17 +201,17 @@ function MinimapDemo(props) {
   const ref = useRef(null);
   return (
     <div style={{ display: 'flex', gap: 14, width: '100%', maxWidth: 640, height: 380, margin: '24px auto', padding: '0 12px', boxSizing: 'border-box' }}>
-      <article id="minimap-demo-story" ref={ref} tabIndex={0} aria-label="Pip's story" style={{ flex: 1, minWidth: 0, overflowY: 'auto', padding: '4px 16px 16px', background: '#1a1c2c', color: '#f4f4f4', font: `16px/1.6 ${PIXEL_FONT}`, boxShadow: '0 0 0 2px #333c57' }}>
+      <article id="minimap-demo-story" ref={ref} tabIndex={0} aria-label="Pip's story" style={{ flex: 1, minWidth: 0, overflowY: 'auto', padding: '4px 16px 16px', background: 'var(--demo-bg, #1a1c2c)', color: 'var(--demo-ink, #f4f4f4)', font: `16px/1.6 ${PIXEL_FONT}`, boxShadow: '0 0 0 2px var(--demo-line, #333c57)' }}>
         {CHAPTERS.map(chapter => (
           <section key={chapter.title}>
-            <h3 style={{ margin: '22px 0 10px', font: `12px/1.6 ${TITLE_FONT}`, color: '#ffcd75' }}>{chapter.title}</h3>
+            <h3 style={{ margin: '22px 0 10px', font: `12px/1.6 ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>{chapter.title}</h3>
             <Sprite name={chapter.sprite} size={64} />
             {[0, 1].map(i => (
-              <p key={i} style={{ color: '#94b0c2' }}>
+              <p key={i} style={{ color: 'var(--demo-muted, #94b0c2)' }}>
                 {chapter.text}
               </p>
             ))}
-            {chapter.code && <pre style={{ margin: 0, padding: 12, overflowX: 'auto', background: '#0b0b14', color: '#a7f070', font: '13px/1.5 ui-monospace, monospace' }}>{chapter.code}</pre>}
+            {chapter.code && <pre style={{ margin: 0, padding: 12, overflowX: 'auto', background: 'var(--demo-field, #0b0b14)', color: '#a7f070', font: '13px/1.5 ui-monospace, monospace' }}>{chapter.code}</pre>}
           </section>
         ))}
       </article>
@@ -247,7 +247,7 @@ function AvatarDemo({ seed, ...props }) {
     <div style={{ ...stack, gap: 26, padding: '28px 16px' }}>
       <div style={{ display: 'grid', justifyItems: 'center', gap: 10 }}>
         <PixelAvatar {...props} seed={seed} size={props.size * 2} />
-        <span style={{ ...hint, color: '#f4f4f4' }}>{seed || '(empty seed)'}</span>
+        <span style={{ ...hint, color: 'var(--demo-ink, #f4f4f4)' }}>{seed || '(empty seed)'}</span>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fill, minmax(${props.size + 8}px, 1fr))`, gap: 12, width: '100%', maxWidth: 560, justifyItems: 'center' }}>
         {NAMES.map(name => (

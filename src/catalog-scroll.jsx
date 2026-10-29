@@ -21,9 +21,9 @@ const BOX_HEIGHT = 560;
 
 // Every demo scrolls inside its own box, so the effect can be tried without leaving the page.
 function ScrollBox({ children, top = 'Scroll inside this box ↓', bottom = 'The end. Scroll back up ↑', topHeight = 160, bottomHeight = 240 }) {
-  const note = height => ({ height, display: 'grid', placeItems: 'center', color: '#94b0c2', font: `14px ${PIXEL_FONT}`, textAlign: 'center', padding: '0 16px' });
+  const note = height => ({ height, display: 'grid', placeItems: 'center', color: 'var(--demo-muted, #94b0c2)', font: `14px ${PIXEL_FONT}`, textAlign: 'center', padding: '0 16px' });
   return (
-    <div style={{ width: '100%', height: BOX_HEIGHT, overflowY: 'auto', overflowX: 'hidden', background: 'linear-gradient(#1a1c2c, #202640)', borderRadius: 4 }}>
+    <div style={{ width: '100%', height: BOX_HEIGHT, overflowY: 'auto', overflowX: 'hidden', background: 'var(--demo-scroll, linear-gradient(#1a1c2c, #202640))', borderRadius: 4 }}>
       <div style={note(topHeight)}>{top}</div>
       {children}
       <div style={note(bottomHeight)}>{bottom}</div>
@@ -63,16 +63,16 @@ const CHANGELOG = [
 
 function ChangelogEntry({ entry }) {
   return (
-    <article style={{ paddingBottom: 44, color: '#f4f4f4', font: `15px/1.55 ${PIXEL_FONT}` }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#94b0c2', fontSize: 13 }}>
-        <span style={{ padding: '3px 7px', background: '#29366f', color: '#73eff7', font: `9px ${TITLE_FONT}` }}>v{entry.version}</span>
+    <article style={{ paddingBottom: 44, color: 'var(--demo-ink, #f4f4f4)', font: `15px/1.55 ${PIXEL_FONT}` }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--demo-muted, #94b0c2)', fontSize: 13 }}>
+        <span style={{ padding: '3px 7px', background: 'var(--demo-panel, #29366f)', color: 'var(--demo-accent, #73eff7)', font: `9px ${TITLE_FONT}` }}>v{entry.version}</span>
         {entry.date}
       </div>
       <h3 style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '10px 0 6px', font: `12px/1.5 ${TITLE_FONT}` }}>
         <Sprite name={entry.icon} size={22} />
         {entry.title}
       </h3>
-      <p style={{ margin: 0, color: '#94b0c2' }}>{entry.body}</p>
+      <p style={{ margin: 0, color: 'var(--demo-muted, #94b0c2)' }}>{entry.body}</p>
       {entry.scene && <img src={biome(entry.scene)} alt="" style={{ ...pixelated, display: 'block', width: '100%', maxWidth: 440, marginTop: 14, boxShadow: '0 0 0 3px #333c57' }} />}
     </article>
   );
@@ -94,13 +94,13 @@ const BIOME_CARDS = [
 
 function BiomeCard({ scene, name, icon, index }) {
   return (
-    <div style={{ background: '#1a1c2c', boxShadow: '0 0 0 3px #333c57, 0 10px 0 rgba(0,0,0,0.35)' }}>
+    <div style={{ background: 'var(--demo-bg, #1a1c2c)', boxShadow: '0 0 0 3px var(--demo-line, #333c57), 0 10px 0 rgba(0,0,0,0.35)' }}>
       <img src={biome(scene)} alt="" style={{ ...pixelated, display: 'block', width: '100%', aspectRatio: '3 / 2', objectFit: 'cover' }} />
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px' }}>
         <Sprite name={icon} size={28} />
         <div>
-          <div style={{ font: `10px/1.5 ${TITLE_FONT}`, color: '#f4f4f4' }}>{name}</div>
-          <div style={{ font: `13px ${PIXEL_FONT}`, color: '#94b0c2' }}>Biome {String(index + 1).padStart(2, '0')}</div>
+          <div style={{ font: `10px/1.5 ${TITLE_FONT}`, color: 'var(--demo-ink, #f4f4f4)' }}>{name}</div>
+          <div style={{ font: `13px ${PIXEL_FONT}`, color: 'var(--demo-muted, #94b0c2)' }}>Biome {String(index + 1).padStart(2, '0')}</div>
         </div>
       </div>
     </div>
@@ -190,7 +190,7 @@ const DEMO_ENTRIES = {
           <ScrollTilt {...props}>
             <SceneMedia scene="cherry" icon="note" />
           </ScrollTilt>
-          <p style={{ margin: '36px 0 0', color: '#94b0c2', font: `16px/1.6 ${PIXEL_FONT}`, textAlign: 'center' }}>Blossom Hills: the calmest biome in the game.</p>
+          <p style={{ margin: '36px 0 0', color: 'var(--demo-muted, #94b0c2)', font: `16px/1.6 ${PIXEL_FONT}`, textAlign: 'center' }}>Blossom Hills: the calmest biome in the game.</p>
         </div>
       </ScrollBox>
     )
@@ -270,7 +270,7 @@ const DEMO_ENTRIES = {
           padding={24}
           fontFamily={PIXEL_FONT}
           label="Biomes"
-          header={<div style={{ font: `clamp(11px, 2.4vw, 15px)/1.5 ${TITLE_FONT}`, color: '#ffcd75' }}>EXPLORE THE BIOMES</div>}
+          header={<div style={{ font: `clamp(11px, 2.4vw, 15px)/1.5 ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>EXPLORE THE BIOMES</div>}
         >
           {BIOME_CARDS.map(([scene, name, icon], index) => (
             <BiomeCard key={scene} scene={scene} name={name} icon={icon} index={index} />

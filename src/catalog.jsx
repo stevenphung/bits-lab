@@ -39,7 +39,7 @@ const color = (name, label) => ({ name, type: 'color', label });
 const toggle = (name, label) => ({ name, type: 'switch', label });
 const select = (name, label, options) => ({ name, type: 'select', label, options });
 const stack = { display: 'grid', gap: 18, justifyItems: 'center', width: '100%', padding: '40px 16px', boxSizing: 'border-box', textAlign: 'center' };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}` };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}` };
 
 // FocusPull's hover mode re-racks on every hover; the others replay when remounted.
 function FocusDemo(props) {

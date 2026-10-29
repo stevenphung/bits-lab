@@ -78,7 +78,7 @@ export function Onboarding({ onDeleteDraft }) {
 
 ### Light mode
 
-97 components switch to a light palette when they sit inside an element with the `light` class or `data-theme="light"`. Put it on `<html>` to theme the whole app, or on any wrapper to theme one area:
+109 components switch to a light palette when they sit inside an element with the `light` class or `data-theme="light"`. Put it on `<html>` to theme the whole app, or on any wrapper to theme one area:
 
 ```html
 <html data-theme="light">        <!-- whole app light -->
@@ -89,7 +89,8 @@ export function Onboarding({ onDeleteDraft }) {
 - **Nested dark:** a `dark` class or `data-theme="dark"` inside a light area switches back to dark.
 - **Overlays:** toasts, dialogs and menus render into `document.body`, so set the theme on `<html>` or `<body>` for them to follow it.
 - **Colour props still win:** passing `textColor`, `accentColor` and so on overrides the theme in both modes.
-- **Dark by design:** screen-like components stay dark in every theme, e.g. BootSequence, CRTPower, TerminalDemo, CodeShowcase, GameOver, Screensaver, DynamicIsland and StoryViewer. Backgrounds and effects take their colours from props.
+- **Dark by design:** screen-like components stay dark in every theme, e.g. BootSequence, CRTPower, TerminalDemo, CodeShowcase, GameOver, Screensaver, DynamicIsland, StoryViewer, WebcamPixels and ScrollZoom. Backgrounds and effects take their colours from props, and text effects use the surrounding text colour.
+- **CSS variables still win:** components styled through `--bl-tk-*` (ToggleKit) or `--bl-ok-*` (OverlayKit) variables only change their fallbacks, so values you set yourself are kept.
 
 The site's preview has a ☀ Light / ☾ Dark switch on every component page.
 
@@ -209,4 +210,4 @@ For later releases, bump the version first with `npm version patch` (or `minor`)
 1. Put the component in `src/bits/Name.jsx`.
 2. Add an entry to `COMPONENTS` in `src/meta.js`.
 3. Add its demo config to `DEMOS` in `src/catalog.jsx`, keyed by slug.
-4. Give it light mode: leave colour props without literal defaults, map them to CSS variables on the root, and run `python3 scripts/theme-tokens.py Name` (or `--dry Name` first to preview the palette). The script writes the token block into all four variants. Check it with `/tw-check.html?theme=light`.
+4. Give it light mode: leave colour props without literal defaults, map them to CSS variables on the root, and run `python3 scripts/theme-tokens.py Name` (or `--dry Name` first to preview the palette). The script writes the token block into all four variants. Check it with `/tw-check.html?theme=light`. Components whose colours live in their CSS instead of props get light overrides from `scripts/theme-fixed.py`.

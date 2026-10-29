@@ -22,7 +22,7 @@ const PIXEL_FONT = '"Pixelify Sans", system-ui, sans-serif';
 const TITLE_FONT = '"Press Start 2P", monospace';
 const stack = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 18, justifyItems: 'center', width: '100%', padding: '32px 0' };
 const row = { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12 };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
 // Theme the overlay and toggle kits once, through their CSS variables.
 const kitTheme = { '--bl-ok-font': PIXEL_FONT, '--bl-ok-radius': '6px', '--bl-tk-font': PIXEL_FONT };
 
@@ -87,7 +87,7 @@ function OverlayDemo() {
               <strong style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Sprite name="pickaxe" size={18} /> Quick craft
               </strong>
-              <span style={{ color: '#94b0c2', fontSize: 13 }}>3 diamonds + 2 sticks</span>
+              <span style={{ color: 'var(--demo-muted, #94b0c2)', fontSize: 13 }}>3 diamonds + 2 sticks</span>
               <PixelButton
                 size="sm"
                 variant="success"

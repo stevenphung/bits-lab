@@ -63,6 +63,14 @@ const CSS = `
 @media (prefers-reduced-motion: reduce) {
   .bl-tk__switch, .bl-tk__thumb, .bl-tk__check, .bl-tk__dash, .bl-tk__dot, .bl-tk__box, .bl-tk__radio, .bl-tk__bell-icon, .bl-tk__bell-icon svg, .bl-tk__bell-waves { transition: none; animation: none !important; }
 }
+/* light overrides */
+:where(.light, [data-theme="light"]) .bl-tk, .bl-tk:where(.light, [data-theme="light"]) { --tk-accent: var(--bl-tk-accent, #167f8f); --tk-ink: var(--bl-tk-ink, #1a1c2c); --tk-muted: var(--bl-tk-muted, #566c86); --tk-track: var(--bl-tk-track, #cfc4ad); --tk-on-ink: var(--bl-tk-on-ink, #f4f1e8); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tk, :where(.light, [data-theme="light"]) .bl-tk:where(.dark, [data-theme="dark"]) { --tk-accent: var(--bl-tk-accent, #73eff7); --tk-ink: var(--bl-tk-ink, #f4f4f4); --tk-muted: var(--bl-tk-muted, #94b0c2); --tk-track: var(--bl-tk-track, #333c57); --tk-on-ink: var(--bl-tk-on-ink, #1a1c2c); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tk, .bl-tk:where([data-theme="system"]) { --tk-accent: var(--bl-tk-accent, #167f8f); --tk-ink: var(--bl-tk-ink, #1a1c2c); --tk-muted: var(--bl-tk-muted, #566c86); --tk-track: var(--bl-tk-track, #cfc4ad); --tk-on-ink: var(--bl-tk-on-ink, #f4f1e8); } }
+:where(.light, [data-theme="light"]) .bl-tk-group legend, .bl-tk-group:where(.light, [data-theme="light"]) legend { color: var(--bl-tk-muted, #566c86); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-tk-group legend, :where(.light, [data-theme="light"]) .bl-tk-group:where(.dark, [data-theme="dark"]) legend { color: var(--bl-tk-muted, #94b0c2); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-tk-group legend, .bl-tk-group:where([data-theme="system"]) legend { color: var(--bl-tk-muted, #566c86); } }
+/* light overrides end */
 `;
 
 function useStyles() {

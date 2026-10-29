@@ -10,6 +10,12 @@ type CSSVars = CSSProperties & { [key: `--${string}`]: string | number | undefin
 
 const STYLE_ID = 'bl-command-palette';
 const CSS = `
+/* theme tokens */
+.bl-cmdk-theme { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.1); --bl-active: rgba(115,239,247,0.12); --bl-accent: #73eff7; --bl-chip: rgba(255,255,255,0.08); --bl-backdrop: rgba(8,8,16,0.55); }
+:where(.light, [data-theme="light"]) .bl-cmdk-theme, .bl-cmdk-theme:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.1); --bl-active: rgba(22,127,143,0.12); --bl-accent: #167f8f; --bl-chip: rgba(26,28,44,0.08); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-cmdk-theme, :where(.light, [data-theme="light"]) .bl-cmdk-theme:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.1); --bl-active: rgba(115,239,247,0.12); --bl-accent: #73eff7; --bl-chip: rgba(255,255,255,0.08); --bl-backdrop: rgba(8,8,16,0.55); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-cmdk-theme, .bl-cmdk-theme:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.1); --bl-active: rgba(22,127,143,0.12); --bl-accent: #167f8f; --bl-chip: rgba(26,28,44,0.08); } }
+/* theme tokens end */
 .bl-cmdk__backdrop { position: fixed; inset: 0; z-index: 1300; background: var(--bl-backdrop); animation: bl-cmdk-fade 160ms ease; }
 .bl-cmdk { position: fixed; z-index: 1301; top: 14vh; left: 50%; width: min(var(--bl-w), calc(100vw - 24px)); transform: translateX(-50%); overflow: hidden; border-radius: var(--bl-radius); background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); box-shadow: 0 0 0 1px var(--bl-line), 0 30px 80px -20px rgba(0,0,0,0.7); animation: bl-cmdk-in 200ms cubic-bezier(.2,.9,.25,1.1); }
 @keyframes bl-cmdk-in { from { opacity: 0; transform: translateX(-50%) scale(0.96); } }
@@ -196,14 +202,14 @@ export default function CommandPalette({
   width = 620,
   maxListHeight = 360,
   radius = 14,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = 'rgba(255,255,255,0.1)',
-  activeColor = 'rgba(115,239,247,0.12)',
-  accentColor = '#73eff7',
-  chipColor = 'rgba(255,255,255,0.08)',
-  backdropColor = 'rgba(8,8,16,0.55)',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  activeColor,
+  accentColor,
+  chipColor,
+  backdropColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   showFooter = true
 }: CommandPaletteProps) {
@@ -354,6 +360,7 @@ export default function CommandPalette({
   let optionIndex = -1;
   return createPortal(
     <div
+      className="bl-cmdk-theme"
       style={{
         '--bl-w': `${width}px`,
         '--bl-radius': `${radius}px`,

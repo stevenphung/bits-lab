@@ -8,6 +8,12 @@ import { createPortal } from 'react-dom';
 
 const STYLE_ID = 'bl-spring-drawer';
 const CSS = `
+/* theme tokens */
+.bl-drawer { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.1); --bl-accent: #73eff7; --bl-backdrop: rgba(8,8,16,0.6); }
+:where(.light, [data-theme="light"]) .bl-drawer, .bl-drawer:where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.1); --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-drawer, :where(.light, [data-theme="light"]) .bl-drawer:where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: rgba(255,255,255,0.1); --bl-accent: #73eff7; --bl-backdrop: rgba(8,8,16,0.6); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-drawer, .bl-drawer:where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: rgba(26,28,44,0.1); --bl-accent: #167f8f; } }
+/* theme tokens end */
 .bl-drawer__backdrop { position: fixed; inset: 0; background: var(--bl-backdrop); opacity: 0; }
 .bl-drawer__shell { position: fixed; display: flex; flex-direction: column; background: var(--bl-bg); color: var(--bl-ink); font-family: var(--bl-font); box-shadow: 0 0 0 1px var(--bl-line), 0 -20px 60px -20px rgba(0,0,0,0.6); outline: none; touch-action: none; will-change: transform; transition: filter 300ms; }
 .bl-drawer[data-contained] .bl-drawer__backdrop, .bl-drawer[data-contained] .bl-drawer__shell { position: absolute; }
@@ -57,12 +63,12 @@ export default function SpringDrawer({
   stiffness = 520,
   damping = 0.82,
   radius = 20,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = 'rgba(255,255,255,0.1)',
-  accentColor = '#73eff7',
-  backdropColor = 'rgba(8,8,16,0.6)',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
+  backdropColor,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
   className = ''
 }) {

@@ -34,7 +34,7 @@ const text = (name, label) => ({ name, type: 'text', label });
 
 const stack = { display: 'grid', justifyItems: 'center', gap: 28, width: '100%', padding: '24px 0' };
 const row = { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 18 };
-const hint = { margin: 0, color: '#94b0c2', font: '15px/1.4 "Pixelify Sans", system-ui, sans-serif', textAlign: 'center' };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: '15px/1.4 "Pixelify Sans", system-ui, sans-serif', textAlign: 'center' };
 
 // ---------- Demo wrappers (hold demo-only state) ----------
 

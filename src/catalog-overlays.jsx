@@ -22,8 +22,8 @@ const TITLE_FONT = '"Press Start 2P", monospace';
 const pixelated = { imageRendering: 'pixelated' };
 const biome = id => `/pixel/biome-${id}.png`;
 const row = { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 14 };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
-const field = { width: '100%', boxSizing: 'border-box', padding: '10px 12px', border: 0, background: '#29366f', color: '#f4f4f4', font: `15px ${PIXEL_FONT}`, outline: 'none', boxShadow: 'inset 0 -3px 0 #1a1c2c' };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const field = { width: '100%', boxSizing: 'border-box', padding: '10px 12px', border: 0, background: 'var(--demo-panel, #29366f)', color: 'var(--demo-ink, #f4f4f4)', font: `15px ${PIXEL_FONT}`, outline: 'none', boxShadow: 'inset 0 -3px 0 #1a1c2c' };
 
 // ---------- MorphDialog ----------
 
@@ -49,11 +49,11 @@ function MorphDialogDemo(props) {
                 <Sprite name={world.icon} size={20} />
                 {world.name}
               </div>
-              <div style={{ marginTop: 4, color: '#94b0c2', fontSize: 14 }}>Seed {world.seed}</div>
+              <div style={{ marginTop: 4, color: 'var(--demo-muted, #94b0c2)', fontSize: 14 }}>Seed {world.seed}</div>
             </div>
           }
         >
-          <p style={{ margin: '0 0 16px', color: '#94b0c2', lineHeight: 1.6 }}>{world.blurb}</p>
+          <p style={{ margin: '0 0 16px', color: 'var(--demo-muted, #94b0c2)', lineHeight: 1.6 }}>{world.blurb}</p>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
             <PixelButton variant="success" size="sm" data-autofocus>
               Play world
@@ -90,7 +90,7 @@ function FeedbackForm({ close }) {
         setSent(true);
       }}
     >
-      <label style={{ color: '#94b0c2', fontSize: 14 }} htmlFor="bl-demo-feedback">
+      <label style={{ color: 'var(--demo-muted, #94b0c2)', fontSize: 14 }} htmlFor="bl-demo-feedback">
         What should we build next?
       </label>
       <textarea id="bl-demo-feedback" rows={4} placeholder="More biomes, please…" style={{ ...field, resize: 'none' }} />
@@ -128,7 +128,7 @@ function MorphPopoverDemo(props) {
                   role="menuitem"
                   type="button"
                   onClick={close}
-                  style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px', border: 0, background: 'transparent', color: '#f4f4f4', font: `15px ${PIXEL_FONT}`, textAlign: 'left', cursor: 'pointer' }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px', border: 0, background: 'transparent', color: 'var(--demo-ink, #f4f4f4)', font: `15px ${PIXEL_FONT}`, textAlign: 'left', cursor: 'pointer' }}
                 >
                   <Sprite name={icon} size={20} />
                   {text}
@@ -187,7 +187,7 @@ function ToastDemo(props) {
             Clear all
           </PixelButton>
         </div>
-        <p style={{ ...hint, color: '#f4f4f4' }}>Hover the stack to fan it out. Swipe a toast sideways to dismiss.</p>
+        <p style={{ ...hint, color: 'var(--demo-ink, #f4f4f4)' }}>Hover the stack to fan it out. Swipe a toast sideways to dismiss.</p>
       </div>
       <Toaster {...props} contained fontFamily={PIXEL_FONT} />
     </div>
@@ -234,11 +234,11 @@ function DrawerDemo({ side, ...props }) {
               key={name}
               type="button"
               onClick={() => setItem({ icon, name, desc })}
-              style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', border: 0, background: '#29366f', color: '#f4f4f4', font: `15px ${PIXEL_FONT}`, textAlign: 'left', cursor: 'pointer', boxShadow: 'inset 0 -3px 0 #1a1c2c' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', border: 0, background: 'var(--demo-panel, #29366f)', color: 'var(--demo-ink, #f4f4f4)', font: `15px ${PIXEL_FONT}`, textAlign: 'left', cursor: 'pointer', boxShadow: 'inset 0 -3px 0 #1a1c2c' }}
             >
               <Sprite name={icon} size={26} />
               <span style={{ flex: 1 }}>{name}</span>
-              <span style={{ color: '#94b0c2' }}>›</span>
+              <span style={{ color: 'var(--demo-muted, #94b0c2)' }}>›</span>
             </button>
           ))}
         </div>
@@ -246,7 +246,7 @@ function DrawerDemo({ side, ...props }) {
           {item && (
             <div style={{ display: 'grid', justifyItems: 'center', gap: 14, paddingTop: 8, textAlign: 'center' }}>
               <Sprite name={item.icon} size={72} />
-              <p style={{ margin: 0, color: '#94b0c2', font: `16px ${PIXEL_FONT}` }}>{item.desc}</p>
+              <p style={{ margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `16px ${PIXEL_FONT}` }}>{item.desc}</p>
               <div style={row}>
                 <PixelButton size="sm" variant="success" onPress={() => setItem(null)}>
                   Equip

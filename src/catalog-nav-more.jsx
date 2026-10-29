@@ -16,17 +16,17 @@ const select = (name, label, options) => ({ name, type: 'select', label, options
 const PIXEL_FONT = '"Pixelify Sans", system-ui, sans-serif';
 const TITLE_FONT = '"Press Start 2P", monospace';
 const pixelated = { imageRendering: 'pixelated' };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
 
 // ---------- MegaMenu ----------
 
-const linkStyle = { display: 'flex', gap: 12, alignItems: 'flex-start', padding: 10, borderRadius: 10, color: '#f4f4f4', textDecoration: 'none' };
+const linkStyle = { display: 'flex', gap: 12, alignItems: 'flex-start', padding: 10, borderRadius: 10, color: 'var(--demo-ink, #f4f4f4)', textDecoration: 'none' };
 const MenuLink = ({ href, sprite, title, text }) => (
   <a href={href} style={linkStyle} className="nav-more-link">
     <Sprite name={sprite} size={28} />
     <span style={{ display: 'grid', gap: 2 }}>
       <strong style={{ fontSize: 15 }}>{title}</strong>
-      <span style={{ color: '#94b0c2', fontSize: 13, lineHeight: 1.4 }}>{text}</span>
+      <span style={{ color: 'var(--demo-muted, #94b0c2)', fontSize: 13, lineHeight: 1.4 }}>{text}</span>
     </span>
   </a>
 );
@@ -50,7 +50,7 @@ const MENU = [
     content: (
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10, width: 'min(380px, calc(100vw - 72px))' }}>
         {['plains', 'snowy', 'desert', 'cherry'].map(b => (
-          <a key={b} href="/backgrounds/retro-horizon" style={{ display: 'grid', gap: 6, color: '#f4f4f4', textDecoration: 'none', fontSize: 14, textTransform: 'capitalize' }}>
+          <a key={b} href="/backgrounds/retro-horizon" style={{ display: 'grid', gap: 6, color: 'var(--demo-ink, #f4f4f4)', textDecoration: 'none', fontSize: 14, textTransform: 'capitalize' }}>
             <img src={`/pixel/biome-${b}.png`} alt="" style={{ width: '100%', aspectRatio: '8 / 5', objectFit: 'cover', borderRadius: 8, ...pixelated }} />
             {b}
           </a>
@@ -75,8 +75,8 @@ function MegaDemo(props) {
   return (
     <div style={{ width: '100%', minHeight: 420, padding: '20px 16px', boxSizing: 'border-box' }}>
       <style>{'.nav-more-link:hover{background:rgba(255,255,255,0.06)}.nav-more-link:focus-visible{outline:2px solid #73eff7;outline-offset:-2px}'}</style>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap', padding: '8px 12px', background: '#0b0b14', borderRadius: 14 }}>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, font: `11px ${TITLE_FONT}`, color: '#73eff7' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap', padding: '8px 12px', background: 'var(--demo-field, #0b0b14)', borderRadius: 14 }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, font: `11px ${TITLE_FONT}`, color: 'var(--demo-accent, #73eff7)' }}>
           <Sprite name="gem" size={20} /> BITS
         </span>
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -129,7 +129,7 @@ function RailDemo({ collapsed, ...props }) {
     setCollapsed(collapsed);
   }
   return (
-    <div style={{ display: 'flex', width: '100%', maxWidth: 720, height: 460, margin: '24px auto', overflow: 'hidden', borderRadius: 14, boxShadow: '0 0 0 2px #333c57', background: '#202640' }}>
+    <div style={{ display: 'flex', width: '100%', maxWidth: 720, height: 460, margin: '24px auto', overflow: 'hidden', borderRadius: 14, boxShadow: '0 0 0 2px var(--demo-line, #333c57)', background: 'var(--demo-bg, #202640)' }}>
       <SideRail
         {...props}
         sections={SECTIONS}
@@ -141,13 +141,13 @@ function RailDemo({ collapsed, ...props }) {
         brand={
           <>
             <Sprite name="gem" size={22} />
-            <span style={{ font: `10px ${TITLE_FONT}`, color: '#73eff7' }}>BITS</span>
+            <span style={{ font: `10px ${TITLE_FONT}`, color: 'var(--demo-accent, #73eff7)' }}>BITS</span>
           </>
         }
       />
-      <main style={{ flex: 1, minWidth: 0, display: 'grid', placeItems: 'center', alignContent: 'center', gap: 12, padding: 16, color: '#f4f4f4', font: `16px ${PIXEL_FONT}`, textAlign: 'center' }}>
-        <span style={{ font: `13px/1.6 ${TITLE_FONT}`, color: '#ffcd75' }}>{NAMES[page]}</span>
-        <span style={{ color: '#94b0c2' }}>Collapse the rail with the arrow at the top. In rail mode, Inventory opens a flyout.</span>
+      <main style={{ flex: 1, minWidth: 0, display: 'grid', placeItems: 'center', alignContent: 'center', gap: 12, padding: 16, color: 'var(--demo-ink, #f4f4f4)', font: `16px ${PIXEL_FONT}`, textAlign: 'center' }}>
+        <span style={{ font: `13px/1.6 ${TITLE_FONT}`, color: 'var(--demo-gold, #ffcd75)' }}>{NAMES[page]}</span>
+        <span style={{ color: 'var(--demo-muted, #94b0c2)' }}>Collapse the rail with the arrow at the top. In rail mode, Inventory opens a flyout.</span>
       </main>
     </div>
   );
@@ -169,8 +169,8 @@ function TabBarDemo(props) {
   const [sprite, text] = SCREENS[tab];
   return (
     <div style={{ display: 'grid', justifyItems: 'center', gap: 16, width: '100%', padding: '24px 12px', boxSizing: 'border-box' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', width: 'min(360px, 100%)', height: 560, overflow: 'hidden', borderRadius: 36, background: '#202640', boxShadow: '0 0 0 10px #0b0b14, 0 0 0 12px #333c57' }}>
-        <div style={{ flex: 1, display: 'grid', placeItems: 'center', alignContent: 'center', gap: 14, color: '#f4f4f4', font: `16px ${PIXEL_FONT}` }}>
+      <div style={{ display: 'flex', flexDirection: 'column', width: 'min(360px, 100%)', height: 560, overflow: 'hidden', borderRadius: 36, background: 'var(--demo-bg, #202640)', boxShadow: '0 0 0 10px #0b0b14, 0 0 0 12px var(--demo-line, #333c57)' }}>
+        <div style={{ flex: 1, display: 'grid', placeItems: 'center', alignContent: 'center', gap: 14, color: 'var(--demo-ink, #f4f4f4)', font: `16px ${PIXEL_FONT}` }}>
           <Sprite name={sprite} size={64} />
           <span>{text}</span>
         </div>

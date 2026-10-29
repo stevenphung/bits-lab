@@ -120,6 +120,17 @@ const CSS = `
 @keyframes bl-ok-pop { from { opacity: 0; transform: translate(-50%, -48%) scale(0.95); } }
 @keyframes bl-ok-slide-in { from { transform: var(--ok-from); } }
 @keyframes bl-ok-float-in { from { opacity: 0; transform: translate(var(--ok-shift, 0, 0)) scale(0.96); } }
+/* light overrides */
+:where(.light, [data-theme="light"]) .bl-ok-layer, .bl-ok-layer:where(.light, [data-theme="light"]) { --ok-bg: var(--bl-ok-bg, #f4f1e8); --ok-ink: var(--bl-ok-ink, #1a1c2c); --ok-muted: var(--bl-ok-muted, #566c86); --ok-line: var(--bl-ok-line, rgba(26,28,44,0.14)); --ok-accent: var(--bl-ok-accent, #167f8f); --ok-hover: var(--bl-ok-hover, rgba(26,28,44,0.07)); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ok-layer, :where(.light, [data-theme="light"]) .bl-ok-layer:where(.dark, [data-theme="dark"]) { --ok-bg: var(--bl-ok-bg, #1a1c2c); --ok-ink: var(--bl-ok-ink, #f4f4f4); --ok-muted: var(--bl-ok-muted, #94b0c2); --ok-line: var(--bl-ok-line, rgba(255,255,255,0.12)); --ok-accent: var(--bl-ok-accent, #73eff7); --ok-hover: var(--bl-ok-hover, rgba(255,255,255,0.07)); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ok-layer, .bl-ok-layer:where([data-theme="system"]) { --ok-bg: var(--bl-ok-bg, #f4f1e8); --ok-ink: var(--bl-ok-ink, #1a1c2c); --ok-muted: var(--bl-ok-muted, #566c86); --ok-line: var(--bl-ok-line, rgba(26,28,44,0.14)); --ok-accent: var(--bl-ok-accent, #167f8f); --ok-hover: var(--bl-ok-hover, rgba(26,28,44,0.07)); } }
+:where(.light, [data-theme="light"]) .bl-ok-tooltip, .bl-ok-tooltip:where(.light, [data-theme="light"]) { background: var(--bl-ok-tooltip-bg, #1a1c2c); color: var(--bl-ok-tooltip-ink, #f4f4f4); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ok-tooltip, :where(.light, [data-theme="light"]) .bl-ok-tooltip:where(.dark, [data-theme="dark"]) { background: var(--bl-ok-tooltip-bg, #f4f4f4); color: var(--bl-ok-tooltip-ink, #1a1c2c); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ok-tooltip, .bl-ok-tooltip:where([data-theme="system"]) { background: var(--bl-ok-tooltip-bg, #1a1c2c); color: var(--bl-ok-tooltip-ink, #f4f4f4); } }
+:where(.light, [data-theme="light"]) .bl-ok-item[data-danger], .bl-ok-item:where(.light, [data-theme="light"])[data-danger] { color: var(--bl-ok-danger, #c4502a); }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) .bl-ok-item[data-danger], :where(.light, [data-theme="light"]) .bl-ok-item:where(.dark, [data-theme="dark"])[data-danger] { color: var(--bl-ok-danger, #ef7d57); }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) .bl-ok-item[data-danger], .bl-ok-item:where([data-theme="system"])[data-danger] { color: var(--bl-ok-danger, #c4502a); } }
+/* light overrides end */
 `;
 
 function useStyles() {
@@ -321,7 +332,7 @@ function Modal({ variant, open, defaultOpen, onOpenChange, trigger, title, descr
       {triggerEl}
       {mounted &&
         createPortal(
-          <div className="[--ok-bg:var(--bl-ok-bg,#1a1c2c)] [--ok-ink:var(--bl-ok-ink,#f4f4f4)] [--ok-muted:var(--bl-ok-muted,#94b0c2)] [--ok-line:var(--bl-ok-line,rgba(255,255,255,0.12))] [--ok-accent:var(--bl-ok-accent,#73eff7)] [--ok-hover:var(--bl-ok-hover,rgba(255,255,255,0.07))] [--ok-radius:var(--bl-ok-radius,14px)] [--ok-backdrop:var(--bl-ok-backdrop,rgba(8,8,16,0.6))] [font-family:var(--bl-ok-font,ui-sans-serif,system-ui,sans-serif)] text-(--ok-ink)" style={{ ...(width ? { '--ok-w': `${width}px` } : null), ...style } as CSSVars}>
+          <div className="bl-ok-layer [--ok-bg:var(--bl-ok-bg,#1a1c2c)] [--ok-ink:var(--bl-ok-ink,#f4f4f4)] [--ok-muted:var(--bl-ok-muted,#94b0c2)] [--ok-line:var(--bl-ok-line,rgba(255,255,255,0.12))] [--ok-accent:var(--bl-ok-accent,#73eff7)] [--ok-hover:var(--bl-ok-hover,rgba(255,255,255,0.07))] [--ok-radius:var(--bl-ok-radius,14px)] [--ok-backdrop:var(--bl-ok-backdrop,rgba(8,8,16,0.6))] [font-family:var(--bl-ok-font,ui-sans-serif,system-ui,sans-serif)] text-(--ok-ink)" style={{ ...(width ? { '--ok-w': `${width}px` } : null), ...style } as CSSVars}>
             <div className="fixed inset-0 z-1500 bg-(--ok-backdrop) data-[state=open]:animate-[bl-ok-fade_220ms_cubic-bezier(.2,.9,.25,1)_both] data-[state=closed]:animate-[bl-ok-fade_220ms_cubic-bezier(.4,0,1,1)_reverse_both]" data-state={state} onClick={() => setOpen(false)} aria-hidden="true" />
             <div
               ref={panelRef}
@@ -414,8 +425,8 @@ export function Tooltip({ content, children, side = 'top', align = 'center', del
       {child}
       {mounted &&
         createPortal(
-          <div ref={floatRef} className="[--ok-bg:var(--bl-ok-bg,#1a1c2c)] [--ok-ink:var(--bl-ok-ink,#f4f4f4)] [--ok-muted:var(--bl-ok-muted,#94b0c2)] [--ok-line:var(--bl-ok-line,rgba(255,255,255,0.12))] [--ok-accent:var(--bl-ok-accent,#73eff7)] [--ok-hover:var(--bl-ok-hover,rgba(255,255,255,0.07))] [--ok-radius:var(--bl-ok-radius,14px)] [--ok-backdrop:var(--bl-ok-backdrop,rgba(8,8,16,0.6))] [font-family:var(--bl-ok-font,ui-sans-serif,system-ui,sans-serif)] text-(--ok-ink)" style={{ ...floatStyle, ...style }} onPointerEnter={() => show(0)} onPointerLeave={() => hide(closeDelay)}>
-            <div id={`${uid}-tip`} role="tooltip" className={`data-[state=open]:animate-[bl-ok-float-in_220ms_cubic-bezier(.3,1.35,.5,1)_both] data-[state=closed]:animate-[bl-ok-float-in_140ms_cubic-bezier(.4,0,1,1)_reverse_both] data-[side=top]:origin-bottom data-[side=top]:[--ok-shift:0,6px] data-[side=bottom]:origin-top data-[side=bottom]:[--ok-shift:0,-6px] data-[side=left]:origin-right data-[side=left]:[--ok-shift:6px,0] data-[side=right]:origin-left data-[side=right]:[--ok-shift:-6px,0] motion-reduce:data-[state]:[animation-name:bl-ok-fade] max-w-[260px] rounded-[calc(var(--ok-radius)*0.6)] bg-[var(--bl-ok-tooltip-bg,#f4f4f4)] px-2.5 py-1.5 text-[13px] leading-[1.4] text-[var(--bl-ok-tooltip-ink,#1a1c2c)] shadow-[0_8px_24px_-10px_rgba(0,0,0,0.6)] ${className}`} data-state={state} data-side={placed}>
+          <div ref={floatRef} className="bl-ok-layer [--ok-bg:var(--bl-ok-bg,#1a1c2c)] [--ok-ink:var(--bl-ok-ink,#f4f4f4)] [--ok-muted:var(--bl-ok-muted,#94b0c2)] [--ok-line:var(--bl-ok-line,rgba(255,255,255,0.12))] [--ok-accent:var(--bl-ok-accent,#73eff7)] [--ok-hover:var(--bl-ok-hover,rgba(255,255,255,0.07))] [--ok-radius:var(--bl-ok-radius,14px)] [--ok-backdrop:var(--bl-ok-backdrop,rgba(8,8,16,0.6))] [font-family:var(--bl-ok-font,ui-sans-serif,system-ui,sans-serif)] text-(--ok-ink)" style={{ ...floatStyle, ...style }} onPointerEnter={() => show(0)} onPointerLeave={() => hide(closeDelay)}>
+            <div id={`${uid}-tip`} role="tooltip" className={`bl-ok-tooltip data-[state=open]:animate-[bl-ok-float-in_220ms_cubic-bezier(.3,1.35,.5,1)_both] data-[state=closed]:animate-[bl-ok-float-in_140ms_cubic-bezier(.4,0,1,1)_reverse_both] data-[side=top]:origin-bottom data-[side=top]:[--ok-shift:0,6px] data-[side=bottom]:origin-top data-[side=bottom]:[--ok-shift:0,-6px] data-[side=left]:origin-right data-[side=left]:[--ok-shift:6px,0] data-[side=right]:origin-left data-[side=right]:[--ok-shift:-6px,0] motion-reduce:data-[state]:[animation-name:bl-ok-fade] max-w-[260px] rounded-[calc(var(--ok-radius)*0.6)] bg-[var(--bl-ok-tooltip-bg,#f4f4f4)] px-2.5 py-1.5 text-[13px] leading-[1.4] text-[var(--bl-ok-tooltip-ink,#1a1c2c)] shadow-[0_8px_24px_-10px_rgba(0,0,0,0.6)] ${className}`} data-state={state} data-side={placed}>
               {content}
             </div>
           </div>,
@@ -457,7 +468,7 @@ export function Popover({ trigger, children, label, open, defaultOpen, onOpenCha
       {triggerEl}
       {mounted &&
         createPortal(
-          <div ref={floatRef} className="[--ok-bg:var(--bl-ok-bg,#1a1c2c)] [--ok-ink:var(--bl-ok-ink,#f4f4f4)] [--ok-muted:var(--bl-ok-muted,#94b0c2)] [--ok-line:var(--bl-ok-line,rgba(255,255,255,0.12))] [--ok-accent:var(--bl-ok-accent,#73eff7)] [--ok-hover:var(--bl-ok-hover,rgba(255,255,255,0.07))] [--ok-radius:var(--bl-ok-radius,14px)] [--ok-backdrop:var(--bl-ok-backdrop,rgba(8,8,16,0.6))] [font-family:var(--bl-ok-font,ui-sans-serif,system-ui,sans-serif)] text-(--ok-ink)" style={{ ...floatStyle, ...(width ? { '--ok-w': `${width}px` } : null), ...style } as CSSVars}>
+          <div ref={floatRef} className="bl-ok-layer [--ok-bg:var(--bl-ok-bg,#1a1c2c)] [--ok-ink:var(--bl-ok-ink,#f4f4f4)] [--ok-muted:var(--bl-ok-muted,#94b0c2)] [--ok-line:var(--bl-ok-line,rgba(255,255,255,0.12))] [--ok-accent:var(--bl-ok-accent,#73eff7)] [--ok-hover:var(--bl-ok-hover,rgba(255,255,255,0.07))] [--ok-radius:var(--bl-ok-radius,14px)] [--ok-backdrop:var(--bl-ok-backdrop,rgba(8,8,16,0.6))] [font-family:var(--bl-ok-font,ui-sans-serif,system-ui,sans-serif)] text-(--ok-ink)" style={{ ...floatStyle, ...(width ? { '--ok-w': `${width}px` } : null), ...style } as CSSVars}>
             <div
               ref={panelRef}
               id={`${uid}-pop`}
@@ -554,7 +565,7 @@ export function Dropdown({ trigger, items = [], label = 'Menu', side = 'bottom',
       {triggerEl}
       {mounted &&
         createPortal(
-          <div ref={floatRef} className="[--ok-bg:var(--bl-ok-bg,#1a1c2c)] [--ok-ink:var(--bl-ok-ink,#f4f4f4)] [--ok-muted:var(--bl-ok-muted,#94b0c2)] [--ok-line:var(--bl-ok-line,rgba(255,255,255,0.12))] [--ok-accent:var(--bl-ok-accent,#73eff7)] [--ok-hover:var(--bl-ok-hover,rgba(255,255,255,0.07))] [--ok-radius:var(--bl-ok-radius,14px)] [--ok-backdrop:var(--bl-ok-backdrop,rgba(8,8,16,0.6))] [font-family:var(--bl-ok-font,ui-sans-serif,system-ui,sans-serif)] text-(--ok-ink)" style={{ ...floatStyle, ...style }}>
+          <div ref={floatRef} className="bl-ok-layer [--ok-bg:var(--bl-ok-bg,#1a1c2c)] [--ok-ink:var(--bl-ok-ink,#f4f4f4)] [--ok-muted:var(--bl-ok-muted,#94b0c2)] [--ok-line:var(--bl-ok-line,rgba(255,255,255,0.12))] [--ok-accent:var(--bl-ok-accent,#73eff7)] [--ok-hover:var(--bl-ok-hover,rgba(255,255,255,0.07))] [--ok-radius:var(--bl-ok-radius,14px)] [--ok-backdrop:var(--bl-ok-backdrop,rgba(8,8,16,0.6))] [font-family:var(--bl-ok-font,ui-sans-serif,system-ui,sans-serif)] text-(--ok-ink)" style={{ ...floatStyle, ...style }}>
             <div ref={menuRef} id={`${uid}-menu`} role="menu" aria-label={label} className={`bg-(--ok-bg) text-(--ok-ink) shadow-[0_0_0_1px_var(--ok-line),0_24px_60px_-24px_rgba(0,0,0,0.75)] outline-none rounded-(--ok-radius) data-[state=open]:animate-[bl-ok-float-in_220ms_cubic-bezier(.3,1.35,.5,1)_both] data-[state=closed]:animate-[bl-ok-float-in_140ms_cubic-bezier(.4,0,1,1)_reverse_both] data-[side=top]:origin-bottom data-[side=top]:[--ok-shift:0,6px] data-[side=bottom]:origin-top data-[side=bottom]:[--ok-shift:0,-6px] data-[side=left]:origin-right data-[side=left]:[--ok-shift:6px,0] data-[side=right]:origin-left data-[side=right]:[--ok-shift:-6px,0] motion-reduce:data-[state]:[animation-name:bl-ok-fade] max-w-[calc(100vw_-_16px)] min-w-[200px] p-[5px] ${className}`} data-state={state} data-side={placed} onKeyDown={onMenuKey}>
               {items.map((item, i) => {
                 if (item.type === 'separator') return <div key={i} className="mx-1 my-[5px] h-px bg-(--ok-line)" role="separator" />;
@@ -570,7 +581,7 @@ export function Dropdown({ trigger, items = [], label = 'Menu', side = 'bottom',
                     type="button"
                     role="menuitem"
                     tabIndex={-1}
-                    className="flex w-full cursor-pointer items-center gap-2.5 rounded-[calc(var(--ok-radius)*0.55)] border-0 bg-transparent px-2.5 py-2 text-left text-[14px] text-inherit hover:bg-(--ok-hover) hover:outline-none focus:bg-(--ok-hover) focus:outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--ok-accent)] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-40 data-[danger]:text-[var(--bl-ok-danger,#ef7d57)]"
+                    className="flex w-full cursor-pointer items-center gap-2.5 rounded-[calc(var(--ok-radius)*0.55)] border-0 bg-transparent px-2.5 py-2 text-left text-[14px] text-inherit hover:bg-(--ok-hover) hover:outline-none focus:bg-(--ok-hover) focus:outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--ok-accent)] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-40 bl-ok-item data-[danger]:text-[var(--bl-ok-danger,#ef7d57)]"
                     disabled={item.disabled}
                     data-danger={item.danger || undefined}
                     onClick={() => {

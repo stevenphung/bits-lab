@@ -17,9 +17,9 @@ const PIXEL_FONT = '"Pixelify Sans", system-ui, sans-serif';
 const TITLE_FONT = '"Press Start 2P", monospace';
 const stack = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 20, justifyItems: 'center', width: '100%', padding: '32px 0' };
 const row = { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10 };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
-const card = { display: 'grid', gap: 6, minWidth: 0, padding: '14px 16px', background: '#1a1c2c', boxShadow: '0 0 0 1px rgba(255,255,255,0.08)' };
-const cardLabel = { display: 'flex', alignItems: 'center', gap: 8, color: '#94b0c2', font: `13px ${PIXEL_FONT}` };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const card = { display: 'grid', gap: 6, minWidth: 0, padding: '14px 16px', background: 'var(--demo-bg, #1a1c2c)', boxShadow: '0 0 0 1px var(--demo-hair, rgba(255,255,255,0.08))' };
+const cardLabel = { display: 'flex', alignItems: 'center', gap: 8, color: 'var(--demo-muted, #94b0c2)', font: `13px ${PIXEL_FONT}` };
 
 // ---------- RollingNumber ----------
 
@@ -134,7 +134,7 @@ function RingDemo({ ringCount, ...props }) {
   const shown = rings.slice(0, ringCount);
   return (
     <div style={stack}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#ffcd75', font: `10px ${TITLE_FONT}` }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--demo-gold, #ffcd75)', font: `10px ${TITLE_FONT}` }}>
         <Sprite name="book" size={22} /> DAILY QUESTS
       </div>
       <RingProgress {...props} rings={shown} fontFamily={PIXEL_FONT} formatValue={ring => `${ring.value}/${ring.max}`} centerLabel={shown.length > 1 ? 'Mine ore' : undefined} />

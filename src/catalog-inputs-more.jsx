@@ -21,9 +21,9 @@ const select = (name, label, options) => ({ name, type: 'select', label, options
 const PIXEL_FONT = '"Pixelify Sans", system-ui, sans-serif';
 const TITLE_FONT = '"Press Start 2P", monospace';
 const stack = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 18, justifyItems: 'center', width: '100%', padding: '28px 16px', boxSizing: 'border-box' };
-const hint = { margin: 0, color: '#94b0c2', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
-const field = { width: '100%', height: 40, padding: '0 12px', boxSizing: 'border-box', border: 0, borderRadius: 10, background: '#0b0b14', color: '#f4f4f4', font: `15px ${PIXEL_FONT}`, boxShadow: 'inset 0 0 0 1px #333c57' };
-const fieldLabel = { display: 'grid', gap: 6, color: '#94b0c2', font: `13px ${PIXEL_FONT}` };
+const hint = { margin: 0, color: 'var(--demo-muted, #94b0c2)', font: `14px/1.4 ${PIXEL_FONT}`, textAlign: 'center' };
+const field = { width: '100%', height: 40, padding: '0 12px', boxSizing: 'border-box', border: 0, borderRadius: 10, background: 'var(--demo-field, #0b0b14)', color: 'var(--demo-ink, #f4f4f4)', font: `15px ${PIXEL_FONT}`, boxShadow: 'inset 0 0 0 1px var(--demo-line, #333c57)' };
+const fieldLabel = { display: 'grid', gap: 6, color: 'var(--demo-muted, #94b0c2)', font: `13px ${PIXEL_FONT}` };
 
 // ---------- TagInput ----------
 
@@ -147,7 +147,7 @@ function StepperDemo(props) {
           <>
             <Sprite name="star" size={40} />
             <strong>World created!</strong>
-            <span style={{ color: '#94b0c2' }}>{summary}</span>
+            <span style={{ color: 'var(--demo-muted, #94b0c2)' }}>{summary}</span>
           </>
         }
       />

@@ -120,7 +120,7 @@ function StatsDemo(props) {
 
 function ReplyDemo(props) {
   return (
-    <div style={{ display: 'grid', gap: 10, maxWidth: 520, padding: 16, background: '#11121e', boxShadow: 'inset 0 0 0 2px #333c57' }}>
+    <div style={{ display: 'grid', gap: 10, maxWidth: 520, padding: 16, background: 'var(--demo-bg, #11121e)', boxShadow: 'inset 0 0 0 2px var(--demo-line, #333c57)' }}>
       <p style={{ margin: 0, lineHeight: 1.55 }}>The quickest route to the Frost Peaks is the northern pass. Pack a warm cloak and two torches; the caves get dark after the second bridge.</p>
       <ReplyActions {...props} text="The quickest route to the Frost Peaks is the northern pass." />
     </div>

@@ -50,6 +50,12 @@ export interface LinkPeekProps {
 
 const STYLE_ID = 'bl-link-peek-tw';
 const CSS = `
+/* theme tokens */
+:is(.bl-peek-link, .bl-peek) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+:where(.light, [data-theme="light"]) :is(.bl-peek-link, .bl-peek), :is(.bl-peek-link, .bl-peek):where(.light, [data-theme="light"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; }
+:where(.light, [data-theme="light"]) :where(.dark, [data-theme="dark"]) :is(.bl-peek-link, .bl-peek), :where(.light, [data-theme="light"]) :is(.bl-peek-link, .bl-peek):where(.dark, [data-theme="dark"]) { --bl-bg: #1a1c2c; --bl-ink: #f4f4f4; --bl-muted: #94b0c2; --bl-line: #333c57; --bl-accent: #73eff7; }
+@media (prefers-color-scheme: light) { :where([data-theme="system"]) :is(.bl-peek-link, .bl-peek), :is(.bl-peek-link, .bl-peek):where([data-theme="system"]) { --bl-bg: #f4f1e8; --bl-ink: #1a1c2c; --bl-muted: #566c86; --bl-line: #cfc4ad; --bl-accent: #167f8f; } }
+/* theme tokens end */
 @keyframes bl-peek-in { from { opacity: 0; transform: translateY(var(--bl-from)) scale(0.92) rotate(0deg); } }
 @keyframes bl-peek-out { to { opacity: 0; transform: translateY(var(--bl-from)) scale(0.96); } }
 @keyframes bl-peek-shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
@@ -86,11 +92,11 @@ export default function LinkPeek({
   tilt = 4,
   target,
   rel,
-  backgroundColor = '#1a1c2c',
-  textColor = '#f4f4f4',
-  mutedColor = '#94b0c2',
-  lineColor = '#333c57',
-  accentColor = '#73eff7',
+  backgroundColor,
+  textColor,
+  mutedColor,
+  lineColor,
+  accentColor,
   linkColor,
   radius = 12,
   fontFamily = 'ui-sans-serif, system-ui, sans-serif',
@@ -195,7 +201,7 @@ export default function LinkPeek({
         href={href}
         target={target}
         rel={rel ?? (target === '_blank' ? 'noopener noreferrer' : undefined)}
-        className={`text-[var(--bl-link,inherit)] underline decoration-1 underline-offset-3 focus-visible:rounded-[2px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--bl-accent) ${className}`}
+        className={`bl-peek-link text-[var(--bl-link,inherit)] underline decoration-1 underline-offset-3 focus-visible:rounded-[2px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--bl-accent) ${className}`}
         aria-describedby={phase === 'open' && data ? `${uid}-desc` : undefined}
         style={{ ...vars, ...style }}
         onPointerEnter={event => event.pointerType === 'mouse' && show(delay)}
@@ -209,7 +215,7 @@ export default function LinkPeek({
       {phase !== 'closed' &&
         createPortal(
           <div
-            className="group/peek pointer-events-none fixed top-0 left-0 z-1700 w-(--bl-w) font-(family-name:--bl-font)"
+            className="bl-peek group/peek pointer-events-none fixed top-0 left-0 z-1700 w-(--bl-w) font-(family-name:--bl-font)"
             data-closing={phase === 'closing' || undefined}
             aria-hidden="true"
             style={{ ...vars, transform: `translate(${placement.x}px, ${placement.y}px)`, '--bl-from': placement.below ? '-8px' : '8px', '--bl-origin': placement.below ? 'top center' : 'bottom center' } as CSSVars}
